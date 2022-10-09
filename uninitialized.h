@@ -52,6 +52,24 @@ namespace stl
                                             std::is_trivially_copy_assignable<
                                             typename iterator_traits<ForwardIter>::value_type>{});
     }
+
+    /*****************************************************************************************/
+    // uninitialized_copy_n
+    // 把 [first, first + n) 上的内容复制到以 result 为起始处的空间，返回复制结束的位置
+    /*****************************************************************************************/
+    template<class InputIter, class Size, class ForwardIter>
+    ForwardIter
+    unchecked_uninit_copy_n(InputIter first, Size n, ForwardIter result, std::true_type)
+    {
+        return mystl::copy_n(first, n, result).second;
+    }
+
+
+
+
+
+
+
 }
 
 #endif //MYTINYSTL_UNINITIALIZED_H
