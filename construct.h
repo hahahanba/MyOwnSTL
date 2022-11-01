@@ -23,6 +23,7 @@ namespace mystl
         ::new ((void *)ptr) Ty();
     }
 
+    // placement new
     template<class Ty1, class Ty2>
     void construct(Ty1* ptr, const Ty2& value)
     {

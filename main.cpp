@@ -68,36 +68,28 @@
 //}
 #include <iostream>
 
-struct Hello
+class Test
 {
-    int helloworld() { return 0; }
-};
-
-struct Generic {};
-
-// SFINAE test
-template <typename T>
-class has_helloworld
-{
-    typedef char one;
-    struct two { char x[2]; };
-
-    template <typename C> static one test( decltype(&C::helloworld) ) ;
-    template <typename C> static two test(...);
-
+    int _a;
+    int _b;
+    int _c;
 public:
-    enum { value = sizeof(test<T>(0)) == sizeof(char) };
+
+    Test(int a, int b) : _a(a), _b(b),_c(0)  {
+        std::cout << "hello world" << std::endl;
+    }
+    Test(int a, int b, int c){
+        _a = a;
+        _b = b;
+        _c = c;
+    };
 };
 
 int main(int argc, char *argv[])
 {
-    std::cout << has_helloworld<Hello>::value << std::endl;
-    std::cout << has_helloworld<Generic>::value << std::endl;
-    std::cout << (sizeof(nullptr) == sizeof(char))<< std::endl;
-    std::cout << static_cast<std::iterator_traits<std::vector<double>>*>(0) << std::endl;
-
-    char* stringa;
-
+    for (int i = 0; i < 10; i++) {
+        std::cout<< i << std::endl;
+    }
 
     return 0;
 }
