@@ -383,6 +383,138 @@ namespace mystl
             return iterator(link_node);
         }
 
+        // c) insert
+        iterator insert(const_iterator pos, const value_type& value)
+        {
+            THROW_LENGTH_ERROR_IF(size_ > max_size() - 1, "list<T>'s size too big");
+            auto link_node = create_node(value);
+            ++size_;
+            return link_iter_node(pos, link_node->as_base());
+        }
+
+        iterator insert(const_iterator pos, value_type&& value)
+        {
+            THROW_LENGTH_ERROR_IF(size_ > max_size() - 1, "list<T>'s size too big");
+            auto link_node = create_node(mystl::move(value));
+            ++size_;
+            return link_iter_node(pos, link->as_base());
+        }
+
+        iterator insert(const_iterator pos, size_type n, const value_type& value)
+        {
+            THROW_LENGTH_ERROR_IF(size_ > max_size() - n, "list<T>'s size too big");
+            return fill_insert(pos, n, value);
+        }
+
+        template<class Iter, typename std::enable_if<
+                mystl::is_input_iterator<Iter>::value, int>::type = 0>
+        iterator insert(const_iterator pos, Iter first, Iter last)
+        {
+            size_type n = mystl::distance(first, last);
+            THROW_LENGTH_ERROR_IF(size_ > max_size() - n, "list<T>'s size too big");
+            return copy_insert(pos, n, first);
+        }
+
+        // d) push_front / push_back
+        void push_front(const value_type& value)
+        {
+            THROW_LENGTH_ERROR_IF(size_ > max_size() - 1, "list<T>'s size too big");
+            auto link_node = create_node(value);
+            link_nodes_at_front(link_node->as_base(), link_node->as_base());
+            ++size_;
+        }
+
+        void push_front(value_type&& value)
+        {
+            emplace_front(mystl::move(value));
+        }
+
+        void push_back(const value_type& value)
+        {
+            THROW_LENGTH_ERROR_IF(size_ > max_size() - 1, "list<T>'s size too big");
+            auto link_node = create_node(value);
+            link_nodes_at_back(link_node->as_base(), link_node->as_base());
+            ++size_;
+        }
+
+        void push_back(value_type&& value)
+        {
+            emplace_back(mystl::move(value));
+        }
+
+        // e) pop_front / pop_back
+        void pop_front()
+        {
+            MYSTL_DEBUG(!empty());
+            auto n = node_->next;
+            unlink_nodes(n, n);
+            destroy_node(n->as_node());
+            --size_;
+        }
+
+        void pop_back()
+        {
+            MYSTL_DEBUG(!empty());
+            auto n = node_->prev;
+            unlink_nodes(n, n);
+            destroy_node(n->as_node());
+            --size_;
+        }
+
+        // f) erase / clear
+        iterator erase(const_iterator pos);
+        iterator erase(const_iterator first, const_iterator last);
+
+        void clear();
+
+        // g) resize
+        void resize(size_type new_size) { resize(new_size, value_type()); }
+        void resize(size_type new_size, const value_type& value);
+
+        void swap(list& rhs) noexcept
+        {
+            mystl::swap(node_, rhs.node_);
+            mystl::swap(node_, rhs.size_);
+        }
+
+        // list 相关操作
+        // 1. splice
+        void splice(const_iterator pos, list& other);
+        void splice(const_iterator pos, list& other, const_iterator it);
+        void splice(const_iterator pos, list& other, const_iterator first, const_iterator last)
+
+        // 2. remove
+        void remove(const value_type& value)
+        {remove_if([&](const value_type& v){return v == value});}
+
+        template<class UnaryPredicate>
+        void remove_if(UnaryPredicate pred);
+
+        // 3. unique
+        void unique()
+        {unique(mystl::equal_to<T>());}
+
+        template<class BinaryPredicate>
+        void unique(BinaryPredicate pred);
+
+        // 4. merge
+        void merge(list& x)
+        { merge(x, mystl::less<T>());}
+
+        template<class Compare>
+        void merge(list& x, Compare comp);
+
+        // 5. sort
+        void sort()
+        { list_sort(begin(), end(), size(), mystl::less<T>()); }
+
+        template<class Compared>
+        void sort(Compared comp)
+        { list_sort(begin(), end(), size(), comp); }
+
+        // 6. reverse
+        void reverse();
+
     private:
         // helper function
         // 1. create/destroy node
