@@ -552,6 +552,241 @@ namespace mystl
         iterator list_sort(iterator first, iterator last, size_type n, Compared comp);
     };
 
+    // 删除pos处的元素
+    template<class T>
+    typename list<T>::iterator
+    list<T>::erase(list::const_iterator pos)
+    {
+        MYSTL_DEBUG(pos != cend());
+        auto n = pos.node_;
+        auto next = n->next;
+        unlink_nodes(n, n);
+        destroy_node(n->as_node());
+        --size_;
+        return iterator(next);
+    }
+
+    // 删除[first, last)内的元素
+    template<class T>
+    typename list<T>::iterator
+    list<T>::erase(list::const_iterator first, list::const_iterator last)
+    {
+        if (first != last)
+        {
+            unlink_nodes(first.node_, last.node_->prev);
+            while (first != last)
+            {
+                auto cur = first.node_;
+                ++first;
+                destroy_node(cur->as_node());
+                --size_;
+            }
+        }
+        return iterator(last.node_);
+    }
+
+    // 清空list
+    template<class T>
+    void list<T>::clear()
+    {
+        if (size_ != 0)
+        {
+            auto cur = node_->next;
+            for (base_ptr next = cur->next; cur != node_; cur = next, next = cur->next)
+            {
+                destroy_node(cur->as_node());
+            }
+            node_->unlink();
+            size_ = 0;
+        }
+    }
+
+    // 重置容器大小
+    template<class T>
+    void list<T>::resize(list::size_type new_size, const value_type &value)
+    {
+        auto i = begin();
+        size_type len = 0;
+        while (i != end() && len < new_size)
+        {
+            ++i;
+            ++len;
+        }
+        if (len == new_size)
+        {
+            erase(i, node_);
+        }
+        else
+        {
+            insert(node_, new_size - len, value);
+        }
+    }
+
+    // 将 list x 接合于 pos 之前
+    template<class T>
+    void list<T>::splice(list::const_iterator pos, list &x)
+    {
+        MYSTL_DEBUG(this != &x);
+        if (!x.empty())
+        {
+            THROW_LENGTH_ERROR_IF(size_ > max_size() - x.size_, "list<T>'s size too big");
+            auto f = x.node_->next;
+            auto l = x.node_->prev;
+
+            x.unlink_nodes(f, l);
+            link_nodes(pos.node_, f, l);
+            size_ += x.size_;
+            x.size_ = 0;
+        }
+    }
+
+    //  将迭代器所指的节点接合于 pos 之前
+    template<class T>
+    void list<T>::splice(list::const_iterator pos, list &x, list::const_iterator it)
+    {
+        if (pos.node_ != it.node_ && pos.node_ != it.node_->next)
+        {
+            THROW_LENGTH_ERROR_IF(size_ > max_size() - 1, "list<T>'s size too big");
+
+            auto f = it.node_;
+
+            x.unlink_nodes(f, f);
+            link_nodes(pos.node_, f, f);
+
+            ++size_;
+            --x.size_;
+        }
+    }
+
+    // 将 list x 的 [first, last) 内的节点接合于 pos 之前
+    template<class T>
+    void list<T>::splice(list::const_iterator pos, list &x, list::const_iterator first, list::const_iterator last)
+    {
+        if (first != last && this != &x)
+        {
+            size_type n = mystl::distance(first, last);
+            THROW_LENGTH_ERROR_IF(size_ > max_size() - n, "list<T>'s size too big");
+            auto f = first.node_;
+            auto l = last.node_->prev;
+
+            x.unlink_nodes(f, l);
+            link_nodes(pos.node_, f, l);
+
+            size_ += n;
+            x.size_ -= n;
+        }
+    }
+
+    // 将另一元操作 pred 为 true 的所有元素移除
+    template<class T>
+    template<class UnaryPredicate>
+    void list<T>::remove_if(UnaryPredicate pred)
+    {
+        auto f = begin();
+        auto l = end();
+        for (auto next = f; f != l; f = next)
+        {
+            ++next;
+            if (pred(*f))
+            {
+                erase(f);
+            }
+        }
+    }
+
+    // 移除 list 中满足 pred 为 true 重复元素
+    template<class T>
+    template<class BinaryPredicate>
+    void list<T>::unique(BinaryPredicate pred)
+    {
+        auto i = begin();
+        auto e = end();
+        auto j = i;
+        ++j;
+        while (j != e)
+        {
+            if (pred(*i, *j))
+            {
+                erase(j);
+            }
+            else
+            {
+                i = j;
+            }
+            j = i;
+            ++j;
+        }
+    }
+
+    // 与另一个 list 合并，按照 comp 为 true 的顺序
+    template<class T>
+    template<class Compare>
+    void list<T>::merge(list &x, Compare comp)
+    {
+        if (this != &x)
+        {
+            THROW_LENGTH_ERROR_IF(size_ > max_size() - x.size_, "list<T>'s size too big");
+            auto f1 = begin();
+            auto l1 = end();
+            auto f2 = x.begin();
+            auto l2 = x.end();
+
+            while (f1 != l1 && f2 != l2)
+            {
+                if (comp(*f2, *f1))
+                {
+                    // 使 comp 为 true 的一段区间
+                    auto next = f2;
+                    ++next;
+                    for (; next != l2 && comp(*next, *f1); ++next)
+                        ;
+                    auto f = f2.node_;
+                    auto l = next.node_->prev;
+                    f2 = next;
+
+                    // link node
+                    x.unlink_nodes(f, l);
+                    link_nodes(f1.node_, f, l);
+                    ++f1;
+                }
+                else
+                {
+                    ++f1;
+                }
+            }
+
+            // 连接剩余部分
+            if (f2 != l2)
+            {
+                auto f = f2.node_;
+                auto l = l2.node_->prev;
+                x.unlink_nodes(f, l);
+                link_nodes(l1.node_, f, l);
+            }
+
+            size_ += x.size_;
+            x.size_ = 0;
+        }
+    }
+
+    // 将 list 反转
+    template<class T>
+    void list<T>::reverse()
+    {
+        if (size_ <= 1)
+        {
+            return;
+        }
+        auto i = begin();
+        auto e = end();
+        while (i.node_ != e.node_)
+        {
+            mystl::swap(i.node_->prev, i.node_->next);
+            i.node_ = i.node_->prev;
+        }
+        mystl::swap(e.node_->prev, e.node_->next);
+    }
+
 }
 
 #endif //MYTINYSTL_LIST_H
