@@ -152,8 +152,262 @@ namespace mystl
         bool operator!=(const base& rhs) const {return node != rhs.node;}
     };
 
+    template<class T, class Hash, class KeyEqual>
+    struct ht_iterator : public ht_iterator_base<T, Hash, KeyEqual>
+    {
+        typedef ht_iterator_base<T, Hash, KeyEqual> base;
+        typedef typename base::hashtable            hashtable;
+        typedef typename base::iterator             iterator;
+        typedef typename base::const_iterator       const_iterator;
+        typedef typename base::node_ptr             node_ptr;
+        typedef typename base::contain_ptr          contain_ptr;
 
+        typedef ht_value_traits<T>                  value_traits;
+        typedef T                                   value_type;
+        typedef value_type*                         pointer;
+        typedef value_type&                         reference;
 
+        using base::node;
+        using base::ht;
+
+        ht_iterator() = default;
+        ht_iterator(node_ptr n, contain_ptr t)
+        {
+            node = n;
+            ht = t;
+        }
+
+        ht_iterator(const iterator& rhs)
+        {
+            node = rhs.node;
+            ht = rhs.ht;
+        }
+
+        ht_iterator(const const_iterator& rhs)
+        {
+            node = rhs.node;
+            ht = rhs.ht;
+        }
+
+        iterator& operator=(const iterator& rhs)
+        {
+            if (this != &rhs)
+            {
+                node = rhs.node;
+                ht = rhs.ht;
+            }
+            return *this;
+        }
+
+        iterator& operator=(const const_iterator& rhs)
+        {
+            if (this != &rhs)
+            {
+                node = rhs.node;
+                ht = rhs.ht;
+            }
+            return *this;
+        }
+
+        // 重载操作符
+        reference operator*()  const {return node->value;}    // 取值
+        pointer   operator->() const {return &(operator*());} // 取地址
+
+        iterator& operator++()
+        {
+            MYSTL_DEBUG(node != nullptr);
+            const node_ptr old = node;
+            node = node->next;
+            if (node == nullptr)
+            {
+                // 如果下一个位置指针为空，跳到下一个bucket的起始处
+                auto index = ht->hash(value_traits::get_key(old->value));
+                while (!node && ++index < ht->bucket_size_)
+                    node = ht->buckets_[index];
+            }
+            return *this;
+        }
+
+        iterator operator++(int)
+        {
+            iterator tmp = *this;
+            ++*this;
+            return tmp;
+        }
+    };
+
+    template<class T, class Hash, class KeyEqual>
+    struct ht_const_iterator : public ht_iterator_base<T, Hash, KeyEqual>
+    {
+        typedef ht_iterator_base<T, Hash, KeyEqual> base;
+        typedef typename base::hashtable            hashtable;
+        typedef typename base::iterator             iterator;
+        typedef typename base::const_iterator       const_iterator;
+        typedef typename base::const_node_ptr       node_ptr;
+        typedef typename base::const_contain_ptr    contain_ptr;
+
+        typedef ht_value_traits<T>                  value_traits;
+        typedef T                                   value_type;
+        typedef const value_type*                   pointer;
+        typedef const value_type&                   reference;
+
+        using base::node;
+        using base::ht;
+
+        ht_const_iterator() = default;
+        ht_const_iterator(node_ptr n, contain_ptr t)
+        {
+            node = n;
+            ht = t;
+        }
+        ht_const_iterator(const iterator& rhs)
+        {
+            node = rhs.node;
+            ht = rhs.ht;
+        }
+        ht_const_iterator(const const_iterator& rhs)
+        {
+            node = rhs.node;
+            ht = rhs.ht;
+        }
+        const_iterator& operator=(const iterator& rhs)
+        {
+            if (this != &rhs)
+            {
+                node = rhs.node;
+                ht = rhs.ht;
+            }
+            return *this;
+        }
+        const_iterator& operator=(const const_iterator& rhs)
+        {
+            if (this != &rhs)
+            {
+                node = rhs.node;
+                ht = rhs.ht;
+            }
+            return *this;
+        }
+
+        // 重载操作符
+        reference operator*()  const {return node->value;}
+        pointer   operator->() const {return &(operator*());}
+
+        const_iterator& operator++()
+        {
+            MYSTL_DEBUG(node != nullptr);
+            const node_ptr old = node;
+            node = node->next;
+            if (node == nullptr)
+            {
+                auto index = ht->hash(value_traits::get_key(old->value));
+                while (!node && ++index < ht->bucket_size_)
+                {
+                    node = ht->buckets_[index];
+                }
+            }
+            return *this;
+        }
+
+        const_iterator operator++(int)
+        {
+            const_iterator tmp = *this;
+            ++*this;
+            return tmp;
+        }
+    };
+
+    template<class T>
+    struct ht_local_iterator : public mystl::iterator<mystl::forward_iterator_tag, T>
+    {
+        typedef T                          value_type;
+        typedef value_type*                pointer;
+        typedef value_type&                reference;
+        typedef size_t                     size_type;
+        typedef ptrdiff_t                  difference_type;
+        typedef hashtable_node<T>*         node_ptr;
+
+        typedef ht_local_iterator<T>       self;
+        typedef ht_local_iterator<T>       local_iterator;
+        typedef ht_const_local_iterator<T> const_local_iterator;
+        node_ptr node;
+
+        ht_local_iterator(node_ptr n)
+            :node(n)
+        {}
+        ht_local_iterator(const local_iterator& rhs)
+            :node(rhs.node)
+        {}
+        ht_local_iterator(const const_local_iterator& rhs)
+            :node(rhs.node)
+        {}
+
+        reference operator*()  const {return node->value;}
+        pointer   operator->() const {return &(operator*());}
+
+        self& operator++()
+        {
+            MYSTL_DEBUG(node != nullptr);
+            node = node->next;
+            return *this;
+        }
+
+        self operator++(int)
+        {
+            self tmp(*this);
+            ++*this;
+            return tmp;
+        }
+
+        bool operator==(const self& other) const {return node == other.node;}
+        bool operator!=(const self& other) const {return node != other.node;}
+    };
+
+    template<class T>
+    struct ht_const_local_iterator : public mystl::iterator<mystl::forward_iterator_tag, T>
+    {
+        typedef T                          value_type;
+        typedef const value_type*          pointer;
+        typedef const value_type&          reference;
+        typedef size_t                     size_type;
+        typedef ptrdiff_t                  difference_type;
+        typedef const hashtable_node<T>*   node_ptr;
+
+        typedef ht_const_local_iterator<T> self;
+        typedef ht_local_iterator<T>       local_iterator;
+        typedef ht_const_local_iterator<T> const_local_iterator;
+        node_ptr node;
+
+        ht_const_local_iterator(node_ptr n)
+            :node(n)
+        {}
+        ht_const_local_iterator(const local_iterator& rhs)
+            :node(rhs.node)
+        {}
+        ht_const_local_iterator(const const_local_iterator& rhs)
+            :node(rhs.node)
+        {}
+
+        reference operator*()  const {return node->value;}
+        pointer   operator->() const {return &(operator*());}
+
+        self& operator++()
+        {
+            MYSTL_DEBUG(node != nullptr);
+            node = node->next;
+            return *this;
+        }
+
+        self operator++(int)
+        {
+            self tmp(*this);
+            ++*this;
+            return tmp;
+        }
+
+        bool operator==(const self& other) const {return node == other.node;}
+        bool operator!=(const self& other) const {return node != other.node;}
+    };
 }
 
 #endif //MYTINYSTL_HASHTABLE_H
