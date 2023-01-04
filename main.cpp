@@ -68,28 +68,14 @@
 //}
 #include <iostream>
 
-class Test
-{
-    int _a;
-    int _b;
-    int _c;
-public:
+#define CALL_WITH_MAX(a, b) f((a) > (b) ? (a) : (b))
 
-    Test(int a, int b) : _a(a), _b(b),_c(0)  {
-        std::cout << "hello world" << std::endl;
-    }
-    Test(int a, int b, int c){
-        _a = a;
-        _b = b;
-        _c = c;
-    };
-};
 
 int main(int argc, char *argv[])
 {
-    for (int i = 0; i < 10; i++) {
-        std::cout<< i << std::endl;
-    }
+    int a = 5,b = 0;
+    CALL_WITH_MAX(++a, b);    //a被累加二次
+    CALL_WITH_MAX(++a, b+10); //a被累加一次
 
     return 0;
 }
