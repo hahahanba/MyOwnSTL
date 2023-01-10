@@ -107,6 +107,8 @@ namespace mystl
 
 
     // forward declaration
+    // 在接下来定义ht_iterator_base时用到了以下结构体，但此时结构体并未定义，因此采用前向声明的方式
+    // 解决循环引用的问题
     template <class T, class HashFun, class KeyEqual>
     class hashtable;
 
