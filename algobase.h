@@ -97,7 +97,7 @@ namespace mystl
     template<class InputIter, class OutputIter>
     OutputIter unchecked_copy(InputIter first, InputIter last, OutputIter result)
     {
-        unchecked_copy_cat(first, last, result, iterator_category(first))
+        unchecked_copy_cat(first, last, result, iterator_category(first));
     }
 
     // 为trivially_copy_assignable 类型提供特化版本
@@ -127,7 +127,7 @@ namespace mystl
     template<class BidirectionalIter1, class BidirectionalIter2>
     BidirectionalIter2
     unchecked_copy_backward_cat(BidirectionalIter1 first, BidirectionalIter1 last,
-                                BidirectionalIter2 result, mystl::bidrectional_iterator_tag)
+                                BidirectionalIter2 result, mystl::bidirectional_iterator_tag)
     {
         while (first != last)
             *--result = *--last;
@@ -378,7 +378,7 @@ namespace mystl
     template<class OutputIter, class Size, class T>
     OutputIter unchecked_fill_n(OutputIter first, Size n, const T& value)
     {
-        for (;, n > 0; --n, ++first)
+        for (; n > 0; --n, ++first)
         {
             *first = value;
         }

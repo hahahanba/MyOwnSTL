@@ -74,8 +74,6 @@
 int main(int argc, char *argv[])
 {
     int a = 5,b = 0;
-    CALL_WITH_MAX(++a, b);    //a被累加二次
-    CALL_WITH_MAX(++a, b+10); //a被累加一次
 
     return 0;
 }

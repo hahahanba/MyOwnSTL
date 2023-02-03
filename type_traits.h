@@ -43,8 +43,9 @@ namespace mystl
     template<class T>
     struct is_pair : mystl::m_false_type {};
 
-    template<class class T1, class T2>
+    template <class T1, class T2>
     struct is_pair<mystl::pair<T1, T2>> : mystl::m_true_type {};
+
 }
 
 #endif //MYTINYSTL_TYPE_TRAITS_H

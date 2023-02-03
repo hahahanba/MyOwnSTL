@@ -20,19 +20,21 @@
 
 namespace mystl
 {
+
     // 模板类 unordered_map，键值不允许重复
     // 参数一代表键值类型，参数二代表实值类型，参数三代表哈希函数，缺省使用 mystl::hash
     // 参数四代表键值比较方式，缺省使用 mystl::equal_to
-    template<class Key, class T, class Hash = mystl::hash<Key>, class KeyEqual = mystl::equal_to<Key>>
+    template <class Key, class T, class Hash = mystl::hash<Key>, class KeyEqual = mystl::equal_to<Key>>
     class unordered_map
     {
     private:
-        // 使用hashtable作为底层机制
-        typedef hashtable<mystl::pair<const Key, T>, KeyEqual> base_type;
+        // 使用 hashtable 作为底层机制
+        typedef hashtable<mystl::pair<const Key, T>, Hash, KeyEqual> base_type;
         base_type ht_;
 
     public:
-        // 使用hashtable的型别
+        // 使用 hashtable 的型别
+
         typedef typename base_type::allocator_type       allocator_type;
         typedef typename base_type::key_type             key_type;
         typedef typename base_type::mapped_type          mapped_type;
@@ -56,34 +58,48 @@ namespace mystl
 
     public:
         // 构造、复制、移动、析构函数
+
         unordered_map()
-          : ht_(100, Hash(), KeyEqual)
-        {}
+                :ht_(100, Hash(), KeyEqual())
+        {
+        }
 
         explicit unordered_map(size_type bucket_count,
                                const Hash& hash = Hash(),
                                const KeyEqual& equal = KeyEqual())
-          :ht_(bucket_count, hash, equal)
-        {}
+                :ht_(bucket_count, hash, equal)
+        {
+        }
 
-        template<class InputIterator>
+        template <class InputIterator>
         unordered_map(InputIterator first, InputIterator last,
                       const size_type bucket_count = 100,
                       const Hash& hash = Hash(),
                       const KeyEqual& equal = KeyEqual())
-          :ht_(mystl::max(bucket_count, static_cast<size_type>(ilist.size())), hash, equal)
+                : ht_(mystl::max(bucket_count, static_cast<size_type>(mystl::distance(first, last))), hash, equal)
+        {
+            for (; first != last; ++first)
+                ht_.insert_unique_noresize(*first);
+        }
+
+        unordered_map(std::initializer_list<value_type> ilist,
+                      const size_type bucket_count = 100,
+                      const Hash& hash = Hash(),
+                      const KeyEqual& equal = KeyEqual())
+                :ht_(mystl::max(bucket_count, static_cast<size_type>(ilist.size())), hash, equal)
         {
             for (auto first = ilist.begin(), last = ilist.end(); first != last; ++first)
                 ht_.insert_unique_noresize(*first);
         }
 
         unordered_map(const unordered_map& rhs)
-          :ht_(rhs.ht_)
-        {}
-
+                :ht_(rhs.ht_)
+        {
+        }
         unordered_map(unordered_map&& rhs) noexcept
-          :ht_(mystl::move(rhs.ht_))
-        {}
+                :ht_(mystl::move(rhs.ht_))
+        {
+        }
 
         unordered_map& operator=(const unordered_map& rhs)
         {
@@ -95,18 +111,20 @@ namespace mystl
             ht_ = mystl::move(rhs.ht_);
             return *this;
         }
+
         unordered_map& operator=(std::initializer_list<value_type> ilist)
         {
             ht_.clear();
             ht_.reserve(ilist.size());
             for (auto first = ilist.begin(), last = ilist.end(); first != last; ++first)
-                ht_.inert_unique_nosize(*first);
+                ht_.insert_unique_noresize(*first);
             return *this;
         }
 
         ~unordered_map() = default;
 
         // 迭代器相关
+
         iterator       begin()        noexcept
         { return ht_.begin(); }
         const_iterator begin()  const noexcept
@@ -117,26 +135,30 @@ namespace mystl
         { return ht_.end(); }
 
         const_iterator cbegin() const noexcept
-        { return ht._cbegin(); }
+        { return ht_.cbegin(); }
         const_iterator cend()   const noexcept
-        { return ht._cend(); }
+        { return ht_.cend(); }
 
         // 容量相关
+
         bool      empty()    const noexcept { return ht_.empty(); }
         size_type size()     const noexcept { return ht_.size(); }
         size_type max_size() const noexcept { return ht_.max_size(); }
 
-        // 修改容器相关
-        // emplace / emplace_hint
-        template<class ...Args>
+        // 修改容器操作
+
+        // empalce / empalce_hint
+
+        template <class ...Args>
         pair<iterator, bool> emplace(Args&& ...args)
         { return ht_.emplace_unique(mystl::forward<Args>(args)...); }
 
-        template<class ...Args>
-        iterator emplace_bint(const_iterator hint, Args&& ...args)
+        template <class ...Args>
+        iterator emplace_hint(const_iterator hint, Args&& ...args)
         { return ht_.emplace_unique_use_hint(hint, mystl::forward<Args>(args)...); }
 
         // insert
+
         pair<iterator, bool> insert(const value_type& value)
         { return ht_.insert_unique(value); }
         pair<iterator, bool> insert(value_type&& value)
@@ -147,11 +169,12 @@ namespace mystl
         iterator insert(const_iterator hint, value_type&& value)
         { return ht_.emplace_unique_use_hint(hint, mystl::move(value)); }
 
-        template<class InputIterator>
+        template <class InputIterator>
         void insert(InputIterator first, InputIterator last)
         { ht_.insert_unique(first, last); }
 
-        // erase/clear
+        // erase / clear
+
         void      erase(iterator it)
         { ht_.erase(it); }
         void      erase(iterator first, iterator last)
@@ -167,18 +190,18 @@ namespace mystl
         { ht_.swap(other.ht_); }
 
         // 查找相关
+
         mapped_type& at(const key_type& key)
         {
             iterator it = ht_.find(key);
             THROW_OUT_OF_RANGE_IF(it.node == nullptr, "unordered_map<Key, T> no such element exists");
-            return it->sencond;
+            return it->second;
         }
-
         const mapped_type& at(const key_type& key) const
         {
             iterator it = ht_.find(key);
             THROW_OUT_OF_RANGE_IF(it.node == nullptr, "unordered_map<Key, T> no such element exists");
-            return it->sencond;
+            return it->second;
         }
 
         mapped_type& operator[](const key_type& key)
@@ -188,7 +211,6 @@ namespace mystl
                 it = ht_.emplace_unique(key, T{}).first;
             return it->second;
         }
-
         mapped_type& operator[](key_type&& key)
         {
             iterator it = ht_.find(key);
@@ -211,41 +233,43 @@ namespace mystl
         { return ht_.equal_range_unique(key); }
 
         // bucket interface
-        local_iterator       begin(size_type n)         noexcept
+
+        local_iterator       begin(size_type n)        noexcept
         { return ht_.begin(n); }
-        const_local_iterator begin(size_type n)   const noexcept
+        const_local_iterator begin(size_type n)  const noexcept
         { return ht_.begin(n); }
-        const_local_iterator cbegin(size_type n)  const noexcept
+        const_local_iterator cbegin(size_type n) const noexcept
         { return ht_.cbegin(n); }
 
-        local_iterator       end(size_type n)           noexcept
+        local_iterator       end(size_type n)          noexcept
         { return ht_.end(n); }
-        const_local_iterator end(size_type n)     const noexcept
+        const_local_iterator end(size_type n)    const noexcept
         { return ht_.end(n); }
-        const_local_iterator cend(size_type n)    const noexcept
+        const_local_iterator cend(size_type n)   const noexcept
         { return ht_.cend(n); }
 
-        size_type bucket_count()                  const noexcept
+        size_type bucket_count()                 const noexcept
         { return ht_.bucket_count(); }
-        size_type max_bucket_count()              const noexcept
+        size_type max_bucket_count()             const noexcept
         { return ht_.max_bucket_count(); }
 
-        size_type bucket_size(size_type n)        const noexcept
+        size_type bucket_size(size_type n)       const noexcept
         { return ht_.bucket_size(n); }
-        size_type bucket(const key_type& key)     const
+        size_type bucket(const key_type& key)    const
         { return ht_.bucket(key); }
 
         // hash policy
-        float     load_factor()             const noexcept { return ht_.load_factor(); }
 
-        float     max_load_factor()         const noexcept { return ht_.max_load_factor(); }
-        void      max_load_factor(float ml)                { ht_.max_load_factor(ml); }
+        float     load_factor()            const noexcept { return ht_.load_factor(); }
 
-        void      rehash(size_type count)                  { ht_.rehash(count); }
-        void      reserve(size_type count)                 { ht_.reserve(count); }
+        float     max_load_factor()        const noexcept { return ht_.max_load_factor(); }
+        void      max_load_factor(float ml)               { ht_.max_load_factor(ml); }
 
-        hasher    hash_fcn()                const          { return ht_.hash_fcn(); }
-        key_equal key_eq()                  const          { return ht_.key_eq(); }
+        void      rehash(size_type count)                 { ht_.rehash(count); }
+        void      reserve(size_type count)                { ht_.reserve(count); }
+
+        hasher    hash_fcn()               const          { return ht_.hash_fcn(); }
+        key_equal key_eq()                 const          { return ht_.key_eq(); }
 
     public:
         friend bool operator==(const unordered_map& lhs, const unordered_map& rhs)
@@ -254,27 +278,27 @@ namespace mystl
         }
         friend bool operator!=(const unordered_map& lhs, const unordered_map& rhs)
         {
-            return !lhs.ht_equal_range_unique(rhs.ht_);
+            return !lhs.ht_.equal_range_unique(rhs.ht_);
         }
     };
 
     // 重载比较操作符
-    template<class Key, class T, class Hash, class KeyEqual>
+    template <class Key, class T, class Hash, class KeyEqual>
     bool operator==(const unordered_map<Key, T, Hash, KeyEqual>& lhs,
                     const unordered_map<Key, T, Hash, KeyEqual>& rhs)
     {
-        return lhs != rhs;
+        return lhs == rhs;
     }
 
-    template<class Key, class T, class Hash, class KeyEqual>
+    template <class Key, class T, class Hash, class KeyEqual>
     bool operator!=(const unordered_map<Key, T, Hash, KeyEqual>& lhs,
                     const unordered_map<Key, T, Hash, KeyEqual>& rhs)
     {
         return lhs != rhs;
     }
 
-    // 重载mystl的swap
-    template<class Key, class T, class Hash, class KeyEqual>
+    // 重载 mystl 的 swap
+    template <class Key, class T, class Hash, class KeyEqual>
     void swap(unordered_map<Key, T, Hash, KeyEqual>& lhs,
               unordered_map<Key, T, Hash, KeyEqual>& rhs)
     {
@@ -286,16 +310,16 @@ namespace mystl
     // 模板类 unordered_multimap，键值允许重复
     // 参数一代表键值类型，参数二代表实值类型，参数三代表哈希函数，缺省使用 mystl::hash
     // 参数四代表键值比较方式，缺省使用 mystl::equal_to
-    template<class Key, class T, class Hash = mystl::hash<Key>, class KeyEqual = mystl::equal_to<Key>>
+    template <class Key, class T, class Hash = mystl::hash<Key>, class KeyEqual = mystl::equal_to<Key>>
     class unordered_multimap
     {
     private:
-        // 使用hashtable作为底层机制
+        // 使用 hashtable 作为底层机制
         typedef hashtable<pair<const Key, T>, Hash, KeyEqual> base_type;
         base_type ht_;
 
     public:
-        // 使用hashtable的型别
+        // 使用 hashtable 的型别
         typedef typename base_type::allocator_type       allocator_type;
         typedef typename base_type::key_type             key_type;
         typedef typename base_type::mapped_type          mapped_type;
@@ -318,25 +342,28 @@ namespace mystl
         allocator_type get_allocator() const { return ht_.get_allocator(); }
 
     public:
-        // 构造，复制，移动函数
+        // 构造、复制、移动函数
+
         unordered_multimap()
-          :ht_(100, Hash(), KeyEqual())
-        {}
+                :ht_(100, Hash(), KeyEqual())
+        {
+        }
 
         explicit unordered_multimap(size_type bucket_count,
                                     const Hash& hash = Hash(),
                                     const KeyEqual& equal = KeyEqual())
-          :ht_(bucket_count, hash, equal)
-        {}
+                :ht_(bucket_count, hash, equal)
+        {
+        }
 
-        template<class InputIterator>
+        template <class InputIterator>
         unordered_multimap(InputIterator first, InputIterator last,
                            const size_type bucket_count = 100,
                            const Hash& hash = Hash(),
                            const KeyEqual& equal = KeyEqual())
-            :ht_(mystl::max(bucket_count, static_cast<size_type>(mystl::distance(first, last))), hash, equal)
+                :ht_(mystl::max(bucket_count, static_cast<size_type>(mystl::distance(first, last))), hash, equal)
         {
-            for (; first != last ; ++first)
+            for (; first != last; ++first)
                 ht_.insert_multi_noresize(*first);
         }
 
@@ -344,18 +371,20 @@ namespace mystl
                            const size_type bucket_count = 100,
                            const Hash& hash = Hash(),
                            const KeyEqual& equal = KeyEqual())
-            :ht_(mystl::max(bucket_count, static_cast<size_type>(ilist.size())), hash, equal)
+                :ht_(mystl::max(bucket_count, static_cast<size_type>(ilist.size())), hash, equal)
         {
-            for (auto first = ilist.begin(), last = ilist.end(); first != last ; ++first)
+            for (auto first = ilist.begin(), last = ilist.end(); first != last; ++first)
                 ht_.insert_multi_noresize(*first);
         }
 
         unordered_multimap(const unordered_multimap& rhs)
-            :ht_(rhs.ht_)
-        {}
-        unordered_multimap(unordered_multimap&& rhs)
-            :ht_(mystl::move(rhs.ht_))
-        {}
+                :ht_(rhs.ht_)
+        {
+        }
+        unordered_multimap(unordered_multimap&& rhs) noexcept
+                :ht_(mystl::move(rhs.ht_))
+        {
+        }
 
         unordered_multimap& operator=(const unordered_multimap& rhs)
         {
@@ -367,11 +396,12 @@ namespace mystl
             ht_ = mystl::move(rhs.ht_);
             return *this;
         }
+
         unordered_multimap& operator=(std::initializer_list<value_type> ilist)
         {
             ht_.clear();
             ht_.reserve(ilist.size());
-            for (auto first = ilist.begin(), last = ilist.end(); first != last ; ++first)
+            for (auto first = ilist.begin(), last = ilist.end(); first != last; ++first)
                 ht_.insert_multi_noresize(*first);
             return *this;
         }
@@ -379,6 +409,7 @@ namespace mystl
         ~unordered_multimap() = default;
 
         // 迭代器相关
+
         iterator       begin()        noexcept
         { return ht_.begin(); }
         const_iterator begin()  const noexcept
@@ -394,36 +425,41 @@ namespace mystl
         { return ht_.cend(); }
 
         // 容量相关
+
         bool      empty()    const noexcept { return ht_.empty(); }
         size_type size()     const noexcept { return ht_.size(); }
         size_type max_size() const noexcept { return ht_.max_size(); }
 
         // 修改容器相关
+
         // emplace / emplace_hint
-        template<class ...Args>
+
+        template <class ...Args>
         iterator emplace(Args&& ...args)
         { return ht_.emplace_multi(mystl::forward<Args>(args)...); }
 
-        template<class ...Args>
+        template <class ...Args>
         iterator emplace_hint(const_iterator hint, Args&& ...args)
         { return ht_.emplace_multi_use_hint(hint, mystl::forward<Args>(args)...); }
 
         // insert
+
         iterator insert(const value_type& value)
         { return ht_.insert_multi(value); }
         iterator insert(value_type&& value)
         { return ht_.emplace_multi(mystl::move(value)); }
 
-        iterator insert(const_iterator hint const value_type& value)
+        iterator insert(const_iterator hint, const value_type& value)
         { return ht_.insert_multi_use_hint(hint, value); }
         iterator insert(const_iterator hint, value_type&& value)
         { return ht_.emplace_multi_use_hint(hint, mystl::move(value)); }
 
-        template<class InputIterator>
-        void      insert(InputIterator first, InputIterator last)
+        template <class InputIterator>
+        void     insert(InputIterator first, InputIterator last)
         { ht_.insert_multi(first, last); }
 
-        // erase/clear
+        // erase / clear
+
         void      erase(iterator it)
         { ht_.erase(it); }
         void      erase(iterator first, iterator last)
@@ -439,6 +475,7 @@ namespace mystl
         { ht_.swap(other.ht_); }
 
         // 查找相关
+
         size_type      count(const key_type& key) const
         { return ht_.count(key); }
 
@@ -449,10 +486,11 @@ namespace mystl
 
         pair<iterator, iterator> equal_range(const key_type& key)
         { return ht_.equal_range_multi(key); }
-        pair<const_iterator, const_iterator> equal_range(const key_type& key)
+        pair<const_iterator, const_iterator> equal_range(const key_type& key) const
         { return ht_.equal_range_multi(key); }
 
         // bucket interface
+
         local_iterator       begin(size_type n)        noexcept
         { return ht_.begin(n); }
         const_local_iterator begin(size_type n)  const noexcept
@@ -460,7 +498,7 @@ namespace mystl
         const_local_iterator cbegin(size_type n) const noexcept
         { return ht_.cbegin(n); }
 
-        local_iterator       end(size_type n)         noexcept
+        local_iterator       end(size_type n)          noexcept
         { return ht_.end(n); }
         const_local_iterator end(size_type n)    const noexcept
         { return ht_.end(n); }
@@ -478,6 +516,7 @@ namespace mystl
         { return ht_.bucket(key); }
 
         // hash policy
+
         float     load_factor()            const noexcept { return ht_.load_factor(); }
 
         float     max_load_factor()        const noexcept { return ht_.max_load_factor(); }
@@ -522,5 +561,7 @@ namespace mystl
     {
         lhs.swap(rhs);
     }
-}
+
+} // namespace mystl
+
 #endif //MYTINYSTL_UNORDERED_MAP_H

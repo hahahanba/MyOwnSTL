@@ -177,7 +177,7 @@ namespace mystl
                         ? offset / static_cast<difference_type>(buffer_size)
                         : -static_cast<difference_type>((-offset - 1) / buffer_size) - 1;
                 set_node(node + node_offset);
-                cur = first + (offset - node_offset * static_cast<difference_type>(buffer_size))
+                cur = first + (offset - node_offset * static_cast<difference_type>(buffer_size));
             }
             return *this;
         }
@@ -227,8 +227,8 @@ namespace mystl
         typedef typename allocator_type::const_reference const_reference;
         typedef typename allocator_type::size_type       size_type;
         typedef typename allocator_type::difference_type difference_type;
-        typedef typename pointer*                        map_pointer;
-        typedef typename const_pointer*                  const_map_pointer;
+        typedef pointer*                                 map_pointer;
+        typedef const_pointer*                           const_map_pointer;
 
         typedef deque_iterator<T, T&, T*>                iterator;
         typedef deque_iterator<T, const T&, const T*>    const_iterator;
@@ -331,7 +331,7 @@ namespace mystl
         const_iterator            cend()     const noexcept
         {return end();}
         const_reverse_iterator    crbegin()  const noexcept
-        {return rbegin()}
+        {return rbegin(); }
         const_reverse_iterator    crend()    const noexcept
         {return end();}
 
@@ -375,7 +375,7 @@ namespace mystl
             return *begin();
         }
 
-        const_reference front()
+        const_reference front() const
         {
             MYSTL_DEBUG(!empty());
             return *begin();
@@ -674,7 +674,7 @@ namespace mystl
         if (begin_.cur != begin_.last - 1)
         {
             data_allocator::destroy(begin_.cur);
-            ++begin_.cur
+            ++begin_.cur;
         }
         else
         {

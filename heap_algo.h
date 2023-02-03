@@ -60,7 +60,7 @@ namespace mystl
     void push_heap_d(RandomIter first, RandomIter last, Distance*, Compared comp)
     {
         mystl::push_heap_aux(first, (last - first) - 1, static_cast<Distance>(0),
-                             *(last - 1), comp)
+                             *(last - 1), comp);
     }
 
     template<class RandomIter, class Compared>
@@ -113,7 +113,7 @@ namespace mystl
 
     // 重载版本使用函数对象comp代替比较操作
     template<class RandomIter, class T, class Distance, class Compared>
-    void adjust_heap(RandomIter first, RandomIter Distance holeIndex, Distance len, T value,
+    void adjust_heap(RandomIter first, Distance holeIndex, Distance len, T value,
                      Compared comp)
     {
         // 先进行下溯(percolate down)过程

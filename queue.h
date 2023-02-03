@@ -46,7 +46,7 @@ namespace mystl
 
         queue(std::initializer_list<T> ilist) : c_(ilist.begin(), ilist.end()) {}
         queue(const Container& c) : c_(c) {}
-        queue(Container&& c) noexcept(std::is_nothrow_move_constructible<Container::value>)
+        queue(Container&& c) noexcept(std::is_nothrow_move_constructible<Container>::value)
           : c_(mystl::move(c))
         {}
 
@@ -180,7 +180,7 @@ namespace mystl
 
    private:
        container_type c_;
-       value_compare  comp_ // 权值比较标准
+       value_compare  comp_; // 权值比较标准
 
    public:
        // 构造、复制、移动函数
@@ -250,7 +250,7 @@ namespace mystl
        priority_queue& operator=(std::initializer_list<T> ilist)
        {
            c_ = ilist;
-           comp_ = value_compare;
+           comp_ = value_compare();
            mystl::make_heap(c_.begin(), c_.end(), comp_);
            return *this;
        }
@@ -287,13 +287,13 @@ namespace mystl
        void pop()
        {
            mystl::pop_heap(c_.begin(), c_.end(), comp_);
-           c_.pop_back()
+           c_.pop_back();
        }
 
        void clear()
        {
            while (!empty())
-               pop()
+               pop();
        }
 
        void swap(priority_queue& rhs) noexcept(noexcept(mystl::swap(c_, rhs.c_)) &&

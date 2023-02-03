@@ -13,7 +13,7 @@
 #include "type_traits.h"
 #include "util.h"
 
-namespace stl
+namespace mystl
 {
     /*****************************************************************************************/
     // uninitialized_copy

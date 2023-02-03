@@ -481,11 +481,11 @@ namespace mystl
         // 1. splice
         void splice(const_iterator pos, list& other);
         void splice(const_iterator pos, list& other, const_iterator it);
-        void splice(const_iterator pos, list& other, const_iterator first, const_iterator last)
+        void splice(const_iterator pos, list& other, const_iterator first, const_iterator last);
 
         // 2. remove
         void remove(const value_type& value)
-        {remove_if([&](const value_type& v){return v == value});}
+        { remove_if([&](const value_type& v) {return v == value; }); }
 
         template<class UnaryPredicate>
         void remove_if(UnaryPredicate pred);
@@ -956,7 +956,7 @@ namespace mystl
     {
         auto f1 = begin();
         auto l1 = end();
-        for (;, f1 != l1 && f2 != l2; ++f1, ++f2)
+        for (; f1 != l1 && f2 != l2; ++f1, ++f2)
         {
             *f1 = *f2;
         }
@@ -986,7 +986,7 @@ namespace mystl
             iterator end = r;
             try
             {
-                for (--n, n > 0; --n, ++end)
+                for (--n; n > 0; --n, ++end)
                 {
                     auto next = create_node(value);
                     end.node_->next = next->as_base();

@@ -33,12 +33,12 @@ namespace mystl
     template<class Ty, class... Args>
     void construct(Ty* ptr, Args&&... args)
     {
-        ::new ((void *)ptr) Ty(mystl::forward<Args>(args)...);
+        ::new ((void *)ptr) Ty(std::forward<Args>(args)...);
     }
 
     // destroy 将对象析构
     template<class Ty>
-    void destroy_one(Ty* std::true_type) {}
+    void destroy_one(Ty*, std::true_type) {}
 
     template<class Ty>
     void destroy_one(Ty* pointer, std::false_type)

@@ -180,7 +180,7 @@ namespace mystl
         const_reference operator[](size_type n) const
         {
             MYSTL_DEBUG(n < size());
-            return *(begin_ + n)
+            return *(begin_ + n);
         }
         reference at(size_type n)
         {
@@ -710,7 +710,7 @@ namespace mystl
             new_end = mystl::uninitialized_move(begin_, pos, new_begin);
             data_allocator::construct(mystl::address_of(*new_end), mystl::forward<Args>(args)...);
             ++new_end;
-            new_end = mystl::uninitilized_move(pos, end_, new_end);
+            new_end = mystl::uninitialized_move(pos, end_, new_end);
         }
         catch (...)
         {
@@ -774,7 +774,7 @@ namespace mystl
             {
                 end_ = mystl::uninitialized_fill_n(end_, n - after_elems, value_copy);
                 end_ = mystl::uninitialized_move(pos, old_end, end_);
-                mystl::uninitilized_fill_n(pos, after_elems, value_copy);
+                mystl::uninitialized_fill_n(pos, after_elems, value_copy);
             }
         }
         else
@@ -838,8 +838,8 @@ namespace mystl
             auto new_end = new_begin;
             try
             {
-                new_end = mystl::uninitailized_move(begin_, pos, new_begin);
-                new_end = mystl::uninitailized_copy(first, last, new_end);
+                new_end = mystl::uninitialized_move(begin_, pos, new_begin);
+                new_end = mystl::uninitialized_copy(first, last, new_end);
                 new_end = mystl::uninitialized_move(pos, end_, new_end);
             }
             catch (...)

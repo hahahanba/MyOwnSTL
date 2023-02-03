@@ -10,7 +10,7 @@
 #pragma warning(disable : 4244)
 #endif
 
-// 这个头文件包含了mystl的一系列算法
+// 这个头文件包含了 mystl 的一系列算法
 
 #include <cstddef>
 #include <ctime>
@@ -27,7 +27,7 @@ namespace mystl
     // all_of
     // 检查[first, last)内是否全部元素都满足一元操作 unary_pred 为 true 的情况，满足则返回 true
     /*****************************************************************************************/
-    template<class InputIter, class UnaryPredicate>
+    template <class InputIter, class UnaryPredicate>
     bool all_of(InputIter first, InputIter last, UnaryPredicate unary_pred)
     {
         for (; first != last; ++first)
@@ -42,7 +42,7 @@ namespace mystl
     // any_of
     // 检查[first, last)内是否存在某个元素满足一元操作 unary_pred 为 true 的情况，满足则返回 true
     /*****************************************************************************************/
-    template<class InputIter, class UnaryPredicate>
+    template <class InputIter, class UnaryPredicate>
     bool any_of(InputIter first, InputIter last, UnaryPredicate unary_pred)
     {
         for (; first != last; ++first)
@@ -57,7 +57,7 @@ namespace mystl
     // none_of
     // 检查[first, last)内是否全部元素都不满足一元操作 unary_pred 为 true 的情况，满足则返回 true
     /*****************************************************************************************/
-    template<class InputIter, class UnaryPredicate>
+    template <class InputIter, class UnaryPredicate>
     bool none_of(InputIter first, InputIter last, UnaryPredicate unary_pred)
     {
         for (; first != last; ++first)
@@ -72,7 +72,7 @@ namespace mystl
     // count
     // 对[first, last)区间内的元素与给定值进行比较，缺省使用 operator==，返回元素相等的个数
     /*****************************************************************************************/
-    template<class InputIter, class T>
+    template <class InputIter, class T>
     size_t count(InputIter first, InputIter last, const T& value)
     {
         size_t n = 0;
@@ -88,7 +88,7 @@ namespace mystl
     // count_if
     // 对[first, last)区间内的每个元素都进行一元 unary_pred 操作，返回结果为 true 的个数
     /*****************************************************************************************/
-    template<class InputIter, class UnaryPredicate>
+    template <class InputIter, class UnaryPredicate>
     size_t count_if(InputIter first, InputIter last, UnaryPredicate unary_pred)
     {
         size_t n = 0;
@@ -100,12 +100,13 @@ namespace mystl
         return n;
     }
 
-    /*****************************************************************************************
-     * find
-     * 在[first, last)区间内找到等于value的元素，返回指向该元素的迭代器
-     * ***************************************************************************************/
-    template<class InputIter, class T>
-    InputIter find(InputIter first, InputIter last, const T& value)
+    /*****************************************************************************************/
+    // find
+    // 在[first, last)区间内找到等于 value 的元素，返回指向该元素的迭代器
+    /*****************************************************************************************/
+    template <class InputIter, class T>
+    InputIter
+    find(InputIter first, InputIter last, const T& value)
     {
         while (first != last && *first != value)
             ++first;
@@ -116,8 +117,9 @@ namespace mystl
     // find_if
     // 在[first, last)区间内找到第一个令一元操作 unary_pred 为 true 的元素并返回指向该元素的迭代器
     /*****************************************************************************************/
-    template<class InputIter, class UnaryPredicate>
-    InputIter find_if(InputIter first, InputIter last, UnaryPredicate unary_pred)
+    template <class InputIter, class UnaryPredicate>
+    InputIter
+    find_if(InputIter first, InputIter last, UnaryPredicate unary_pred)
     {
         while (first != last && !unary_pred(*first))
             ++first;
@@ -128,8 +130,9 @@ namespace mystl
     // find_if_not
     // 在[first, last)区间内找到第一个令一元操作 unary_pred 为 false 的元素并返回指向该元素的迭代器
     /*****************************************************************************************/
-    template<class InputIter, class UnaryPredicate>
-    InputIter find_if_not(InputIter first, InputIter last, UnaryPredicate unary_pred)
+    template <class InputIter, class UnaryPredicate>
+    InputIter
+    find_if_not(InputIter first, InputIter last, UnaryPredicate unary_pred)
     {
         while (first != last && unary_pred(*first))
             ++first;
@@ -140,9 +143,10 @@ namespace mystl
     // search
     // 在[first1, last1)中查找[first2, last2)的首次出现点
     /*****************************************************************************************/
-    template<class ForwardIter1, class ForwardIter2>
-    ForwardIter1 search(ForwardIter1 first1, ForwardIter1 last1,
-                        ForwardIter2 first2, ForwardIter2 last2)
+    template <class ForwardIter1, class ForwardIter2>
+    ForwardIter1
+    search(ForwardIter1 first1, ForwardIter1 last1,
+           ForwardIter2 first2, ForwardIter2 last2)
     {
         auto d1 = mystl::distance(first1, last1);
         auto d2 = mystl::distance(first2, last2);
@@ -214,81 +218,92 @@ namespace mystl
     // search_n
     // 在[first, last)中查找连续 n 个 value 所形成的子序列，返回一个迭代器指向该子序列的起始处
     /*****************************************************************************************/
-    template<class ForwardIter, class Size, class T>
-    ForwardIter search_n(ForwardIter first, ForwardIter last, Size n, const T& value) {
-        if (n <= 0) {
+    template <class ForwardIter, class Size, class T>
+    ForwardIter
+    search_n(ForwardIter first, ForwardIter last, Size n, const T& value)
+    {
+        if (n <= 0)
+        {
             return first;
-        } else {
+        }
+        else
+        {
             first = mystl::find(first, last, value);
-            while (first != last) {
+            while (first != last)
+            {
                 auto m = n - 1;
                 auto i = first;
                 ++i;
-                while (i != last && m != 0 && *i == value) {
+                while (i != last && m != 0 && *i == value)
+                {
                     ++i;
                     --m;
                 }
-                if (m == 0) {
+                if (m == 0)
+                {
                     return first;
-                } else {
+                }
+                else
+                {
                     first = mystl::find(i, last, value);
                 }
             }
             return last;
         }
     }
-        // 重载版本使用函数对象 comp 代替比较操作
-        template <class ForwardIter, class Size, class T, class Compared>
-        ForwardIter
-        search_n(ForwardIter first, ForwardIter last,
-                 Size n, const T& value, Compared comp)
+
+    // 重载版本使用函数对象 comp 代替比较操作
+    template <class ForwardIter, class Size, class T, class Compared>
+    ForwardIter
+    search_n(ForwardIter first, ForwardIter last,
+             Size n, const T& value, Compared comp)
+    {
+        if (n <= 0)
         {
-            if (n <= 0)
-            {
-                return first;
-            }
-            else
-            {
-                while (first != last)
-                {
-                    if (comp(*first, value))
-                        break;
-                    ++first;
-                }
-                while (first != last)
-                {
-                    auto m = n - 1;
-                    auto i = first;
-                    ++i;
-                    while (i != last && m != 0 && comp(*i, value))
-                    {
-                        ++i;
-                        --m;
-                    }
-                    if (m == 0)
-                    {
-                        return first;
-                    }
-                    else
-                    {
-                        while (i != last)
-                        {
-                            if (comp(*i, value))
-                                break;
-                            ++i;
-                        }
-                        first = i;
-                    }
-                }
-                return last;
-            }
+            return first;
         }
+        else
+        {
+            while (first != last)
+            {
+                if (comp(*first, value))
+                    break;
+                ++first;
+            }
+            while (first != last)
+            {
+                auto m = n - 1;
+                auto i = first;
+                ++i;
+                while (i != last && m != 0 && comp(*i, value))
+                {
+                    ++i;
+                    --m;
+                }
+                if (m == 0)
+                {
+                    return first;
+                }
+                else
+                {
+                    while (i != last)
+                    {
+                        if (comp(*i, value))
+                            break;
+                        ++i;
+                    }
+                    first = i;
+                }
+            }
+            return last;
+        }
+    }
 
     /*****************************************************************************************/
-// find_end
-// 在[first1, last1)区间中查找[first2, last2)最后一次出现的地方，若不存在返回 last1
-/*****************************************************************************************/
-// find_end_dispatch 的 forward_iterator_tag 版本
+    // find_end
+    // 在[first1, last1)区间中查找[first2, last2)最后一次出现的地方，若不存在返回 last1
+    /*****************************************************************************************/
+    // find_end_dispatch 的 forward_iterator_tag 版本
     template <class ForwardIter1, class ForwardIter2>
     ForwardIter1
     find_end_dispatch(ForwardIter1 first1, ForwardIter1 last1,
@@ -320,7 +335,7 @@ namespace mystl
         }
     }
 
-// find_end_dispatch 的 bidirectional_iterator_tag 版本
+    // find_end_dispatch 的 bidirectional_iterator_tag 版本
     template <class BidirectionalIter1, class BidirectionalIter2>
     BidirectionalIter1
     find_end_dispatch(BidirectionalIter1 first1, BidirectionalIter1 last1,
@@ -354,8 +369,8 @@ namespace mystl
         return mystl::find_end_dispatch(first1, last1, first2, last2, Category1(), Category2());
     }
 
-// 重载版本使用函数对象 comp 代替比较操作
-// find_end_dispatch 的 forward_iterator_tag 版本
+    // 重载版本使用函数对象 comp 代替比较操作
+    // find_end_dispatch 的 forward_iterator_tag 版本
     template <class ForwardIter1, class ForwardIter2, class Compared>
     ForwardIter1
     find_end_dispatch(ForwardIter1 first1, ForwardIter1 last1,
@@ -387,7 +402,7 @@ namespace mystl
         }
     }
 
-// find_end_dispatch 的 bidirectional_iterator_tag 版本
+    // find_end_dispatch 的 bidirectional_iterator_tag 版本
     template <class BidirectionalIter1, class BidirectionalIter2, class Compared>
     BidirectionalIter1
     find_end_dispatch(BidirectionalIter1 first1, BidirectionalIter1 last1,
@@ -421,10 +436,10 @@ namespace mystl
         return mystl::find_end_dispatch(first1, last1, first2, last2, Category1(), Category2(), comp);
     }
 
-/*****************************************************************************************/
-// find_first_of
-// 在[first1, last1)中查找[first2, last2)中的某些元素，返回指向第一次出现的元素的迭代器
-/*****************************************************************************************/
+    /*****************************************************************************************/
+    // find_first_of
+    // 在[first1, last1)中查找[first2, last2)中的某些元素，返回指向第一次出现的元素的迭代器
+    /*****************************************************************************************/
     template <class InputIter, class ForwardIter>
     InputIter
     find_first_of(InputIter first1, InputIter last1,
@@ -441,7 +456,7 @@ namespace mystl
         return last1;
     }
 
-// 重载版本使用函数对象 comp 代替比较操作
+    // 重载版本使用函数对象 comp 代替比较操作
     template <class InputIter, class ForwardIter, class Compared>
     InputIter
     find_first_of(InputIter first1, InputIter last1,
@@ -458,11 +473,11 @@ namespace mystl
         return last1;
     }
 
-/*****************************************************************************************/
-// for_each
-// 使用一个函数对象 f 对[first, last)区间内的每个元素执行一个 operator() 操作，但不能改变元素内容
-// f() 可返回一个值，但该值会被忽略
-/*****************************************************************************************/
+    /*****************************************************************************************/
+    // for_each
+    // 使用一个函数对象 f 对[first, last)区间内的每个元素执行一个 operator() 操作，但不能改变元素内容
+    // f() 可返回一个值，但该值会被忽略
+    /*****************************************************************************************/
     template <class InputIter, class Function>
     Function for_each(InputIter first, InputIter last, Function f)
     {
@@ -473,10 +488,10 @@ namespace mystl
         return f;
     }
 
-/*****************************************************************************************/
-// adjacent_find
-// 找出第一对匹配的相邻元素，缺省使用 operator== 比较，如果找到返回一个迭代器，指向这对元素的第一个元素
-/*****************************************************************************************/
+    /*****************************************************************************************/
+    // adjacent_find
+    // 找出第一对匹配的相邻元素，缺省使用 operator== 比较，如果找到返回一个迭代器，指向这对元素的第一个元素
+    /*****************************************************************************************/
     template <class ForwardIter>
     ForwardIter adjacent_find(ForwardIter first, ForwardIter last)
     {
@@ -490,7 +505,7 @@ namespace mystl
         return last;
     }
 
-// 重载版本使用函数对象 comp 代替比较操作
+    // 重载版本使用函数对象 comp 代替比较操作
     template <class ForwardIter, class Compared>
     ForwardIter adjacent_find(ForwardIter first, ForwardIter last, Compared comp)
     {
@@ -504,11 +519,11 @@ namespace mystl
         return last;
     }
 
-/*****************************************************************************************/
-// lower_bound
-// 在[first, last)中查找第一个不小于 value 的元素，并返回指向它的迭代器，若没有则返回 last
-/*****************************************************************************************/
-// lbound_dispatch 的 forward_iterator_tag 版本
+    /*****************************************************************************************/
+    // lower_bound
+    // 在[first, last)中查找第一个不小于 value 的元素，并返回指向它的迭代器，若没有则返回 last
+    /*****************************************************************************************/
+    // lbound_dispatch 的 forward_iterator_tag 版本
     template <class ForwardIter, class T>
     ForwardIter
     lbound_dispatch(ForwardIter first, ForwardIter last,
@@ -536,7 +551,7 @@ namespace mystl
         return first;
     }
 
-// lbound_dispatch 的 random_access_iterator_tag 版本
+    // lbound_dispatch 的 random_access_iterator_tag 版本
     template <class RandomIter, class T>
     RandomIter
     lbound_dispatch(RandomIter first, RandomIter last,
@@ -569,8 +584,8 @@ namespace mystl
         return mystl::lbound_dispatch(first, last, value, iterator_category(first));
     }
 
-// 重载版本使用函数对象 comp 代替比较操作
-// lbound_dispatch 的 forward_iterator_tag 版本
+    // 重载版本使用函数对象 comp 代替比较操作
+    // lbound_dispatch 的 forward_iterator_tag 版本
     template <class ForwardIter, class T, class Compared>
     ForwardIter
     lbound_dispatch(ForwardIter first, ForwardIter last,
@@ -598,7 +613,7 @@ namespace mystl
         return first;
     }
 
-// lbound_dispatch 的 random_access_iterator_tag 版本
+    // lbound_dispatch 的 random_access_iterator_tag 版本
     template <class RandomIter, class T, class Compared>
     RandomIter
     lbound_dispatch(RandomIter first, RandomIter last,
@@ -631,11 +646,11 @@ namespace mystl
         return mystl::lbound_dispatch(first, last, value, iterator_category(first), comp);
     }
 
-/*****************************************************************************************/
-// upper_bound
-// 在[first, last)中查找第一个大于value 的元素，并返回指向它的迭代器，若没有则返回 last
-/*****************************************************************************************/
-// ubound_dispatch 的 forward_iterator_tag 版本
+    /*****************************************************************************************/
+    // upper_bound
+    // 在[first, last)中查找第一个大于value 的元素，并返回指向它的迭代器，若没有则返回 last
+    /*****************************************************************************************/
+    // ubound_dispatch 的 forward_iterator_tag 版本
     template <class ForwardIter, class T>
     ForwardIter
     ubound_dispatch(ForwardIter first, ForwardIter last,
@@ -663,7 +678,7 @@ namespace mystl
         return first;
     }
 
-// ubound_dispatch 的 random_access_iterator_tag 版本
+    // ubound_dispatch 的 random_access_iterator_tag 版本
     template <class RandomIter, class T>
     RandomIter
     ubound_dispatch(RandomIter first, RandomIter last,
@@ -696,8 +711,8 @@ namespace mystl
         return mystl::ubound_dispatch(first, last, value, iterator_category(first));
     }
 
-// 重载版本使用函数对象 comp 代替比较操作
-// ubound_dispatch 的 forward_iterator_tag 版本
+    // 重载版本使用函数对象 comp 代替比较操作
+    // ubound_dispatch 的 forward_iterator_tag 版本
     template <class ForwardIter, class T, class Compared>
     ForwardIter
     ubound_dispatch(ForwardIter first, ForwardIter last,
@@ -725,7 +740,7 @@ namespace mystl
         return first;
     }
 
-// ubound_dispatch 的 random_access_iterator_tag 版本
+    // ubound_dispatch 的 random_access_iterator_tag 版本
     template <class RandomIter, class T, class Compared>
     RandomIter
     ubound_dispatch(RandomIter first, RandomIter last,
@@ -758,10 +773,10 @@ namespace mystl
         return mystl::ubound_dispatch(first, last, value, iterator_category(first), comp);
     }
 
-/*****************************************************************************************/
-// binary_search
-// 二分查找，如果在[first, last)内有等同于 value 的元素，返回 true，否则返回 false
-/*****************************************************************************************/
+    /*****************************************************************************************/
+    // binary_search
+    // 二分查找，如果在[first, last)内有等同于 value 的元素，返回 true，否则返回 false
+    /*****************************************************************************************/
     template <class ForwardIter, class T>
     bool binary_search(ForwardIter first, ForwardIter last, const T& value)
     {
@@ -769,7 +784,7 @@ namespace mystl
         return i != last && !(value < *i);
     }
 
-// 重载版本使用函数对象 comp 代替比较操作
+    // 重载版本使用函数对象 comp 代替比较操作
     template <class ForwardIter, class T, class Compared>
     bool binary_search(ForwardIter first, ForwardIter last, const T& value, Compared comp)
     {
@@ -777,12 +792,12 @@ namespace mystl
         return i != last && !comp(value, *i);
     }
 
-/*****************************************************************************************/
-// equal_range
-// 查找[first,last)区间中与 value 相等的元素所形成的区间，返回一对迭代器指向区间首尾
-// 第一个迭代器指向第一个不小于 value 的元素，第二个迭代器指向第一个大于 value 的元素
-/*****************************************************************************************/
-// erange_dispatch 的 forward_iterator_tag 版本
+    /*****************************************************************************************/
+    // equal_range
+    // 查找[first,last)区间中与 value 相等的元素所形成的区间，返回一对迭代器指向区间首尾
+    // 第一个迭代器指向第一个不小于 value 的元素，第二个迭代器指向第一个大于 value 的元素
+    /*****************************************************************************************/
+    // erange_dispatch 的 forward_iterator_tag 版本
     template <class ForwardIter, class T>
     mystl::pair<ForwardIter, ForwardIter>
     erange_dispatch(ForwardIter first, ForwardIter last,
@@ -817,7 +832,7 @@ namespace mystl
         return mystl::pair<ForwardIter, ForwardIter>(last, last);
     }
 
-// erange_dispatch 的 random_access_iterator_tag 版本
+    // erange_dispatch 的 random_access_iterator_tag 版本
     template <class RandomIter, class T>
     mystl::pair<RandomIter, RandomIter>
     erange_dispatch(RandomIter first, RandomIter last,
@@ -856,8 +871,8 @@ namespace mystl
         return mystl::erange_dispatch(first, last, value, iterator_category(first));
     }
 
-// 重载版本使用函数对象 comp 代替比较操作
-// erange_dispatch 的 forward iterator 版本
+    // 重载版本使用函数对象 comp 代替比较操作
+    // erange_dispatch 的 forward iterator 版本
     template <class ForwardIter, class T, class Compared>
     mystl::pair<ForwardIter, ForwardIter>
     erange_dispatch(ForwardIter first, ForwardIter last,
@@ -892,7 +907,7 @@ namespace mystl
         return mystl::pair<ForwardIter, ForwardIter>(last, last);
     }
 
-// erange_dispatch 的 random access iterator 版本
+    // erange_dispatch 的 random access iterator 版本
     template <class RandomIter, class T, class Compared>
     mystl::pair<RandomIter, RandomIter>
     erange_dispatch(RandomIter first, RandomIter last,
@@ -931,10 +946,10 @@ namespace mystl
         return mystl::erange_dispatch(first, last, value, iterator_category(first), comp);
     }
 
-/*****************************************************************************************/
-// generate
-// 将函数对象 gen 的运算结果对[first, last)内的每个元素赋值
-/*****************************************************************************************/
+    /*****************************************************************************************/
+    // generate
+    // 将函数对象 gen 的运算结果对[first, last)内的每个元素赋值
+    /*****************************************************************************************/
     template <class ForwardIter, class Generator>
     void generate(ForwardIter first, ForwardIter last, Generator gen)
     {
@@ -944,10 +959,10 @@ namespace mystl
         }
     }
 
-/*****************************************************************************************/
-// generate_n
-// 用函数对象 gen 连续对 n 个元素赋值
-/*****************************************************************************************/
+    /*****************************************************************************************/
+    // generate_n
+    // 用函数对象 gen 连续对 n 个元素赋值
+    /*****************************************************************************************/
     template <class ForwardIter, class Size, class Generator>
     void generate_n(ForwardIter first, Size n, Generator gen)
     {
@@ -957,10 +972,10 @@ namespace mystl
         }
     }
 
-/*****************************************************************************************/
-// includes
-// 判断序列一S1 是否包含序列二S2
-/*****************************************************************************************/
+    /*****************************************************************************************/
+    // includes
+    // 判断序列一S1 是否包含序列二S2
+    /*****************************************************************************************/
     template <class InputIter1, class InputIter2>
     bool includes(InputIter1 first1, InputIter1 last1,
                   InputIter2 first2, InputIter2 last2)
@@ -983,7 +998,7 @@ namespace mystl
         return first2 == last2;
     }
 
-// 重载版本使用函数对象 comp 代替比较操作
+    // 重载版本使用函数对象 comp 代替比较操作
     template <class InputIter1, class InputIter2, class Compared>
     bool includes(InputIter1 first1, InputIter1 last1,
                   InputIter2 first2, InputIter2 last2, Compared comp)
@@ -1006,10 +1021,10 @@ namespace mystl
         return first2 == last2;
     }
 
-/*****************************************************************************************/
-// is_heap
-// 检查[first, last)内的元素是否为一个堆，如果是，则返回 true
-/*****************************************************************************************/
+    /*****************************************************************************************/
+    // is_heap
+    // 检查[first, last)内的元素是否为一个堆，如果是，则返回 true
+    /*****************************************************************************************/
     template <class RandomIter>
     bool is_heap(RandomIter first, RandomIter last)
     {
@@ -1025,7 +1040,7 @@ namespace mystl
         return true;
     }
 
-// 重载版本使用函数对象 comp 代替比较操作
+    // 重载版本使用函数对象 comp 代替比较操作
     template <class RandomIter, class Compared>
     bool is_heap(RandomIter first, RandomIter last, Compared comp)
     {
@@ -1041,10 +1056,10 @@ namespace mystl
         return true;
     }
 
-/*****************************************************************************************/
-// is_sorted
-// 检查[first, last)内的元素是否升序，如果是升序，则返回 true
-/*****************************************************************************************/
+    /*****************************************************************************************/
+    // is_sorted
+    // 检查[first, last)内的元素是否升序，如果是升序，则返回 true
+    /*****************************************************************************************/
     template <class ForwardIter>
     bool is_sorted(ForwardIter first, ForwardIter last)
     {
@@ -1060,7 +1075,7 @@ namespace mystl
         return true;
     }
 
-// 重载版本使用函数对象 comp 代替比较操作
+    // 重载版本使用函数对象 comp 代替比较操作
     template <class ForwardIter, class Compared>
     bool is_sorted(ForwardIter first, ForwardIter last, Compared comp)
     {
@@ -1076,10 +1091,10 @@ namespace mystl
         return true;
     }
 
-/*****************************************************************************************/
-// median
-// 找出三个值的中间值
-/*****************************************************************************************/
+    /*****************************************************************************************/
+    // median
+    // 找出三个值的中间值
+    /*****************************************************************************************/
     template <class T>
     const T& median(const T& left, const T& mid, const T& right)
     {
@@ -1098,7 +1113,7 @@ namespace mystl
             return mid;
     }
 
-// 重载版本使用函数对象 comp 代替比较操作
+    // 重载版本使用函数对象 comp 代替比较操作
     template <class T, class Compared>
     const T& median(const T& left, const T& mid, const T& right, Compared comp)
     {
@@ -1117,10 +1132,10 @@ namespace mystl
             return mid;
     }
 
-/*****************************************************************************************/
-// max_element
-// 返回一个迭代器，指向序列中最大的元素
-/*****************************************************************************************/
+    /*****************************************************************************************/
+    // max_element
+    // 返回一个迭代器，指向序列中最大的元素
+    /*****************************************************************************************/
     template <class ForwardIter>
     ForwardIter max_element(ForwardIter first, ForwardIter last)
     {
@@ -1135,7 +1150,7 @@ namespace mystl
         return result;
     }
 
-// 重载版本使用函数对象 comp 代替比较操作
+    // 重载版本使用函数对象 comp 代替比较操作
     template <class ForwardIter, class Compared>
     ForwardIter max_element(ForwardIter first, ForwardIter last, Compared comp)
     {
@@ -1150,10 +1165,10 @@ namespace mystl
         return result;
     }
 
-/*****************************************************************************************/
-// min_element
-// 返回一个迭代器，指向序列中最小的元素
-/*****************************************************************************************/
+    /*****************************************************************************************/
+    // min_element
+    // 返回一个迭代器，指向序列中最小的元素
+    /*****************************************************************************************/
     template <class ForwardIter>
     ForwardIter min_elememt(ForwardIter first, ForwardIter last)
     {
@@ -1168,7 +1183,7 @@ namespace mystl
         return result;
     }
 
-// 重载版本使用函数对象 comp 代替比较操作
+    // 重载版本使用函数对象 comp 代替比较操作
     template <class ForwardIter, class Compared>
     ForwardIter min_elememt(ForwardIter first, ForwardIter last, Compared comp)
     {
@@ -1183,11 +1198,11 @@ namespace mystl
         return result;
     }
 
-/*****************************************************************************************/
-// swap_ranges
-// 将[first1, last1)从 first2 开始，交换相同个数元素
-// 交换的区间长度必须相同，两个序列不能互相重叠，返回一个迭代器指向序列二最后一个被交换元素的下一位置
-/*****************************************************************************************/
+    /*****************************************************************************************/
+    // swap_ranges
+    // 将[first1, last1)从 first2 开始，交换相同个数元素
+    // 交换的区间长度必须相同，两个序列不能互相重叠，返回一个迭代器指向序列二最后一个被交换元素的下一位置
+    /*****************************************************************************************/
     template <class ForwardIter1, class ForwardIter2>
     ForwardIter2
     swap_ranges(ForwardIter1 first1, ForwardIter1 last1,
@@ -1200,11 +1215,11 @@ namespace mystl
         return first2;
     }
 
-/*****************************************************************************************/
-// transform
-// 第一个版本以函数对象 unary_op 作用于[first, last)中的每个元素并将结果保存至 result 中
-// 第二个版本以函数对象 binary_op 作用于两个序列[first1, last1)、[first2, last2)的相同位置
-/*****************************************************************************************/
+    /*****************************************************************************************/
+    // transform
+    // 第一个版本以函数对象 unary_op 作用于[first, last)中的每个元素并将结果保存至 result 中
+    // 第二个版本以函数对象 binary_op 作用于两个序列[first1, last1)、[first2, last2)的相同位置
+    /*****************************************************************************************/
     template <class InputIter, class OutputIter, class UnaryOperation>
     OutputIter
     transform(InputIter first, InputIter last,
@@ -1229,10 +1244,10 @@ namespace mystl
         return result;
     }
 
-/*****************************************************************************************/
-// remove_copy
-// 移除区间内与指定 value 相等的元素，并将结果复制到以 result 标示起始位置的容器上
-/*****************************************************************************************/
+    /*****************************************************************************************/
+    // remove_copy
+    // 移除区间内与指定 value 相等的元素，并将结果复制到以 result 标示起始位置的容器上
+    /*****************************************************************************************/
     template <class InputIter, class OutputIter, class T>
     OutputIter
     remove_copy(InputIter first, InputIter last, OutputIter result, const T& value)
@@ -1247,11 +1262,11 @@ namespace mystl
         return result;
     }
 
-/*****************************************************************************************/
-// remove
-// 移除所有与指定 value 相等的元素
-// 并不从容器中删除这些元素，所以 remove 和 remove_if 不适用于 array
-/*****************************************************************************************/
+    /*****************************************************************************************/
+    // remove
+    // 移除所有与指定 value 相等的元素
+    // 并不从容器中删除这些元素，所以 remove 和 remove_if 不适用于 array
+    /*****************************************************************************************/
     template <class ForwardIter, class T>
     ForwardIter remove(ForwardIter first, ForwardIter last, const T& value)
     {
@@ -1260,10 +1275,10 @@ namespace mystl
         return first == last ? first : mystl::remove_copy(++next, last, first, value);
     }
 
-/*****************************************************************************************/
-// remove_copy_if
-// 移除区间内所有令一元操作 unary_pred 为 true 的元素，并将结果复制到以 result 为起始位置的容器上
-/*****************************************************************************************/
+    /*****************************************************************************************/
+    // remove_copy_if
+    // 移除区间内所有令一元操作 unary_pred 为 true 的元素，并将结果复制到以 result 为起始位置的容器上
+    /*****************************************************************************************/
     template <class InputIter, class OutputIter, class UnaryPredicate>
     OutputIter
     remove_copy_if(InputIter first, InputIter last,
@@ -1280,10 +1295,10 @@ namespace mystl
         return result;
     }
 
-/*****************************************************************************************/
-// remove_if
-// 移除区间内所有令一元操作 unary_pred 为 true 的元素
-/*****************************************************************************************/
+    /*****************************************************************************************/
+    // remove_if
+    // 移除区间内所有令一元操作 unary_pred 为 true 的元素
+    /*****************************************************************************************/
     template <class ForwardIter, class UnaryPredicate>
     ForwardIter
     remove_if(ForwardIter first, ForwardIter last, UnaryPredicate unary_pred)
@@ -1293,10 +1308,10 @@ namespace mystl
         return first == last ? first : mystl::remove_copy_if(++next, last, first, unary_pred);
     }
 
-/*****************************************************************************************/
-// replace
-// 将区间内所有的 old_value 都以 new_value 替代
-/*****************************************************************************************/
+    /*****************************************************************************************/
+    // replace
+    // 将区间内所有的 old_value 都以 new_value 替代
+    /*****************************************************************************************/
     template <class ForwardIter, class T>
     void replace(ForwardIter first, ForwardIter last,
                  const T& old_value, const T& new_value)
@@ -1308,10 +1323,10 @@ namespace mystl
         }
     }
 
-/*****************************************************************************************/
-// replace_copy
-// 行为与 replace 类似，不同的是将结果复制到 result 所指的容器中，原序列没有改变
-/*****************************************************************************************/
+    /*****************************************************************************************/
+    // replace_copy
+    // 行为与 replace 类似，不同的是将结果复制到 result 所指的容器中，原序列没有改变
+    /*****************************************************************************************/
     template <class InputIter, class OutputIter, class T>
     OutputIter
     replace_copy(InputIter first, InputIter last,
@@ -1324,10 +1339,10 @@ namespace mystl
         return result;
     }
 
-/*****************************************************************************************/
-// replace_copy_if
-// 行为与 replace_if 类似，不同的是将结果复制到 result 所指的容器中，原序列没有改变
-/*****************************************************************************************/
+    /*****************************************************************************************/
+    // replace_copy_if
+    // 行为与 replace_if 类似，不同的是将结果复制到 result 所指的容器中，原序列没有改变
+    /*****************************************************************************************/
     template <class InputIter, class OutputIter, class UnaryPredicate, class T>
     OutputIter
     replace_copy_if(InputIter first, InputIter last,
@@ -1340,10 +1355,10 @@ namespace mystl
         return result;
     }
 
-/*****************************************************************************************/
-// replace_if
-// 将区间内所有令一元操作 unary_pred 为 true 的元素都用 new_value 替代
-/*****************************************************************************************/
+    /*****************************************************************************************/
+    // replace_if
+    // 将区间内所有令一元操作 unary_pred 为 true 的元素都用 new_value 替代
+    /*****************************************************************************************/
     template <class ForwardIter, class UnaryPredicate, class T>
     void replace_if(ForwardIter first, ForwardIter last,
                     UnaryPredicate unary_pred, const T& new_value)
@@ -1355,11 +1370,11 @@ namespace mystl
         }
     }
 
-/*****************************************************************************************/
-// reverse
-// 将[first, last)区间内的元素反转
-/*****************************************************************************************/
-// reverse_dispatch 的 bidirectional_iterator_tag 版本
+    /*****************************************************************************************/
+    // reverse
+    // 将[first, last)区间内的元素反转
+    /*****************************************************************************************/
+    // reverse_dispatch 的 bidirectional_iterator_tag 版本
     template <class BidirectionalIter>
     void reverse_dispatch(BidirectionalIter first, BidirectionalIter last,
                           bidirectional_iterator_tag)
@@ -1372,7 +1387,7 @@ namespace mystl
         }
     }
 
-// reverse_dispatch 的 random_access_iterator_tag 版本
+    // reverse_dispatch 的 random_access_iterator_tag 版本
     template <class RandomIter>
     void reverse_dispatch(RandomIter first, RandomIter last,
                           random_access_iterator_tag)
@@ -1387,10 +1402,10 @@ namespace mystl
         mystl::reverse_dispatch(first, last, iterator_category(first));
     }
 
-/*****************************************************************************************/
-// reverse_copy
-// 行为与 reverse 类似，不同的是将结果复制到 result 所指容器中
-/*****************************************************************************************/
+    /*****************************************************************************************/
+    // reverse_copy
+    // 行为与 reverse 类似，不同的是将结果复制到 result 所指容器中
+    /*****************************************************************************************/
     template <class BidirectionalIter, class OutputIter>
     OutputIter
     reverse_copy(BidirectionalIter first, BidirectionalIter last,
@@ -1405,11 +1420,11 @@ namespace mystl
         return result;
     }
 
-/*****************************************************************************************/
-// random_shuffle
-// 将[first, last)内的元素次序随机重排
-// 重载版本使用一个产生随机数的函数对象 rand
-/*****************************************************************************************/
+    /*****************************************************************************************/
+    // random_shuffle
+    // 将[first, last)内的元素次序随机重排
+    // 重载版本使用一个产生随机数的函数对象 rand
+    /*****************************************************************************************/
     template <class RandomIter>
     void random_shuffle(RandomIter first, RandomIter last)
     {
@@ -1422,7 +1437,7 @@ namespace mystl
         }
     }
 
-// 重载版本使用一个产生随机数的函数对象 rand
+    // 重载版本使用一个产生随机数的函数对象 rand
     template <class RandomIter, class RandomNumberGenerator>
     void random_shuffle(RandomIter first, RandomIter last,
                         RandomNumberGenerator& rand)
@@ -1436,12 +1451,12 @@ namespace mystl
         }
     }
 
-/*****************************************************************************************/
-// rotate
-// 将[first, middle)内的元素和 [middle, last)内的元素互换，可以交换两个长度不同的区间
-// 返回交换后 middle 的位置
-/*****************************************************************************************/
-// rotate_dispatch 的 forward_iterator_tag 版本
+    /*****************************************************************************************/
+    // rotate
+    // 将[first, middle)内的元素和 [middle, last)内的元素互换，可以交换两个长度不同的区间
+    // 返回交换后 middle 的位置
+    /*****************************************************************************************/
+    // rotate_dispatch 的 forward_iterator_tag 版本
     template <class ForwardIter>
     ForwardIter
     rotate_dispatch(ForwardIter first, ForwardIter middle,
@@ -1472,7 +1487,7 @@ namespace mystl
         return new_middle;
     }
 
-// rotate_dispatch 的 bidirectional_iterator_tag 版本
+    // rotate_dispatch 的 bidirectional_iterator_tag 版本
     template <class BidirectionalIter>
     BidirectionalIter
     rotate_dispatch(BidirectionalIter first, BidirectionalIter middle,
@@ -1494,7 +1509,7 @@ namespace mystl
         }
     }
 
-// 求最大公因子
+    // 求最大公因子
     template <class EuclideanRingElement>
     EuclideanRingElement rgcd(EuclideanRingElement m, EuclideanRingElement n)
     {
@@ -1507,7 +1522,7 @@ namespace mystl
         return m;
     }
 
-// rotate_dispatch 的 random_access_iterator_tag 版本
+    // rotate_dispatch 的 random_access_iterator_tag 版本
     template <class RandomIter>
     RandomIter
     rotate_dispatch(RandomIter first, RandomIter middle,
@@ -1571,10 +1586,10 @@ namespace mystl
         return mystl::rotate_dispatch(first, middle, last, iterator_category(first));
     }
 
-/*****************************************************************************************/
-// rotate_copy
-// 行为与 rotate 类似，不同的是将结果复制到 result 所指的容器中
-/*****************************************************************************************/
+    /*****************************************************************************************/
+    // rotate_copy
+    // 行为与 rotate 类似，不同的是将结果复制到 result 所指的容器中
+    /*****************************************************************************************/
     template <class ForwardIter, class OutputIter>
     ForwardIter
     rotate_copy(ForwardIter first, ForwardIter middle,
@@ -1583,10 +1598,10 @@ namespace mystl
         return mystl::copy(first, middle, mystl::copy(middle, last, result));
     }
 
-/*****************************************************************************************/
-// is_permutation
-// 判断[first1,last1)是否为[first2, last2)的排列组合
-/*****************************************************************************************/
+    /*****************************************************************************************/
+    // is_permutation
+    // 判断[first1,last1)是否为[first2, last2)的排列组合
+    /*****************************************************************************************/
     template <class ForwardIter1, class ForwardIter2, class BinaryPred>
     bool is_permutation_aux(ForwardIter1 first1, ForwardIter1 last1,
                             ForwardIter2 first2, ForwardIter2 last2,
@@ -1683,10 +1698,10 @@ namespace mystl
                                   mystl::equal_to<v1>());
     }
 
-/*****************************************************************************************/
-// next_permutation
-// 取得[first, last)所标示序列的下一个排列组合，如果没有下一个排序组合，返回 false，否则返回 true
-/*****************************************************************************************/
+    /*****************************************************************************************/
+    // next_permutation
+    // 取得[first, last)所标示序列的下一个排列组合，如果没有下一个排序组合，返回 false，否则返回 true
+    /*****************************************************************************************/
     template <class BidirectionalIter>
     bool next_permutation(BidirectionalIter first, BidirectionalIter last)
     {
@@ -1712,7 +1727,7 @@ namespace mystl
         }
     }
 
-// 重载版本使用函数对象 comp 代替比较操作
+    // 重载版本使用函数对象 comp 代替比较操作
     template <class BidirectionalIter, class Compared>
     bool next_permutation(BidirectionalIter first, BidirectionalIter last, Compared comp)
     {
@@ -1738,10 +1753,10 @@ namespace mystl
         }
     }
 
-/*****************************************************************************************/
-// prev_permutation
-// 取得[first, last)所标示序列的上一个排列组合，如果没有上一个排序组合，返回 false，否则返回 true
-/*****************************************************************************************/
+    /*****************************************************************************************/
+    // prev_permutation
+    // 取得[first, last)所标示序列的上一个排列组合，如果没有上一个排序组合，返回 false，否则返回 true
+    /*****************************************************************************************/
     template <class BidirectionalIter>
     bool prev_permutation(BidirectionalIter first, BidirectionalIter last)
     {
@@ -1767,7 +1782,7 @@ namespace mystl
         }
     }
 
-// 重载版本使用函数对象 comp 代替比较操作
+    // 重载版本使用函数对象 comp 代替比较操作
     template <class BidirectionalIter, class Compared>
     bool prev_permutation(BidirectionalIter first, BidirectionalIter last, Compared comp)
     {
@@ -1793,10 +1808,10 @@ namespace mystl
         }
     }
 
-/*****************************************************************************************/
-// merge
-// 将两个经过排序的集合 S1 和 S2 合并起来置于另一段空间，返回一个迭代器指向最后一个元素的下一位置
-/*****************************************************************************************/
+    /*****************************************************************************************/
+    // merge
+    // 将两个经过排序的集合 S1 和 S2 合并起来置于另一段空间，返回一个迭代器指向最后一个元素的下一位置
+    /*****************************************************************************************/
     template <class InputIter1, class InputIter2, class OutputIter>
     OutputIter
     merge(InputIter1 first1, InputIter1 last1,
@@ -1820,7 +1835,7 @@ namespace mystl
         return mystl::copy(first2, last2, mystl::copy(first1, last1, result));
     }
 
-// 重载版本使用函数对象 comp 代替比较操作
+    // 重载版本使用函数对象 comp 代替比较操作
     template <class InputIter1, class InputIter2, class OutputIter, class Compared>
     OutputIter
     merge(InputIter1 first1, InputIter1 last1,
@@ -1844,11 +1859,11 @@ namespace mystl
         return mystl::copy(first2, last2, mystl::copy(first1, last1, result));
     }
 
-/*****************************************************************************************/
-// inplace_merge
-// 把连接在一起的两个有序序列结合成单一序列并保持有序
-/*****************************************************************************************/
-// 没有缓冲区的情况下合并
+    /*****************************************************************************************/
+    // inplace_merge
+    // 把连接在一起的两个有序序列结合成单一序列并保持有序
+    /*****************************************************************************************/
+    // 没有缓冲区的情况下合并
     template <class BidirectionalIter, class Distance>
     void merge_without_buffer(BidirectionalIter first, BidirectionalIter middle,
                               BidirectionalIter last, Distance len1, Distance len2)
@@ -1940,7 +1955,7 @@ namespace mystl
         }
     }
 
-// 有缓冲区的情况下合并
+    // 有缓冲区的情况下合并
     template <class BidirectionalIter, class Distance, class Pointer>
     void merge_adaptive(BidirectionalIter first, BidirectionalIter middle,
                         BidirectionalIter last, Distance len1, Distance len2,
@@ -2013,8 +2028,8 @@ namespace mystl
         mystl::inplace_merge_aux(first, middle, last, value_type(first));
     }
 
-// 重载版本使用函数对象 comp 代替比较操作
-// 没有缓冲区的情况下合并
+    // 重载版本使用函数对象 comp 代替比较操作
+    // 没有缓冲区的情况下合并
     template <class BidirectionalIter, class Distance, class Compared>
     void merge_without_buffer(BidirectionalIter first, BidirectionalIter middle,
                               BidirectionalIter last, Distance len1, Distance len2,
@@ -2082,7 +2097,7 @@ namespace mystl
         }
     }
 
-// 有缓冲区的情况下合并
+    // 有缓冲区的情况下合并
     template <class BidirectionalIter, class Distance, class Pointer, class Compared>
     void merge_adaptive(BidirectionalIter first, BidirectionalIter middle,
                         BidirectionalIter last, Distance len1, Distance len2,
@@ -2156,10 +2171,10 @@ namespace mystl
         mystl::inplace_merge_aux(first, middle, last, value_type(first), comp);
     }
 
-/*****************************************************************************************/
-// partial_sort
-// 对整个序列做部分排序，保证较小的 N 个元素以递增顺序置于[first, first + N)中
-/*****************************************************************************************/
+    /*****************************************************************************************/
+    // partial_sort
+    // 对整个序列做部分排序，保证较小的 N 个元素以递增顺序置于[first, first + N)中
+    /*****************************************************************************************/
     template <class RandomIter>
     void partial_sort(RandomIter first, RandomIter middle,
                       RandomIter last)
@@ -2175,7 +2190,7 @@ namespace mystl
         mystl::sort_heap(first, middle);
     }
 
-// 重载版本使用函数对象 comp 代替比较操作
+    // 重载版本使用函数对象 comp 代替比较操作
     template <class RandomIter, class Compared>
     void partial_sort(RandomIter first, RandomIter middle,
                       RandomIter last, Compared comp)
@@ -2191,10 +2206,10 @@ namespace mystl
         mystl::sort_heap(first, middle, comp);
     }
 
-/*****************************************************************************************/
-// partial_sort_copy
-// 行为与 partial_sort 类似，不同的是把排序结果复制到 result 容器中
-/*****************************************************************************************/
+    /*****************************************************************************************/
+    // partial_sort_copy
+    // 行为与 partial_sort 类似，不同的是把排序结果复制到 result 容器中
+    /*****************************************************************************************/
     template <class InputIter, class RandomIter, class Distance>
     RandomIter
     psort_copy_aux(InputIter first, InputIter last,
@@ -2233,7 +2248,7 @@ namespace mystl
                                      distance_type(result_first));
     }
 
-// 重载版本使用函数对象 comp 代替比较操作
+    // 重载版本使用函数对象 comp 代替比较操作
     template <class InputIter, class RandomIter, class Distance, class Compared>
     RandomIter
     psort_copy_aux(InputIter first, InputIter last,
@@ -2272,11 +2287,11 @@ namespace mystl
         return mystl::psort_copy_aux(first, last, result_first, result_last,
                                      distance_type(result_first), comp);
     }
-/*****************************************************************************************/
-// partition
-// 对区间内的元素重排，被一元条件运算判定为 true 的元素会放到区间的前段
-// 该函数不保证元素的原始相对位置
-/*****************************************************************************************/
+    /*****************************************************************************************/
+    // partition
+    // 对区间内的元素重排，被一元条件运算判定为 true 的元素会放到区间的前段
+    // 该函数不保证元素的原始相对位置
+    /*****************************************************************************************/
     template <class BidirectionalIter, class UnaryPredicate>
     BidirectionalIter
     partition(BidirectionalIter first, BidirectionalIter last,
@@ -2303,11 +2318,11 @@ namespace mystl
         return first;
     }
 
-/*****************************************************************************************/
-// partition_copy
-// 行为与 partition 类似，不同的是，将被一元操作符判定为 true 的放到 result_true 的输出区间
-// 其余放到 result_false 的输出区间，并返回一个 mystl::pair 指向这两个区间的尾部
-/*****************************************************************************************/
+    /*****************************************************************************************/
+    // partition_copy
+    // 行为与 partition 类似，不同的是，将被一元操作符判定为 true 的放到 result_true 的输出区间
+    // 其余放到 result_false 的输出区间，并返回一个 mystl::pair 指向这两个区间的尾部
+    /*****************************************************************************************/
     template <class InputIter, class OutputIter1, class OutputIter2, class UnaryPredicate>
     mystl::pair<OutputIter1, OutputIter2>
     partition_copy(InputIter first, InputIter last,
@@ -2328,10 +2343,10 @@ namespace mystl
         return mystl::pair<OutputIter1, OutputIter2>(result_true, result_false);
     }
 
-/*****************************************************************************************/
-// sort
-// 将[first, last)内的元素以递增的方式排序
-/*****************************************************************************************/
+    /*****************************************************************************************/
+    // sort
+    // 将[first, last)内的元素以递增的方式排序
+    /*****************************************************************************************/
     constexpr static size_t kSmallSectionSize = 128;  // 小型区间的大小，在这个大小内采用插入排序
 
     // 用于控制分割恶化的情况
@@ -2344,7 +2359,7 @@ namespace mystl
         return k;
     }
 
-// 分割函数 unchecked_partition
+    // 分割函数 unchecked_partition
     template <class RandomIter, class T>
     RandomIter
     unchecked_partition(RandomIter first, RandomIter last, const T& pivot)
@@ -2363,7 +2378,7 @@ namespace mystl
         }
     }
 
-// 内省式排序，先进行 quick sort，当分割行为有恶化倾向时，改用 heap sort
+    // 内省式排序，先进行 quick sort，当分割行为有恶化倾向时，改用 heap sort
     template <class RandomIter, class Size>
     void intro_sort(RandomIter first, RandomIter last, Size depth_limit)
     {
@@ -2382,7 +2397,7 @@ namespace mystl
         }
     }
 
-// 插入排序辅助函数 unchecked_linear_insert
+    // 插入排序辅助函数 unchecked_linear_insert
     template <class RandomIter, class T>
     void unchecked_linear_insert(RandomIter last, const T& value)
     {
@@ -2397,7 +2412,7 @@ namespace mystl
         *last = value;
     }
 
-// 插入排序函数 unchecked_insertion_sort
+    // 插入排序函数 unchecked_insertion_sort
     template <class RandomIter>
     void unchecked_insertion_sort(RandomIter first, RandomIter last)
     {
@@ -2407,7 +2422,7 @@ namespace mystl
         }
     }
 
-// 插入排序函数 insertion_sort
+    // 插入排序函数 insertion_sort
     template <class RandomIter>
     void insertion_sort(RandomIter first, RandomIter last)
     {
@@ -2428,7 +2443,7 @@ namespace mystl
         }
     }
 
-// 最终插入排序函数 final_insertion_sort
+    // 最终插入排序函数 final_insertion_sort
     template <class RandomIter>
     void final_insertion_sort(RandomIter first, RandomIter last)
     {
@@ -2454,8 +2469,8 @@ namespace mystl
         }
     }
 
-// 重载版本使用函数对象 comp 代替比较操作
-// 分割函数 unchecked_partition
+    // 重载版本使用函数对象 comp 代替比较操作
+    // 分割函数 unchecked_partition
     template <class RandomIter, class T, class Compared>
     RandomIter
     unchecked_partition(RandomIter first, RandomIter last,
@@ -2475,7 +2490,7 @@ namespace mystl
         }
     }
 
-// 内省式排序，先进行 quick sort，当分割行为有恶化倾向时，改用 heap sort
+    // 内省式排序，先进行 quick sort，当分割行为有恶化倾向时，改用 heap sort
     template <class RandomIter, class Size, class Compared>
     void intro_sort(RandomIter first, RandomIter last,
                     Size depth_limit, Compared comp)
@@ -2495,7 +2510,7 @@ namespace mystl
         }
     }
 
-// 插入排序辅助函数 unchecked_linear_insert
+    // 插入排序辅助函数 unchecked_linear_insert
     template <class RandomIter, class T, class Compared>
     void unchecked_linear_insert(RandomIter last, const T& value, Compared comp)
     {
@@ -2510,7 +2525,7 @@ namespace mystl
         *last = value;
     }
 
-// 插入排序函数 unchecked_insertion_sort
+    // 插入排序函数 unchecked_insertion_sort
     template <class RandomIter, class Compared>
     void unchecked_insertion_sort(RandomIter first, RandomIter last,
                                   Compared comp)
@@ -2521,7 +2536,7 @@ namespace mystl
         }
     }
 
-// 插入排序函数 insertion_sort
+    // 插入排序函数 insertion_sort
     template <class RandomIter, class Compared>
     void insertion_sort(RandomIter first, RandomIter last, Compared comp)
     {
@@ -2542,7 +2557,7 @@ namespace mystl
         }
     }
 
-// 最终插入排序函数 final_insertion_sort
+    // 最终插入排序函数 final_insertion_sort
     template <class RandomIter, class Compared>
     void final_insertion_sort(RandomIter first, RandomIter last, Compared comp)
     {
@@ -2568,10 +2583,10 @@ namespace mystl
         }
     }
 
-/*****************************************************************************************/
-// nth_element
-// 对序列重排，使得所有小于第 n 个元素的元素出现在它的前面，大于它的出现在它的后面
-/*****************************************************************************************/
+    /*****************************************************************************************/
+    // nth_element
+    // 对序列重排，使得所有小于第 n 个元素的元素出现在它的前面，大于它的出现在它的后面
+    /*****************************************************************************************/
     template <class RandomIter>
     void nth_element(RandomIter first, RandomIter nth,
                      RandomIter last)
@@ -2591,7 +2606,7 @@ namespace mystl
         mystl::insertion_sort(first, last);
     }
 
-// 重载版本使用函数对象 comp 代替比较操作
+    // 重载版本使用函数对象 comp 代替比较操作
     template <class RandomIter, class Compared>
     void nth_element(RandomIter first, RandomIter nth,
                      RandomIter last, Compared comp)
@@ -2611,11 +2626,11 @@ namespace mystl
         mystl::insertion_sort(first, last, comp);
     }
 
-/*****************************************************************************************/
-// unique_copy
-// 从[first, last)中将元素复制到 result 上，序列必须有序，如果有重复的元素，只会复制一次
-/*****************************************************************************************/
-// unique_copy_dispatch 的 forward_iterator_tag 版本
+    /*****************************************************************************************/
+    // unique_copy
+    // 从[first, last)中将元素复制到 result 上，序列必须有序，如果有重复的元素，只会复制一次
+    /*****************************************************************************************/
+    // unique_copy_dispatch 的 forward_iterator_tag 版本
     template <class InputIter, class ForwardIter>
     ForwardIter
     unique_copy_dispatch(InputIter first, InputIter last,
@@ -2630,8 +2645,8 @@ namespace mystl
         return ++result;
     }
 
-// unique_copy_dispatch 的 output_iterator_tag 版本
-// 由于 output iterator 只能进行只读操作，所以不能有 *result != *first 这样的判断
+    // unique_copy_dispatch 的 output_iterator_tag 版本
+    // 由于 output iterator 只能进行只读操作，所以不能有 *result != *first 这样的判断
     template <class InputIter, class OutputIter>
     OutputIter
     unique_copy_dispatch(InputIter first, InputIter last,
@@ -2659,8 +2674,8 @@ namespace mystl
         return mystl::unique_copy_dispatch(first, last, result, iterator_category(result));
     }
 
-// 重载版本使用函数对象 comp 代替比较操作
-// unique_copy_dispatch 的 forward_iterator_tag 版本
+    // 重载版本使用函数对象 comp 代替比较操作
+    // unique_copy_dispatch 的 forward_iterator_tag 版本
     template <class InputIter, class ForwardIter, class Compared>
     ForwardIter
     unique_copy_dispatch(InputIter first, InputIter last,
@@ -2675,8 +2690,8 @@ namespace mystl
         return ++result;
     }
 
-// unique_copy_dispatch 的 output_iterator_tag 版本
-// 由于 output iterator 只能进行只读操作，所以不能有 *result != *first 这样的判断
+    // unique_copy_dispatch 的 output_iterator_tag 版本
+    // 由于 output iterator 只能进行只读操作，所以不能有 *result != *first 这样的判断
     template <class InputIter, class OutputIter, class Compared>
     OutputIter
     unique_copy_dispatch(InputIter first, InputIter last,
@@ -2704,10 +2719,10 @@ namespace mystl
         return mystl::unique_copy_dispatch(first, last, result, iterator_category(result), comp);
     }
 
-/*****************************************************************************************/
-// unique
-// 移除[first, last)内重复的元素，序列必须有序，和 remove 类似，它也不能真正的删除重复元素
-/*****************************************************************************************/
+    /*****************************************************************************************/
+    // unique
+    // 移除[first, last)内重复的元素，序列必须有序，和 remove 类似，它也不能真正的删除重复元素
+    /*****************************************************************************************/
     template <class ForwardIter>
     ForwardIter unique(ForwardIter first, ForwardIter last)
     {
@@ -2715,10 +2730,18 @@ namespace mystl
         return mystl::unique_copy(first, last, first);
     }
 
-// 重载版本使用函数对象 comp 代替比较操作
+    // 重载版本使用函数对象 comp 代替比较操作
     template <class ForwardIter, class Compared>
     ForwardIter unique(ForwardIter first, ForwardIter last, Compared comp)
+    {
+        first = mystl::adjacent_find(first, last, comp);
+        return mystl::unique_copy(first, last, first, comp);
+    }
 
-}
+} // namespace mystl
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif //MYTINYSTL_ALGO_H

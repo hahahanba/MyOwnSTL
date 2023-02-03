@@ -506,7 +506,7 @@ namespace mystl
                     // 都转换成case 5：当前节点为左子节点
                     rb_tree_set_black(x->parent);
                     rb_tree_set_red(x->parnet->parent);
-                    rb_tree_rotate_right(x->parent->parent, root)
+                    rb_tree_rotate_right(x->parent->parent, root);
                     break;
                 }
             }

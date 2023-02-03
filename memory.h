@@ -95,7 +95,7 @@ namespace mystl
 
     private:
         temporary_buffer(const temporary_buffer&);
-        void operator=(const temporary_buffer&)
+        void operator=(const temporary_buffer&);
     };
 
     template<class ForwardIterator, class T>
