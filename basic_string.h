@@ -621,43 +621,43 @@ namespace mystl
         // 查找相关操作
 
         // find
-        size_type find(value_type ch, size_type pos = 0)                             const noexcept;
-        size_type find(const_pointer str, size_type pos = 0)                         const noexcept;
-        size_type find(const_pointer str, size_type pos, size_type count)            const noexcept;
-        size_type find(const basic_string& str, size_type pos = 0)                   const noexcept;
+        size_type find(typename basic_string::value_type ch, size_type pos = 0)              const noexcept;
+        size_type find(const_pointer str, size_type pos = 0)                                 const noexcept;
+        size_type find(const_pointer str, size_type pos, size_type count)                    const noexcept;
+        size_type find(const basic_string& str, size_type pos = 0)                           const noexcept;
 
         // rfind
-        size_type rfind(value_type ch, size_type pos = npos)                         const noexcept;
-        size_type rfind(const_pointer str, size_type pos = npos)                     const noexcept;
-        size_type rfind(const_pointer str, size_type pos, size_type count)           const noexcept;
-        size_type rfind(const basic_string& str, size_type pos = npos)               const noexcept;
+        size_type rfind(typename basic_string::value_type ch, size_type pos = npos)          const noexcept;
+        size_type rfind(const_pointer str, size_type pos = npos)                             const noexcept;
+        size_type rfind(const_pointer str, size_type pos, size_type count)                   const noexcept;
+        size_type rfind(const basic_string& str, size_type pos = npos)                       const noexcept;
 
         // find_first_of
-        size_type find_first_of(value_type ch, size_type pos = 0)                    const noexcept;
-        size_type find_first_of(const_pointer s, size_type pos = 0)                  const noexcept;
-        size_type find_first_of(const_pointer s, size_type pos, size_type count)     const noexcept;
-        size_type find_first_of(const basic_string& str, size_type pos = 0)          const noexcept;
+        size_type find_first_of(typename basic_string::value_type ch, size_type pos = 0)     const noexcept;
+        size_type find_first_of(const_pointer s, size_type pos = 0)                          const noexcept;
+        size_type find_first_of(const_pointer s, size_type pos, size_type count)             const noexcept;
+        size_type find_first_of(const basic_string& str, size_type pos = 0)                  const noexcept;
 
         // find_first_not_of
-        size_type find_first_not_of(value_type ch, size_type pos = 0)                const noexcept;
-        size_type find_first_not_of(const_pointer s, size_type pos = 0)              const noexcept;
-        size_type find_first_not_of(const_pointer s, size_type pos, size_type count) const noexcept;
-        size_type find_first_not_of(const basic_string& str, size_type pos = 0)      const noexcept;
+        size_type find_first_not_of(typename basic_string::value_type ch, size_type pos = 0) const noexcept;
+        size_type find_first_not_of(const_pointer s, size_type pos = 0)                      const noexcept;
+        size_type find_first_not_of(const_pointer s, size_type pos, size_type count)         const noexcept;
+        size_type find_first_not_of(const basic_string& str, size_type pos = 0)              const noexcept;
 
         // find_last_of
-        size_type find_last_of(value_type ch, size_type pos = 0)                     const noexcept;
-        size_type find_last_of(const_pointer s, size_type pos = 0)                   const noexcept;
-        size_type find_last_of(const_pointer s, size_type pos, size_type count)      const noexcept;
-        size_type find_last_of(const basic_string& str, size_type pos = 0)           const noexcept;
+        size_type find_last_of(typename basic_string::value_type ch, size_type pos = 0)      const noexcept;
+        size_type find_last_of(const_pointer s, size_type pos = 0)                           const noexcept;
+        size_type find_last_of(const_pointer s, size_type pos, size_type count)              const noexcept;
+        size_type find_last_of(const basic_string& str, size_type pos = 0)                   const noexcept;
 
         // find_last_not_of
-        size_type find_last_not_of(value_type ch, size_type pos = 0)                 const noexcept;
-        size_type find_last_not_of(const_pointer s, size_type pos = 0)               const noexcept;
-        size_type find_last_not_of(const_pointer s, size_type pos, size_type count)  const noexcept;
-        size_type find_last_not_of(const basic_string& str, size_type pos = 0)       const noexcept;
+        size_type find_last_not_of(typename basic_string::value_type ch, size_type pos = 0)  const noexcept;
+        size_type find_last_not_of(const_pointer s, size_type pos = 0)                       const noexcept;
+        size_type find_last_not_of(const_pointer s, size_type pos, size_type count)          const noexcept;
+        size_type find_last_not_of(const basic_string& str, size_type pos = 0)               const noexcept;
 
         // count
-        size_type count(value_type ch, size_type pos = 0) const noexcept;
+        size_type count(typename basic_string::value_type ch, size_type pos = 0)    const noexcept;
 
     public:
         // 重载 operator+=
@@ -700,7 +700,7 @@ namespace mystl
         template <class Iter>
         void          copy_init(Iter first, Iter last, mystl::forward_iterator_tag);
 
-        void          init_from(const_pointer src, size_type pos, size_type n);
+        void          init_from(const_pointer src, size_type pos, size_type count);
 
         void          destroy_buffer();
 
@@ -871,6 +871,1190 @@ namespace mystl
         size_ += len;
         return r;
     }
+
+    // 在末尾添加 count 个 ch
+    template<class CharType, class CharTraits>
+    basic_string<CharType, CharTraits>&
+    basic_string<CharType, CharTraits>::append(basic_string::size_type count, value_type ch)
+    {
+        THROW_LENGTH_ERROR_IF(size_ > max_size() - count, "basic_string<Char, Traits>'s size too big");
+        if (cap_ - size_ < count)
+        {
+            reallocate(count);
+        }
+        char_traits::fill(buffer_ + size_, ch, count);
+        size_ += count;
+        return *this;
+    }
+
+    // 在末尾添加 [str[pos] str[pos+count]) 一段
+    template<class CharType, class CharTraits>
+    basic_string<CharType, CharTraits>&
+    basic_string<CharType, CharTraits>::
+    append(const basic_string &str, basic_string::size_type pos, basic_string::size_type count)
+    {
+        THROW_LENGTH_ERROR_IF(size_ > max_size() -count, "basic_string<Char, Traits>'s size too big");
+        if (count == 0)
+            return *this;
+        if (cap_ - size_ < count)
+        {
+            reallocate(count);
+        }
+        char_traits::copy(buffer_ + size_, str.buffer_ + pos, count);
+        size_ += count;
+        return *this;
+    }
+
+    // 在末尾添加 [s, s+count) 一段
+    template<class CharType, class CharTraits>
+    basic_string<CharType, CharTraits>&
+    basic_string<CharType, CharTraits>::append(basic_string::const_pointer s, basic_string::size_type count)
+    {
+        THROW_LENGTH_ERROR_IF(size_ > max_size() -count, "basic_string<Char, Traits>'s size too big");
+        if (cap_ - size_ < count)
+        {
+            reallocate(count);
+        }
+        char_traits::copy(buffer_ + size_, s, count);
+        size_ += count;
+        return *this;
+    }
+
+    // 删除 pos 处的元素
+    template<class CharType, class CharTraits>
+    typename basic_string<CharType, CharTraits>::iterator
+    basic_string<CharType, CharTraits>::erase(basic_string::const_iterator pos)
+    {
+        MYSTL_DEBUG(pos != end());
+        iterator r = const_cast<iterator>(pos);
+        char_traits::move(r, pos + 1, end() - pos - 1);
+        --size_;
+        return r;
+    }
+
+    // 删除 [first, last) 的元素
+    template<class CharType, class CharTraits>
+    typename basic_string<CharType, CharTraits>::iterator
+    basic_string<CharType, CharTraits>::erase(basic_string::const_iterator first, basic_string::const_iterator last)
+    {
+        if (first == begin() && last == end())
+        {
+            clear();
+            return end();
+        }
+        const size_type n = end() - last;
+        iterator r = const_cast<iterator>(first);
+        char_traits::move(r, last, n);
+        size_ -= (last - first);
+        return r;
+    }
+
+    // 重置容器大小
+    template<class CharType, class CharTraits>
+    void basic_string<CharType, CharTraits>::resize(basic_string::size_type count, value_type ch)
+    {
+        if (count < size_)
+        {
+            erase(buffer_ + count, buffer_ + size_);
+        }
+        else
+        {
+            append(count - size_, ch);
+        }
+    }
+
+    // 比较两个 basic_string，小于返回 -1，大于返回 1，等于返回 0
+    template<class CharType, class CharTraits>
+    int basic_string<CharType, CharTraits>::compare(const basic_string &other) const
+    {
+        return compare_cstr(buffer_, size_, other.buffer_, other.size_);
+    }
+
+    // 从 pos1 下标开始的 count1 个字符跟另一个 basic_string 比较
+    template<class CharType, class CharTraits>
+    int basic_string<CharType, CharTraits>::
+    compare(basic_string::size_type pos1, basic_string::size_type count1, const basic_string &other) const
+    {
+        auto n1 = mystl::min(count1, size_ - pos1);
+        return compare_cstr(buffer_ + pos1, n1, other.buffer_, other.size_);
+    }
+
+    // 从 pos1 下标开始的 count1 个字符跟另一个 basic_string 下标 pos2 开始的 count2 个字符比较
+    template<class CharType, class CharTraits>
+    int basic_string<CharType, CharTraits>::
+    compare(basic_string::size_type pos1, basic_string::size_type count1,
+            const basic_string &other, basic_string::size_type pos2,
+            basic_string::size_type count2) const
+   {
+        auto n1 = mystl::min(count1, size_ - pos1);
+        auto n2 = mystl::min(count2, other.size_ - pos2);
+        return compare_cstr(buffer_, n1, other.buffer_, n2);
+    }
+
+    // 跟一个字符串比较
+    template<class CharType, class CharTraits>
+    int basic_string<CharType, CharTraits>::compare(basic_string::const_pointer s) const
+    {
+        auto n2 = char_traits::length(s);
+        return compare_cstr(buffer_, size_, s, n2);
+    }
+
+    // 从下标 pos1 开始的 count1 个字符跟另一个字符串比较
+    template<class CharType, class CharTraits>
+    int basic_string<CharType, CharTraits>::
+    compare(basic_string::size_type pos1, basic_string::size_type count1, basic_string::const_pointer s) const
+    {
+        auto n1 = mystl::min(count1, size_ - pos1);
+        auto n2 = char_traits::length(s);
+        return compare_cstr(buffer_, n1, s, n2);
+    }
+
+    // 从下标 pos1 开始的 count1 个字符跟另一个字符串的前 count2 个字符比较
+    template<class CharType, class CharTraits>
+    int basic_string<CharType, CharTraits>::
+    compare(basic_string::size_type pos1, basic_string::size_type count1,
+            basic_string::const_pointer s, basic_string::size_type count2) const
+    {
+        auto n1 = mystl::min(count1, size_ - pos1);
+        return compare_cstr(buffer_, n1, s, count2);
+    }
+
+    // 反转 basic_string
+    template<class CharType, class CharTraits>
+    void basic_string<CharType, CharTraits>::reverse() noexcept
+    {
+        for (auto i = begin(), j = end(); i < j;)
+        {
+            mystl::iter_swap(i++, --j);
+        }
+    }
+
+    // 交换两个 basic_string
+    template<class CharType, class CharTraits>
+    void basic_string<CharType, CharTraits>::swap(basic_string &rhs) noexcept
+    {
+        if (this != &rhs)
+        {
+            mystl::swap(buffer_, rhs.buffer_);
+            mystl::swap(size_, rhs.size_);
+            mystl::swap(cap_, rhs.cap_);
+        }
+    }
+
+    // 从下标 pos 开始查找字符为 ch 的元素，若找到返回其下标，否则返回 npos
+    template<class CharType, class CharTraits>
+    typename basic_string<CharType, CharTraits>::size_type
+    basic_string<CharType, CharTraits>::find(basic_string::value_type ch, basic_string::size_type pos) const noexcept
+    {
+        for (auto i = pos; i < size_; ++i)
+        {
+            if (*(buffer_ + i) == ch)
+                return i;
+        }
+        return npos;
+    }
+
+    // 从下标 pos 开始查找字符串 str，若找到返回起始位置的下标，否则返回 npos
+    template<class CharType, class CharTraits>
+    typename basic_string<CharType, CharTraits>::size_type
+    basic_string<CharType, CharTraits>::
+    find(basic_string::const_pointer str, basic_string::size_type pos) const noexcept
+    {
+        const auto len = char_traits::length(str);
+        if (len == 0)
+            return pos;
+        if (size_ - pos < len)
+            return npos;
+        const auto left = size_ - len;
+        for (auto i = pos; i <= left; ++i)
+        {
+            if (*(buffer_ + i) == *str)
+            {
+                size_type j = 1;
+                for (; j < len; ++j)
+                {
+                    if (*(buffer_ + i + j) != *(str + j))
+                        break;
+                }
+                if (j == len)
+                    return i;
+            }
+        }
+        return npos;
+    }
+
+    // 从下标 pos 开始查找字符串 str 的前 count 个字符，若找到返回起始位置的下标，否则返回 npos
+    template<class CharType, class CharTraits>
+    typename basic_string<CharType, CharTraits>::size_type
+    basic_string<CharType, CharTraits>::
+    find(basic_string::const_pointer str, basic_string::size_type pos, basic_string::size_type count) const noexcept
+    {
+        if (count == 0)
+            return pos;
+        if (size_ - pos < count)
+            return npos;
+        const auto left = size_ - count;
+        for (auto i = pos; i <= left; ++i)
+        {
+            if (*(buffer_ + i) == *str)
+            {
+                size_type j = 1;
+                for (; j < count; ++j)
+                {
+                    if (*(buffer_ + i + j) != *(str + j))
+                        break;
+                }
+                if (j == count)
+                    return i;
+            }
+        }
+        return npos;
+    }
+
+    // 从下标 pos 开始查找字符串 str，若找到返回起始位置的下标，否则返回 npos
+    template<class CharType, class CharTraits>
+    typename basic_string<CharType, CharTraits>::size_type
+    basic_string<CharType, CharTraits>::
+    find(const basic_string &str, basic_string::size_type pos) const noexcept
+    {
+        const size_type count = str.size_;
+        if (count == 0)
+            return pos;
+        if (size_ - pos < count)
+            return npos;
+        const auto left = size_ - count;
+        for (auto i = pos; i <= left; ++i)
+        {
+            if (*(buffer_ + i) == str.front())
+            {
+                size_type j = 1;
+                for (; j < count; ++j)
+                {
+                    if (*(buffer_ + i + j) != str[j])
+                        break;
+                }
+                if (j == count)
+                    return i;
+            }
+        }
+        return npos;
+    }
+
+    // 从下标 pos 开始反向查找值为 ch 的元素，与 find 类似
+    template<class CharType, class CharTraits>
+    typename basic_string<CharType, CharTraits>::size_type
+    basic_string<CharType, CharTraits>::
+    rfind(basic_string::value_type ch, basic_string::size_type pos) const noexcept
+    {
+        if (pos >= size_)
+            pos = size_ - 1;
+        for (auto i = pos; i != 0; --i)
+        {
+            if (*(buffer_ + i) == ch)
+                return i;
+        }
+        return front() == ch ? 0 : npos;
+    }
+
+    // 从下标 pos 开始反向查找字符串 str，与 find 类似
+    template<class CharType, class CharTraits>
+    typename basic_string<CharType, CharTraits>::size_type
+    basic_string<CharType, CharTraits>::
+    rfind(basic_string::const_pointer str, basic_string::size_type pos) const noexcept
+    {
+        if (pos >= size_)
+            pos = size_ - 1;
+        const size_type len = char_traits::length(str);
+        switch (len)
+        {
+            case 0:
+                return pos;
+            case 1:
+            {
+                for (auto i = pos; i != 0; --i)
+                {
+                    if (*(buffer_ + i) == *str)
+                        return i;
+                }
+                return front() == *str ? 0 : npos;
+            }
+            default:
+            { // len >= 2
+                for (auto i = pos; i >= len - 1; --i)
+                {
+                    if (*(buffer_ + i) == *(str + len - 1))
+                    {
+                        size_type j = 1;
+                        for (; j < len; ++j)
+                        {
+                            if (*(buffer_ + i - j) != *(str + len - j - 1))
+                                break;
+                        }
+                        if (j == len)
+                            return i - len + 1;
+                    }
+                }
+                break;
+            }
+        }
+        return npos;
+    }
+
+    // 从下标 pos 开始反向查找字符串 str 前 count 个字符，与 find 类似
+    template<class CharType, class CharTraits>
+    typename basic_string<CharType, CharTraits>::size_type
+    basic_string<CharType, CharTraits>::
+    rfind(basic_string::const_pointer str, basic_string::size_type pos, basic_string::size_type count) const noexcept
+    {
+        if (count == 0)
+            return pos;
+        if (pos >= size_)
+            pos = size_ - 1;
+        if (pos < count - 1)
+            return npos;
+        for (auto i = pos; i >= count - 1; --i)
+        {
+            if (*(buffer_ + i) == *(str + count - 1))
+            {
+                size_type j = 1;
+                for (; j < count; ++j)
+                {
+                    if (*(buffer_ + i - j) != *(str + count - j - 1))
+                        break;
+                }
+                if (j == count)
+                    return i - count + 1;
+            }
+        }
+        return npos;
+    }
+
+    // 从下标 pos 开始反向查找字符串 str，与 find 类似
+    template<class CharType, class CharTraits>
+    typename basic_string<CharType, CharTraits>::size_type
+    basic_string<CharType, CharTraits>::
+    rfind(const basic_string &str, basic_string::size_type pos) const noexcept
+    {
+        const size_type count = str.size_;
+        if (pos >= size_)
+            pos = size_ - 1;
+        if (count == 0)
+            return pos;
+        if (pos < count - 1)
+            return npos;
+        for (auto i = pos; i >= count - 1; --i)
+        {
+            if (*(buffer_ + i) == str[count - 1])
+            {
+                size_type j = 1;
+                for (; j < count; ++j)
+                {
+                    if (*(buffer_ + i - j) != str[count - j - 1])
+                        break;
+                }
+                if (j == count)
+                    return i - count + 1;
+            }
+        }
+        return npos;
+    }
+
+    // 从下标 pos 开始查找 ch 出现的第一个位置
+    template <class CharType, class CharTraits>
+    typename basic_string<CharType, CharTraits>::size_type
+    basic_string<CharType, CharTraits>::
+    find_first_of(basic_string::value_type ch, basic_string::size_type pos) const noexcept
+    {
+        for (auto i = pos; i < size_; ++i)
+        {
+            if (*(buffer_ + i) == ch)
+            return i;
+        }
+        return npos;
+    }
+
+    // 从下标 pos 开始查找字符串 s 其中的一个字符出现的第一个位置
+    template <class CharType, class CharTraits>
+    typename basic_string<CharType, CharTraits>::size_type
+    basic_string<CharType, CharTraits>::
+    find_first_of(basic_string::const_pointer s, basic_string::size_type pos) const noexcept
+    {
+        const size_type len = char_traits::length(s);
+        for (auto i = pos; i < size_; ++i)
+        {
+            value_type ch = *(buffer_ + i);
+            for (size_type j = 0; j < len; ++j)
+            {
+                if (ch == *(s + j))
+                    return i;
+            }
+        }
+        return npos;
+    }
+
+    // 从下标 pos 开始查找字符串 s
+    template <class CharType, class CharTraits>
+    typename basic_string<CharType, CharTraits>::size_type
+    basic_string<CharType, CharTraits>::
+    find_first_of(basic_string::const_pointer s, basic_string::size_type pos, basic_string::size_type count) const noexcept
+    {
+        for (auto i = pos; i < size_; ++i)
+        {
+            value_type ch = *(buffer_ + i);
+            for (size_type j = 0; j < count; ++j)
+            {
+                if (ch == *(s + j))
+                    return i;
+            }
+        }
+        return npos;
+    }
+
+    // 从下标 pos 开始查找字符串 str 其中一个字符出现的第一个位置
+    template <class CharType, class CharTraits>
+    typename basic_string<CharType, CharTraits>::size_type
+    basic_string<CharType, CharTraits>::
+    find_first_of(const basic_string& str, basic_string::size_type pos) const noexcept
+    {
+        for (auto i = pos; i < size_; ++i)
+        {
+            value_type ch = *(buffer_ + i);
+            for (size_type j = 0; j < str.size_; ++j)
+            {
+                if (ch == str[j])
+                    return i;
+            }
+        }
+        return npos;
+    }
+
+    // 从下标 pos 开始查找与 ch 不相等的第一个位置
+    template <class CharType, class CharTraits>
+    typename basic_string<CharType, CharTraits>::size_type
+    basic_string<CharType, CharTraits>::
+    find_first_not_of(basic_string::value_type ch, basic_string::size_type pos) const noexcept
+    {
+        for (auto i = pos; i < size_; ++i)
+        {
+            if (*(buffer_ + i) != ch)
+            return i;
+        }
+        return npos;
+    }
+
+    // 从下标 pos 开始查找与字符串 s 其中一个字符不相等的第一个位置
+    template <class CharType, class CharTraits>
+    typename basic_string<CharType, CharTraits>::size_type
+    basic_string<CharType, CharTraits>::
+    find_first_not_of(basic_string::const_pointer s, basic_string::size_type pos) const noexcept
+    {
+        const size_type len = char_traits::length(s);
+        for (auto i = pos; i < size_; ++i)
+        {
+            value_type ch = *(buffer_ + i);
+            for (size_type j = 0; j < len; ++j)
+            {
+                if (ch != *(s + j))
+                    return i;
+            }
+        }
+        return npos;
+    }
+
+    // 从下标 pos 开始查找与字符串 s 前 count 个字符中不相等的第一个位置
+    template <class CharType, class CharTraits>
+    typename basic_string<CharType, CharTraits>::size_type
+    basic_string<CharType, CharTraits>::
+    find_first_not_of(basic_string::const_pointer s, basic_string::size_type pos, basic_string::size_type count) const noexcept
+    {
+        for (auto i = pos; i < size_; ++i)
+        {
+            value_type ch = *(buffer_ + i);
+            for (size_type j = 0; j < count; ++j)
+            {
+                if (ch != *(s + j))
+                    return i;
+            }
+        }
+        return npos;
+    }
+
+    // 从下标 pos 开始查找与字符串 str 的字符中不相等的第一个位置
+    template <class CharType, class CharTraits>
+    typename basic_string<CharType, CharTraits>::size_type
+    basic_string<CharType, CharTraits>::
+    find_first_not_of(const basic_string& str, basic_string::size_type pos) const noexcept
+    {
+        for (auto i = pos; i < size_; ++i)
+        {
+            value_type ch = *(buffer_ + i);
+            for (size_type j = 0; j < str.size_; ++j)
+            {
+                if (ch != str[j])
+                    return i;
+            }
+        }
+        return npos;
+    }
+
+    // 从下标 pos 开始查找与 ch 相等的最后一个位置
+    template <class CharType, class CharTraits>
+    typename basic_string<CharType, CharTraits>::size_type
+    basic_string<CharType, CharTraits>::
+    find_last_of(basic_string::value_type ch, basic_string::size_type pos) const noexcept
+    {
+        for (auto i = size_ - 1; i >= pos; --i)
+        {
+            if (*(buffer_ + i) == ch)
+            return i;
+        }
+        return npos;
+    }
+
+    // 从下标 pos 开始查找与字符串 s 其中一个字符相等的最后一个位置
+    template <class CharType, class CharTraits>
+    typename basic_string<CharType, CharTraits>::size_type
+    basic_string<CharType, CharTraits>::
+    find_last_of(basic_string::const_pointer s, basic_string::size_type pos) const noexcept
+    {
+        const size_type len = char_traits::length(s);
+        for (auto i = size_ - 1; i >= pos; --i)
+        {
+            value_type ch = *(buffer_ + i);
+            for (size_type j = 0; j < len; ++j)
+            {
+                if (ch == *(s + j))
+                    return i;
+            }
+        }
+        return npos;
+    }
+
+    // 从下标 pos 开始查找与字符串 s 前 count 个字符中相等的最后一个位置
+    template <class CharType, class CharTraits>
+    typename basic_string<CharType, CharTraits>::size_type
+    basic_string<CharType, CharTraits>::
+    find_last_of(basic_string::const_pointer s, basic_string::size_type pos, basic_string::size_type count) const noexcept
+    {
+        for (auto i = size_ - 1; i >= pos; --i)
+        {
+            value_type ch = *(buffer_ + i);
+            for (size_type j = 0; j < count; ++j)
+            {
+                if (ch == *(s + j))
+                    return i;
+            }
+        }
+        return npos;
+    }
+
+    // 从下标 pos 开始查找与字符串 str 字符中相等的最后一个位置
+    template <class CharType, class CharTraits>
+    typename basic_string<CharType, CharTraits>::size_type
+    basic_string<CharType, CharTraits>::
+    find_last_of(const basic_string& str, basic_string::size_type pos) const noexcept
+    {
+        for (auto i = size_ - 1; i >= pos; --i)
+        {
+            value_type ch = *(buffer_ + i);
+            for (size_type j = 0; j < str.size_; ++j)
+            {
+                if (ch == str[j])
+                    return i;
+            }
+        }
+        return npos;
+    }
+
+    // 从下标 pos 开始查找与 ch 字符不相等的最后一个位置
+    template <class CharType, class CharTraits>
+    typename basic_string<CharType, CharTraits>::size_type
+    basic_string<CharType, CharTraits>::
+    find_last_not_of(basic_string::value_type ch, basic_string::size_type pos) const noexcept
+    {
+        for (auto i = size_ - 1; i >= pos; --i)
+        {
+            if (*(buffer_ + i) != ch)
+                return i;
+        }
+        return npos;
+    }
+
+    // 从下标 pos 开始查找与字符串 s 的字符中不相等的最后一个位置
+    template <class CharType, class CharTraits>
+    typename basic_string<CharType, CharTraits>::size_type
+    basic_string<CharType, CharTraits>::
+    find_last_not_of(basic_string::const_pointer s, basic_string::size_type pos) const noexcept
+    {
+        const size_type len = char_traits::length(s);
+        for (auto i = size_ - 1; i >= pos; --i)
+        {
+            value_type ch = *(buffer_ + i);
+            for (size_type j = 0; j < len; ++j)
+            {
+                if (ch != *(s + j))
+                    return i;
+            }
+        }
+        return npos;
+    }
+
+    // 从下标 pos 开始查找与字符串 s 前 count 个字符中不相等的最后一个位置
+    template <class CharType, class CharTraits>
+    typename basic_string<CharType, CharTraits>::size_type
+    basic_string<CharType, CharTraits>::
+    find_last_not_of(basic_string::const_pointer s, basic_string::size_type pos, basic_string::size_type count) const noexcept
+    {
+        for (auto i = size_ - 1; i >= pos; --i)
+        {
+            value_type ch = *(buffer_ + i);
+            for (size_type j = 0; j < count; ++j)
+            {
+                if (ch != *(s + j))
+                    return i;
+            }
+        }
+        return npos;
+    }
+
+    // 从下标 pos 开始查找与字符串 str 字符中不相等的最后一个位置
+    template <class CharType, class CharTraits>
+    typename basic_string<CharType, CharTraits>::size_type
+    basic_string<CharType, CharTraits>::
+    find_last_not_of(const basic_string& str, basic_string::size_type pos) const noexcept
+    {
+        for (auto i = size_ - 1; i >= pos; --i)
+        {
+            value_type ch = *(buffer_ + i);
+            for (size_type j = 0; j < str.size_; ++j)
+            {
+                if (ch != str[j])
+                    return i;
+            }
+        }
+        return npos;
+    }
+
+    // 返回从下标 pos 开始字符为 ch 的元素出现的次数
+    template<class CharType, class CharTraits>
+    typename basic_string<CharType, CharTraits>::size_type
+    basic_string<CharType, CharTraits>::
+    count(basic_string::value_type ch, basic_string::size_type pos) const noexcept
+    {
+        size_type n = 0;
+        for (auto i = pos; i < size_; ++i)
+        {
+            if (*(buffer_ + i) == ch)
+                ++n;
+        }
+        return n;
+    }
+
+    /*****************************************************************************************/
+    // helper function
+
+    // 尝试初始化一段 buffer，若分配失败则忽略，不会抛出异常
+    template<class CharType, class CharTraits>
+    void basic_string<CharType, CharTraits>::
+    try_init() noexcept
+    {
+        try
+        {
+            buffer_ = data_allocator::allocate(static_cast<size_type>(STRING_INIT_SIZE));
+            size_ = 0;
+            cap_ = 0;
+        }
+        catch (...)
+        {
+            buffer_ = nullptr;
+            size_ = 0;
+            cap_ = 0;
+            // no throw
+        }
+    }
+
+    // fill_init 函数
+    template<class CharType, class CharTraits>
+    void basic_string<CharType, CharTraits>::
+    fill_init(basic_string::size_type n, value_type ch)
+    {
+        const auto init_size = mystl::max(static_cast<size_type>(STRING_INIT_SIZE), n + 1);
+        buffer_ = data_allocator::allocate(init_size);
+        char_traits::fill(buffer_, ch, n);
+        size_ = n;
+        cap_ = init_size;
+    }
+
+    // copy_init 函数
+    template<class CharType, class CharTraits>
+    template<class Iter>
+    void basic_string<CharType, CharTraits>::
+    copy_init(Iter first, Iter last, mystl::input_iterator_tag)
+    {
+        size_type n = mystl::distance(first, last);
+        const auto init_size = mystl::max(static_cast<size_type>(STRING_INIT_SIZE), n + 1);
+        try
+        {
+            buffer_ = data_allocator::allocate(init_size);
+            size_ = n;
+            cap_ = init_size;
+        }
+        catch (...)
+        {
+            buffer_ = nullptr;
+            size_ = 0;
+            cap_ = 0;
+            throw;
+        }
+        for (; n > 0; --n, ++first)
+            append(*first);
+    }
+
+    template<class CharType, class CharTraits>
+    template<class Iter>
+    void basic_string<CharType, CharTraits>::
+    copy_init(Iter first, Iter last, mystl::forward_iterator_tag)
+    {
+        const size_type n = mystl::distance(first, last);
+        const auto init_size = mystl::max(static_cast<size_type>(STRING_INIT_SIZE), n + 1);
+        try
+        {
+            buffer_ = data_allocator::allocate(init_size);
+            size_ = n;
+            cap_ = init_size;
+            mystl::uninitialized_copy(first, last, buffer_);
+        }
+        catch (...)
+        {
+            buffer_ = nullptr;
+            size_ = 0;
+            cap_ = 0;
+            throw;
+        }
+    }
+
+    // init_from 函数
+    template<class CharType, class CharTraits>
+    void basic_string<CharType, CharTraits>::
+    init_from(basic_string::const_pointer src, basic_string::size_type pos, basic_string::size_type count)
+    {
+        const auto init_size = mystl::max(static_cast<size_type>(STRING_INIT_SIZE), count + 1);
+        buffer_ = data_allocator::allocate(init_size);
+        char_traits::copy(buffer_, str + pos, count);
+        size_ = count;
+        cap_ = init_size;
+    }
+
+    // destroy_buffer 函数
+    template<class CharType, class CharTraits>
+    void basic_string<CharType, CharTraits>::
+    destroy_buffer()
+    {
+        if (buffer_ != nullptr)
+        {
+            data_allocator::deallocate(buffer_, cap_);
+            buffer_ = nullptr;
+            size_ = 0;
+            cap_ = 0;
+        }
+    }
+
+    // to_raw_pointer 函数
+    template<class CharType, class CharTraits>
+    typename basic_string<CharType, CharTraits>::const_pointer
+    basic_string<CharType, CharTraits>::
+    to_raw_pointer() const
+    {
+        *(buffer_ + size_) = value_type();
+        return buffer_;
+    }
+
+    // reinsert 函数
+    template<class CharType, class CharTraits>
+    void basic_string<CharType, CharTraits>::
+    reinsert(basic_string::size_type size)
+    {
+        auto new_buffer = data_allocator::allocate(size);
+        try
+        {
+            char_traits::move(new_buffer, buffer_, size);
+        }
+        catch (...)
+        {
+            data_allocator::deallocate(new_buffer);
+        }
+        buffer_ = new_buffer;
+        size_ = size;
+        cap_ = size;
+    }
+
+    // append_range，末尾追加一段 [first, last) 内的字符
+    template<class CharType, class CharTraits>
+    template<class Iter>
+    basic_string<CharType, CharTraits>&
+    basic_string<CharType, CharTraits>::
+    append_range(Iter first, Iter last)
+    {
+        const size_type n = mystl::distance(first, last);
+        THROW_LENGTH_ERROR_IF(size_ > max_size() - n,
+                              "basic_string<Char, Tratis>'s size too big");
+        if (cap_ - size_ < n)
+        {
+            reallocate(n);
+        }
+        mystl::uninitialized_copy_n(first, n, buffer_ + size_);
+        size_ += n;
+        return *this;
+    }
+
+    template<class CharType, class CharTraits>
+    int basic_string<CharType, CharTraits>::
+    compare_cstr(basic_string::const_pointer s1, basic_string::size_type n1,
+                 basic_string::const_pointer s2, basic_string::size_type n2) const
+    {
+        auto rlen = mystl::min(n1, n2);
+        auto res = char_traits::compare(s1, s2, rlen);
+        if (res != 0) return res;
+        if (n1 < n2) return -1;
+        if (n1 > n2) return 1;
+        return 0;
+    }
+
+    // 把 first 开始的 count1 个字符替换成 str 开始的 count2 个字符
+    template<class CharType, class CharTraits>
+    basic_string<CharType, CharTraits>&
+    basic_string<CharType, CharTraits>::
+    replace_cstr(basic_string::const_iterator first, basic_string::size_type count1,
+                 basic_string::const_pointer str, basic_string::size_type count2)
+    {
+        if (static_cast<size_type>(cend() - first) < count1)
+        {
+            count1 = cend() - first;
+        }
+        if (count1 < count2)
+        {
+            const size_type add = count2 - count1;
+            THROW_LENGTH_ERROR_IF(size_ > max_size() - add,
+                                  "basic_string<Char, Traits>'s size too big");
+            if (size_ > cap_ - add)
+            {
+                reallocate(add);
+            }
+            pointer r = const_cast<pointer>(first);
+            char_traits::move(r + count2, first + count1, end() - (first + count1));
+            char_traits::copy(r, str, count2);
+            size_ += add;
+        }
+        else
+        {
+            pointer r = const_cast<pointer>(first);
+            char_traits::move(r + count2, first + count1, end() - (first + count1));
+            char_traits::copy(r, str, count2);
+            size_ -= (count1 - count2);
+        }
+        return *this;
+    }
+
+    // 把 first 开始的 count1 个字符替换成 count2 个 ch 字符
+    template<class CharType, class CharTraits>
+    basic_string<CharType, CharTraits>&
+    basic_string<CharType, CharTraits>::
+    replace_fill(basic_string::const_iterator first, basic_string::size_type count1,
+                 basic_string::size_type count2, value_type ch)
+    {
+        if (static_cast<size_type>(cend() - first) < count1)
+        {
+            count1 = cend() - first;
+        }
+        if (count1 < count2)
+        {
+            const size_type add = count2 - count1;
+            THROW_LENGTH_ERROR_IF(size_ > max_size() - add,
+                                  "basic_string<Char, Traits>'s size too big");
+            if (size_ > cap_ - add)
+            {
+                reallocate(add);
+            }
+            pointer r = const_cast<pointer>(first);
+            char_traits::move(r + count2, first + count1, end() - (first + count1));
+            char_traits::fill(r, ch, count2);
+            size_ += add;
+        }
+        else
+        {
+            pointer r = const_cast<pointer>(first);
+            char_traits::move(r + count2, first + count1, end() - (first + count1));
+            char_traits::fill(r, ch, count2);
+            size_ -= (count1 - count2);
+        }
+        return *this;
+    }
+
+    // 把 [first, last) 的字符替换成 [first2, last2)
+    template <class CharType, class CharTraits>
+    template <class Iter>
+    basic_string<CharType, CharTraits>&
+    basic_string<CharType, CharTraits>::
+    replace_copy(const_iterator first, const_iterator last, Iter first2, Iter last2)
+    {
+        size_type len1 = last - first;
+        size_type len2 = last2 - first2;
+        if (len1 < len2)
+        {
+            const size_type add = len2 - len1;
+            THROW_LENGTH_ERROR_IF(size_ > max_size() - add,
+                                  "basic_string<Char, Traits>'s size too big");
+            if (size_ > cap_ - add)
+            {
+                reallocate(add);
+            }
+            pointer r = const_cast<pointer>(first);
+            char_traits::move(r + len2, first + len1, end() - (first + len1));
+            char_traits::copy(r, first2, len2);
+            size_ += add;
+        }
+        else
+        {
+            pointer r = const_cast<pointer>(first);
+            char_traits::move(r + len2, first + len1, end() - (first + len1));
+            char_traits::copy(r, first2, len2);
+            size_ -= (len1 - len2);
+        }
+        return *this;
+    }
+
+    // reallocate 函数
+    template<class CharType, class CharTraits>
+    void basic_string<CharType, CharTraits>::
+    reallocate(basic_string::size_type need)
+    {
+        const auto new_cap = mystl::max(cap_ + need, cap_ + (cap_ >> 1));
+        auto new_buffer = data_allocator::allocate(new_cap);
+        char_traits::move(new_buffer, buffer_, size_);
+        data_allocator::deallocate(buffer_);
+        buffer_ = new_buffer;
+        cap_ = new_buffer;
+    }
+
+    // reallocate_and_fill 函数
+    template <class CharType, class CharTraits>
+    typename basic_string<CharType, CharTraits>::iterator
+    basic_string<CharType, CharTraits>::
+    reallocate_and_fill(iterator pos, size_type n, value_type ch)
+    {
+        const auto r = pos - buffer_;
+        const auto old_cap = cap_;
+        const auto new_cap = mystl::max(old_cap + n, old_cap + (old_cap >> 1));
+        auto new_buffer = data_allocator::allocate(new_cap);
+        auto e1 = char_traits::move(new_buffer, buffer_, r) + r;
+        auto e2 = char_traits::fill(e1, ch, n) + n;
+        char_traits::move(e2, buffer_ + r, size_ - r);
+        data_allocator::deallocate(buffer_, old_cap);
+        buffer_ = new_buffer;
+        size_ += n;
+        cap_ = new_cap;
+        return buffer_ + r;
+    }
+
+    // reallocate_and_copy 函数
+    template <class CharType, class CharTraits>
+    typename basic_string<CharType, CharTraits>::iterator
+    basic_string<CharType, CharTraits>::
+    reallocate_and_copy(iterator pos, const_iterator first, const_iterator last)
+    {
+        const auto r = pos - buffer_;
+        const auto old_cap = cap_;
+        const size_type n = mystl::distance(first, last);
+        const auto new_cap = mystl::max(old_cap + n, old_cap + (old_cap >> 1));
+        auto new_buffer = data_allocator::allocate(new_cap);
+        auto e1 = char_traits::move(new_buffer, buffer_, r) + r;
+        auto e2 = mystl::uninitialized_copy_n(first, n, e1) + n;
+        char_traits::move(e2, buffer_ + r, size_ - r);
+        data_allocator::deallocate(buffer_, old_cap);
+        buffer_ = new_buffer;
+        size_ += n;
+        cap_ = new_cap;
+        return buffer_ + r;
+    }
+
+    /*****************************************************************************************/
+    // 重载全局操作符
+
+    // 重载 operator+
+    template<class CharType, class CharTraits>
+    basic_string<CharType, CharTraits>
+    operator+(const basic_string<CharType, CharTraits>& lhs,
+              const basic_string<CharType, CharTraits>& rhs)
+    {
+        basic_string<CharType, CharTraits> tmp(lhs);
+        tmp.append(rhs);
+        return tmp;
+    }
+
+
+    template <class CharType, class CharTraits>
+    basic_string<CharType, CharTraits>
+    operator+(const CharType* lhs, const basic_string<CharType, CharTraits>& rhs)
+    {
+        basic_string<CharType, CharTraits> tmp(lhs);
+        tmp.append(rhs);
+        return tmp;
+    }
+
+    template <class CharType, class CharTraits>
+    basic_string<CharType, CharTraits>
+    operator+(CharType ch, const basic_string<CharType, CharTraits>& rhs)
+    {
+        basic_string<CharType, CharTraits> tmp(1, ch);
+        tmp.append(rhs);
+        return tmp;
+    }
+
+    template <class CharType, class CharTraits>
+    basic_string<CharType, CharTraits>
+    operator+(const basic_string<CharType, CharTraits>& lhs, const CharType* rhs)
+    {
+        basic_string<CharType, CharTraits> tmp(lhs);
+        tmp.append(rhs);
+        return tmp;
+    }
+
+    template <class CharType, class CharTraits>
+    basic_string<CharType, CharTraits>
+    operator+(const basic_string<CharType, CharTraits>& lhs, CharType ch)
+    {
+        basic_string<CharType, CharTraits> tmp(lhs);
+        tmp.append(1, ch);
+        return tmp;
+    }
+
+    template <class CharType, class CharTraits>
+    basic_string<CharType, CharTraits>
+    operator+(basic_string<CharType, CharTraits>&& lhs,
+              const basic_string<CharType, CharTraits>& rhs)
+    {
+        basic_string<CharType, CharTraits> tmp(mystl::move(lhs));
+        tmp.append(rhs);
+        return tmp;
+    }
+
+    template <class CharType, class CharTraits>
+    basic_string<CharType, CharTraits>
+    operator+(const basic_string<CharType, CharTraits>& lhs,
+              basic_string<CharType, CharTraits>&& rhs)
+    {
+        basic_string<CharType, CharTraits> tmp(mystl::move(rhs));
+        tmp.insert(tmp.begin(), lhs.begin(), lhs.end());
+        return tmp;
+    }
+
+    template <class CharType, class CharTraits>
+    basic_string<CharType, CharTraits>
+    operator+(basic_string<CharType, CharTraits>&& lhs,
+              basic_string<CharType, CharTraits>&& rhs)
+    {
+        basic_string<CharType, CharTraits> tmp(mystl::move(lhs));
+        tmp.append(rhs);
+        return tmp;
+    }
+
+    template <class CharType, class CharTraits>
+    basic_string<CharType, CharTraits>
+    operator+(const CharType* lhs, basic_string<CharType, CharTraits>&& rhs)
+    {
+        basic_string<CharType, CharTraits> tmp(mystl::move(rhs));
+        tmp.insert(tmp.begin(), lhs, lhs + char_traits<CharType>::length(lhs));
+        return tmp;
+    }
+
+    template <class CharType, class CharTraits>
+    basic_string<CharType, CharTraits>
+    operator+(CharType ch, basic_string<CharType, CharTraits>&& rhs)
+    {
+        basic_string<CharType, CharTraits> tmp(mystl::move(rhs));
+        tmp.insert(tmp.begin(), ch);
+        return tmp;
+    }
+
+    template <class CharType, class CharTraits>
+    basic_string<CharType, CharTraits>
+    operator+(basic_string<CharType, CharTraits>&& lhs, const CharType* rhs)
+    {
+        basic_string<CharType, CharTraits> tmp(mystl::move(lhs));
+        tmp.append(rhs);
+        return tmp;
+    }
+
+    template <class CharType, class CharTraits>
+    basic_string<CharType, CharTraits>
+    operator+(basic_string<CharType, CharTraits>&& lhs, CharType ch)
+    {
+        basic_string<CharType, CharTraits> tmp(mystl::move(lhs));
+        tmp.append(1, ch);
+        return tmp;
+    }
+
+    // 重载比较操作符
+    template <class CharType, class CharTraits>
+    bool operator==(const basic_string<CharType, CharTraits>& lhs,
+                    const basic_string<CharType, CharTraits>& rhs)
+    {
+        return lhs.size() == rhs.size() && lhs.compare(rhs) == 0;
+    }
+
+    template <class CharType, class CharTraits>
+    bool operator!=(const basic_string<CharType, CharTraits>& lhs,
+                    const basic_string<CharType, CharTraits>& rhs)
+    {
+        return lhs.size() != rhs.size() || lhs.compare(rhs) != 0;
+    }
+
+    template <class CharType, class CharTraits>
+    bool operator<(const basic_string<CharType, CharTraits>& lhs,
+                   const basic_string<CharType, CharTraits>& rhs)
+    {
+        return lhs.compare(rhs) < 0;
+    }
+
+    template <class CharType, class CharTraits>
+    bool operator<=(const basic_string<CharType, CharTraits>& lhs,
+                    const basic_string<CharType, CharTraits>& rhs)
+    {
+        return lhs.compare(rhs) <= 0;
+    }
+
+    template <class CharType, class CharTraits>
+    bool operator>(const basic_string<CharType, CharTraits>& lhs,
+                   const basic_string<CharType, CharTraits>& rhs)
+    {
+        return lhs.compare(rhs) > 0;
+    }
+
+    template <class CharType, class CharTraits>
+    bool operator>=(const basic_string<CharType, CharTraits>& lhs,
+                    const basic_string<CharType, CharTraits>& rhs)
+    {
+        return lhs.compare(rhs) >= 0;
+    }
+
+    // 重载 mystl 的 swap
+    template <class CharType, class CharTraits>
+    void swap(basic_string<CharType, CharTraits>& lhs,
+              basic_string<CharType, CharTraits>& rhs) noexcept
+    {
+        lhs.swap(rhs);
+    }
+
+    // 特化 mystl::hash
+    template<class CharType, class CharTraits>
+    struct hash<basic_string<CharType, CharTraits>>
+    {
+        size_t operator()(const basic_string<CharType, CharTraits>& str)
+        {
+            return bitwise_hash((const unsigned char*)str.c_str(),
+                                str.size() * sizeof(CharType));
+        }
+    };
 
 } // namespace mystl
 
