@@ -205,44 +205,44 @@ namespace myownstl
     };
 
 // 对于整数类型，只是返回原值
-#define myownstl_TRIVIAL_HASH_FCN(Type)            \
+#define MYOWNSTL_TRIVIAL_HASH_FCN(Type)            \
 template <> struct hash<Type>                   \
 {                                               \
     size_t operator()(Type val) const noexcept  \
     {return static_cast<size_t>(val);}          \
 };
 
-myownstl_TRIVIAL_HASH_FCN(bool)
+MYOWNSTL_TRIVIAL_HASH_FCN(bool)
 
-myownstl_TRIVIAL_HASH_FCN(char)
+MYOWNSTL_TRIVIAL_HASH_FCN(char)
 
-myownstl_TRIVIAL_HASH_FCN(signed char)
+MYOWNSTL_TRIVIAL_HASH_FCN(signed char)
 
-myownstl_TRIVIAL_HASH_FCN(unsigned char)
+MYOWNSTL_TRIVIAL_HASH_FCN(unsigned char)
 
-myownstl_TRIVIAL_HASH_FCN(wchar_t)
+MYOWNSTL_TRIVIAL_HASH_FCN(wchar_t)
 
-myownstl_TRIVIAL_HASH_FCN(char16_t)
+MYOWNSTL_TRIVIAL_HASH_FCN(char16_t)
 
-myownstl_TRIVIAL_HASH_FCN(char32_t)
+MYOWNSTL_TRIVIAL_HASH_FCN(char32_t)
 
-myownstl_TRIVIAL_HASH_FCN(short)
+MYOWNSTL_TRIVIAL_HASH_FCN(short)
 
-myownstl_TRIVIAL_HASH_FCN(unsigned short)
+MYOWNSTL_TRIVIAL_HASH_FCN(unsigned short)
 
-myownstl_TRIVIAL_HASH_FCN(int)
+MYOWNSTL_TRIVIAL_HASH_FCN(int)
 
-myownstl_TRIVIAL_HASH_FCN(unsigned int)
+MYOWNSTL_TRIVIAL_HASH_FCN(unsigned int)
 
-myownstl_TRIVIAL_HASH_FCN(long)
+MYOWNSTL_TRIVIAL_HASH_FCN(long)
 
-myownstl_TRIVIAL_HASH_FCN(unsigned long)
+MYOWNSTL_TRIVIAL_HASH_FCN(unsigned long)
 
-myownstl_TRIVIAL_HASH_FCN(long long)
+MYOWNSTL_TRIVIAL_HASH_FCN(long long)
 
-myownstl_TRIVIAL_HASH_FCN(unsigned long long)
+MYOWNSTL_TRIVIAL_HASH_FCN(unsigned long long)
 
-#undef myownstl_TRIVIAL_HASH_FCN
+#undef MYOWNSTL_TRIVIAL_HASH_FCN
 
     // 对于浮点数，逐位哈希
     inline size_t bitwise_hash(const unsigned char* first, size_t count)
