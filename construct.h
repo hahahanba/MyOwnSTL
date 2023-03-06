@@ -2,8 +2,8 @@
 // Created by gy gao on 8/31/22.
 //
 
-#ifndef MYTINYSTL_CONSTRUCT_H
-#define MYTINYSTL_CONSTRUCT_H
+#ifndef MYOWNSTL_CONSTRUCT_H
+#define MYOWNSTL_CONSTRUCT_H
 
 // 头文件包含两个函数 construct，destroy
 // construct : 负责对象的构造
@@ -14,7 +14,7 @@
 #include "type_traits.h"
 #include "iterator.h"
 
-namespace mystl
+namespace myownstl
 {
     // construct
     template<class Ty>
@@ -75,4 +75,4 @@ namespace mystl
 }
 
 
-#endif //MYTINYSTL_CONSTRUCT_H
+#endif //MYOWNSTL_CONSTRUCT_H

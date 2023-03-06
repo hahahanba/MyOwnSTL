@@ -2,8 +2,8 @@
 // Created by gy gao on 11/25/22.
 //
 
-#ifndef MYTINYSTL_BASIC_STRING_H
-#define MYTINYSTL_BASIC_STRING_H
+#ifndef MYOWNSTL_BASIC_STRING_H
+#define MYOWNSTL_BASIC_STRING_H
 
 // 包含一个模板类 basic_string 用于表示字符串类型
 
@@ -14,7 +14,7 @@
 #include "functional.h"
 #include "exceptdef.h"
 
-namespace mystl
+namespace myownstl
 {
 
     // char_traits
@@ -46,7 +46,7 @@ namespace mystl
 
         static char_type* copy(char_type* dst, const char_type* src, size_t n)
         {
-            MYSTL_DEBUG(src + n <= dst || dst + n <= src);
+            myownstl_DEBUG(src + n <= dst || dst + n <= src);
             char_type* r = dst;
             for (; n != 0; --n, ++dst, ++src)
                 *dst = *src;
@@ -94,7 +94,7 @@ namespace mystl
 
         static char_type* copy(char_type* dst, const char_type* src, size_t n) noexcept
         {
-            MYSTL_DEBUG(src + n <= dst || dst + n <= src);
+            myownstl_DEBUG(src + n <= dst || dst + n <= src);
             return static_cast<char_type*>(std::memcpy(dst, src, n));
         }
 
@@ -127,7 +127,7 @@ namespace mystl
 
         static char_type* copy(char_type* dst, const char_type* src, size_t n) noexcept
         {
-            MYSTL_DEBUG(src + n <= dst || dst + n <= src);
+            myownstl_DEBUG(src + n <= dst || dst + n <= src);
             return static_cast<char_type*>(std::wmemcpy(dst, src, n));
         }
 
@@ -170,7 +170,7 @@ namespace mystl
 
         static char_type* copy(char_type* dst, const char_type* src, size_t n) noexcept
         {
-            MYSTL_DEBUG(src + n <= dst || dst + n <= src);
+            myownstl_DEBUG(src + n <= dst || dst + n <= src);
             char_type* r = dst;
             for (; n != 0; --n, ++dst, ++src)
                 *dst = *src;
@@ -232,7 +232,7 @@ namespace mystl
 
         static char_type* copy(char_type* dst, const char_type* src, size_t n) noexcept
         {
-            MYSTL_DEBUG(src + n <= dst || dst + n <= src);
+            myownstl_DEBUG(src + n <= dst || dst + n <= src);
             char_type* r = dst;
             for (; n != 0; --n, ++dst, ++src)
                 *dst = *src;
@@ -270,16 +270,16 @@ namespace mystl
 #define STRING_INIT_SIZE 32
 
     // 模板类 basic_string
-    // 参数一代表字符类型，参数二代表萃取字符类型的方式，缺省使用 mystl::char_traits
-    template <class CharType, class CharTraits = mystl::char_traits<CharType>>
+    // 参数一代表字符类型，参数二代表萃取字符类型的方式，缺省使用 myownstl::char_traits
+    template <class CharType, class CharTraits = myownstl::char_traits<CharType>>
     class basic_string
     {
     public:
         typedef CharTraits                               traits_type;
         typedef CharTraits                               char_traits;
 
-        typedef mystl::allocator<CharType>               allocator_type;
-        typedef mystl::allocator<CharType>               data_allocator;
+        typedef myownstl::allocator<CharType>               allocator_type;
+        typedef myownstl::allocator<CharType>               data_allocator;
 
         typedef typename allocator_type::value_type      value_type;
         typedef typename allocator_type::pointer         pointer;
@@ -291,8 +291,8 @@ namespace mystl
 
         typedef value_type*                              iterator;
         typedef const value_type*                        const_iterator;
-        typedef mystl::reverse_iterator<iterator>        reverse_iterator;
-        typedef mystl::reverse_iterator<const_iterator>  const_reverse_iterator;
+        typedef myownstl::reverse_iterator<iterator>        reverse_iterator;
+        typedef myownstl::reverse_iterator<const_iterator>  const_reverse_iterator;
 
         allocator_type get_allocator() { return allocator_type(); }
 
@@ -345,7 +345,7 @@ namespace mystl
         }
 
         template <class Iter, typename std::enable_if<
-                mystl::is_input_iterator<Iter>::value, int>::type = 0>
+                myownstl::is_input_iterator<Iter>::value, int>::type = 0>
         basic_string(Iter first, Iter last)
         { copy_init(first, last, iterator_category(first)); }
 
@@ -430,14 +430,14 @@ namespace mystl
         // 访问元素相关操作
         reference       operator[](size_type n)
         {
-            MYSTL_DEBUG(n <= size_);
+            myownstl_DEBUG(n <= size_);
             if (n == size_)
                 *(buffer_ + n) = value_type();
             return *(buffer_ + n);
         }
         const_reference operator[](size_type n) const
         {
-            MYSTL_DEBUG(n <= size_);
+            myownstl_DEBUG(n <= size_);
             if (n == size_)
                 *(buffer_ + n) = value_type();
             return *(buffer_ + n);
@@ -458,23 +458,23 @@ namespace mystl
 
         reference       front()
         {
-            MYSTL_DEBUG(!empty());
+            myownstl_DEBUG(!empty());
             return *begin();
         }
         const_reference front() const
         {
-            MYSTL_DEBUG(!empty());
+            myownstl_DEBUG(!empty());
             return *begin();
         }
 
         reference       back()
         {
-            MYSTL_DEBUG(!empty());
+            myownstl_DEBUG(!empty());
             return *(end() - 1);
         }
         const_reference back()  const
         {
-            MYSTL_DEBUG(!empty());
+            myownstl_DEBUG(!empty());
             return *(end() - 1);
         }
 
@@ -498,7 +498,7 @@ namespace mystl
         { append(1, ch); }
         void     pop_back()
         {
-            MYSTL_DEBUG(!empty());
+            myownstl_DEBUG(!empty());
             --size_;
         }
 
@@ -516,7 +516,7 @@ namespace mystl
         basic_string& append(const_pointer s, size_type count);
 
         template <class Iter, typename std::enable_if<
-                mystl::is_input_iterator<Iter>::value, int>::type = 0>
+                myownstl::is_input_iterator<Iter>::value, int>::type = 0>
         basic_string& append(Iter first, Iter last)
         { return append_range(first, last); }
 
@@ -546,7 +546,7 @@ namespace mystl
         // substr
         basic_string substr(size_type index, size_type count = npos)
         {
-            count = mystl::min(count, size_ - index);
+            count = myownstl::min(count, size_ - index);
             return basic_string(buffer_ + index, buffer_ + index + count);
         }
 
@@ -558,7 +558,7 @@ namespace mystl
         }
         basic_string& replace(const_iterator first, const_iterator last, const basic_string& str)
         {
-            MYSTL_DEBUG(begin() <= first && last <= end() && first <= last);
+            myownstl_DEBUG(begin() <= first && last <= end() && first <= last);
             return replace_cstr(first, static_cast<size_type>(last - first), str.buffer_, str.size_);
         }
 
@@ -569,7 +569,7 @@ namespace mystl
         }
         basic_string& replace(const_iterator first, const_iterator last, const_pointer str)
         {
-            MYSTL_DEBUG(begin() <= first && last <= end() && first <= last);
+            myownstl_DEBUG(begin() <= first && last <= end() && first <= last);
             return replace_cstr(first, static_cast<size_type>(last - first), str, char_traits::length(str));
         }
 
@@ -580,7 +580,7 @@ namespace mystl
         }
         basic_string& replace(const_iterator first, const_iterator last, const_pointer str, size_type count)
         {
-            MYSTL_DEBUG(begin() <= first && last <= end() && first <= last);
+            myownstl_DEBUG(begin() <= first && last <= end() && first <= last);
             return replace_cstr(first, static_cast<size_type>(last - first), str, count);
 
         }
@@ -592,7 +592,7 @@ namespace mystl
         }
         basic_string& replace(const_iterator first, const_iterator last, size_type count, value_type ch)
         {
-            MYSTL_DEBUG(begin() <= first && last <= end() && first <= last);
+            myownstl_DEBUG(begin() <= first && last <= end() && first <= last);
             return replace_fill(first, static_cast<size_type>(last - first), count, ch);
         }
 
@@ -605,10 +605,10 @@ namespace mystl
         }
 
         template <class Iter, typename std::enable_if<
-                mystl::is_input_iterator<Iter>::value, int>::type = 0>
+                myownstl::is_input_iterator<Iter>::value, int>::type = 0>
         basic_string& replace(const_iterator first, const_iterator last, Iter first2, Iter last2)
         {
-            MYSTL_DEBUG(begin() <= first && last <= end() && first <= last);
+            myownstl_DEBUG(begin() <= first && last <= end() && first <= last);
             return replace_copy(first, last, first2, last2);
         }
 
@@ -696,9 +696,9 @@ namespace mystl
         void          fill_init(size_type n, value_type ch);
 
         template <class Iter>
-        void          copy_init(Iter first, Iter last, mystl::input_iterator_tag);
+        void          copy_init(Iter first, Iter last, myownstl::input_iterator_tag);
         template <class Iter>
-        void          copy_init(Iter first, Iter last, mystl::forward_iterator_tag);
+        void          copy_init(Iter first, Iter last, myownstl::forward_iterator_tag);
 
         void          init_from(const_pointer src, size_type pos, size_type count);
 
@@ -853,7 +853,7 @@ namespace mystl
     basic_string<CharType, CharTraits>::insert(basic_string::const_iterator pos, Iter first, Iter last)
     {
         iterator r = const_cast<iterator>(pos);
-        const size_type len = mystl::distance(first, last);
+        const size_type len = myownstl::distance(first, last);
         if (len == 0)
             return r;
         if (cap_ - size_ < len)
@@ -862,12 +862,12 @@ namespace mystl
         }
         if (pos == end())
         {
-            mystl::uninitialized_copy(first, last, end());
+            myownstl::uninitialized_copy(first, last, end());
             size_ += len;
             return r;
         }
         char_traits::move(r + len, r, len);
-        mystl::uninitialized_copy(first, last, r);
+        myownstl::uninitialized_copy(first, last, r);
         size_ += len;
         return r;
     }
@@ -925,7 +925,7 @@ namespace mystl
     typename basic_string<CharType, CharTraits>::iterator
     basic_string<CharType, CharTraits>::erase(basic_string::const_iterator pos)
     {
-        MYSTL_DEBUG(pos != end());
+        myownstl_DEBUG(pos != end());
         iterator r = const_cast<iterator>(pos);
         char_traits::move(r, pos + 1, end() - pos - 1);
         --size_;
@@ -975,7 +975,7 @@ namespace mystl
     int basic_string<CharType, CharTraits>::
     compare(basic_string::size_type pos1, basic_string::size_type count1, const basic_string &other) const
     {
-        auto n1 = mystl::min(count1, size_ - pos1);
+        auto n1 = myownstl::min(count1, size_ - pos1);
         return compare_cstr(buffer_ + pos1, n1, other.buffer_, other.size_);
     }
 
@@ -986,8 +986,8 @@ namespace mystl
             const basic_string &other, basic_string::size_type pos2,
             basic_string::size_type count2) const
    {
-        auto n1 = mystl::min(count1, size_ - pos1);
-        auto n2 = mystl::min(count2, other.size_ - pos2);
+        auto n1 = myownstl::min(count1, size_ - pos1);
+        auto n2 = myownstl::min(count2, other.size_ - pos2);
         return compare_cstr(buffer_, n1, other.buffer_, n2);
     }
 
@@ -1004,7 +1004,7 @@ namespace mystl
     int basic_string<CharType, CharTraits>::
     compare(basic_string::size_type pos1, basic_string::size_type count1, basic_string::const_pointer s) const
     {
-        auto n1 = mystl::min(count1, size_ - pos1);
+        auto n1 = myownstl::min(count1, size_ - pos1);
         auto n2 = char_traits::length(s);
         return compare_cstr(buffer_, n1, s, n2);
     }
@@ -1015,7 +1015,7 @@ namespace mystl
     compare(basic_string::size_type pos1, basic_string::size_type count1,
             basic_string::const_pointer s, basic_string::size_type count2) const
     {
-        auto n1 = mystl::min(count1, size_ - pos1);
+        auto n1 = myownstl::min(count1, size_ - pos1);
         return compare_cstr(buffer_, n1, s, count2);
     }
 
@@ -1025,7 +1025,7 @@ namespace mystl
     {
         for (auto i = begin(), j = end(); i < j;)
         {
-            mystl::iter_swap(i++, --j);
+            myownstl::iter_swap(i++, --j);
         }
     }
 
@@ -1035,9 +1035,9 @@ namespace mystl
     {
         if (this != &rhs)
         {
-            mystl::swap(buffer_, rhs.buffer_);
-            mystl::swap(size_, rhs.size_);
-            mystl::swap(cap_, rhs.cap_);
+            myownstl::swap(buffer_, rhs.buffer_);
+            myownstl::swap(size_, rhs.size_);
+            myownstl::swap(cap_, rhs.cap_);
         }
     }
 
@@ -1578,7 +1578,7 @@ namespace mystl
     void basic_string<CharType, CharTraits>::
     fill_init(basic_string::size_type n, value_type ch)
     {
-        const auto init_size = mystl::max(static_cast<size_type>(STRING_INIT_SIZE), n + 1);
+        const auto init_size = myownstl::max(static_cast<size_type>(STRING_INIT_SIZE), n + 1);
         buffer_ = data_allocator::allocate(init_size);
         char_traits::fill(buffer_, ch, n);
         size_ = n;
@@ -1589,10 +1589,10 @@ namespace mystl
     template<class CharType, class CharTraits>
     template<class Iter>
     void basic_string<CharType, CharTraits>::
-    copy_init(Iter first, Iter last, mystl::input_iterator_tag)
+    copy_init(Iter first, Iter last, myownstl::input_iterator_tag)
     {
-        size_type n = mystl::distance(first, last);
-        const auto init_size = mystl::max(static_cast<size_type>(STRING_INIT_SIZE), n + 1);
+        size_type n = myownstl::distance(first, last);
+        const auto init_size = myownstl::max(static_cast<size_type>(STRING_INIT_SIZE), n + 1);
         try
         {
             buffer_ = data_allocator::allocate(init_size);
@@ -1613,16 +1613,16 @@ namespace mystl
     template<class CharType, class CharTraits>
     template<class Iter>
     void basic_string<CharType, CharTraits>::
-    copy_init(Iter first, Iter last, mystl::forward_iterator_tag)
+    copy_init(Iter first, Iter last, myownstl::forward_iterator_tag)
     {
-        const size_type n = mystl::distance(first, last);
-        const auto init_size = mystl::max(static_cast<size_type>(STRING_INIT_SIZE), n + 1);
+        const size_type n = myownstl::distance(first, last);
+        const auto init_size = myownstl::max(static_cast<size_type>(STRING_INIT_SIZE), n + 1);
         try
         {
             buffer_ = data_allocator::allocate(init_size);
             size_ = n;
             cap_ = init_size;
-            mystl::uninitialized_copy(first, last, buffer_);
+            myownstl::uninitialized_copy(first, last, buffer_);
         }
         catch (...)
         {
@@ -1638,7 +1638,7 @@ namespace mystl
     void basic_string<CharType, CharTraits>::
     init_from(basic_string::const_pointer src, basic_string::size_type pos, basic_string::size_type count)
     {
-        const auto init_size = mystl::max(static_cast<size_type>(STRING_INIT_SIZE), count + 1);
+        const auto init_size = myownstl::max(static_cast<size_type>(STRING_INIT_SIZE), count + 1);
         buffer_ = data_allocator::allocate(init_size);
         char_traits::copy(buffer_, str + pos, count);
         size_ = count;
@@ -1695,14 +1695,14 @@ namespace mystl
     basic_string<CharType, CharTraits>::
     append_range(Iter first, Iter last)
     {
-        const size_type n = mystl::distance(first, last);
+        const size_type n = myownstl::distance(first, last);
         THROW_LENGTH_ERROR_IF(size_ > max_size() - n,
                               "basic_string<Char, Tratis>'s size too big");
         if (cap_ - size_ < n)
         {
             reallocate(n);
         }
-        mystl::uninitialized_copy_n(first, n, buffer_ + size_);
+        myownstl::uninitialized_copy_n(first, n, buffer_ + size_);
         size_ += n;
         return *this;
     }
@@ -1712,7 +1712,7 @@ namespace mystl
     compare_cstr(basic_string::const_pointer s1, basic_string::size_type n1,
                  basic_string::const_pointer s2, basic_string::size_type n2) const
     {
-        auto rlen = mystl::min(n1, n2);
+        auto rlen = myownstl::min(n1, n2);
         auto res = char_traits::compare(s1, s2, rlen);
         if (res != 0) return res;
         if (n1 < n2) return -1;
@@ -1828,7 +1828,7 @@ namespace mystl
     void basic_string<CharType, CharTraits>::
     reallocate(basic_string::size_type need)
     {
-        const auto new_cap = mystl::max(cap_ + need, cap_ + (cap_ >> 1));
+        const auto new_cap = myownstl::max(cap_ + need, cap_ + (cap_ >> 1));
         auto new_buffer = data_allocator::allocate(new_cap);
         char_traits::move(new_buffer, buffer_, size_);
         data_allocator::deallocate(buffer_);
@@ -1844,7 +1844,7 @@ namespace mystl
     {
         const auto r = pos - buffer_;
         const auto old_cap = cap_;
-        const auto new_cap = mystl::max(old_cap + n, old_cap + (old_cap >> 1));
+        const auto new_cap = myownstl::max(old_cap + n, old_cap + (old_cap >> 1));
         auto new_buffer = data_allocator::allocate(new_cap);
         auto e1 = char_traits::move(new_buffer, buffer_, r) + r;
         auto e2 = char_traits::fill(e1, ch, n) + n;
@@ -1864,11 +1864,11 @@ namespace mystl
     {
         const auto r = pos - buffer_;
         const auto old_cap = cap_;
-        const size_type n = mystl::distance(first, last);
-        const auto new_cap = mystl::max(old_cap + n, old_cap + (old_cap >> 1));
+        const size_type n = myownstl::distance(first, last);
+        const auto new_cap = myownstl::max(old_cap + n, old_cap + (old_cap >> 1));
         auto new_buffer = data_allocator::allocate(new_cap);
         auto e1 = char_traits::move(new_buffer, buffer_, r) + r;
-        auto e2 = mystl::uninitialized_copy_n(first, n, e1) + n;
+        auto e2 = myownstl::uninitialized_copy_n(first, n, e1) + n;
         char_traits::move(e2, buffer_ + r, size_ - r);
         data_allocator::deallocate(buffer_, old_cap);
         buffer_ = new_buffer;
@@ -1933,7 +1933,7 @@ namespace mystl
     operator+(basic_string<CharType, CharTraits>&& lhs,
               const basic_string<CharType, CharTraits>& rhs)
     {
-        basic_string<CharType, CharTraits> tmp(mystl::move(lhs));
+        basic_string<CharType, CharTraits> tmp(myownstl::move(lhs));
         tmp.append(rhs);
         return tmp;
     }
@@ -1943,7 +1943,7 @@ namespace mystl
     operator+(const basic_string<CharType, CharTraits>& lhs,
               basic_string<CharType, CharTraits>&& rhs)
     {
-        basic_string<CharType, CharTraits> tmp(mystl::move(rhs));
+        basic_string<CharType, CharTraits> tmp(myownstl::move(rhs));
         tmp.insert(tmp.begin(), lhs.begin(), lhs.end());
         return tmp;
     }
@@ -1953,7 +1953,7 @@ namespace mystl
     operator+(basic_string<CharType, CharTraits>&& lhs,
               basic_string<CharType, CharTraits>&& rhs)
     {
-        basic_string<CharType, CharTraits> tmp(mystl::move(lhs));
+        basic_string<CharType, CharTraits> tmp(myownstl::move(lhs));
         tmp.append(rhs);
         return tmp;
     }
@@ -1962,7 +1962,7 @@ namespace mystl
     basic_string<CharType, CharTraits>
     operator+(const CharType* lhs, basic_string<CharType, CharTraits>&& rhs)
     {
-        basic_string<CharType, CharTraits> tmp(mystl::move(rhs));
+        basic_string<CharType, CharTraits> tmp(myownstl::move(rhs));
         tmp.insert(tmp.begin(), lhs, lhs + char_traits<CharType>::length(lhs));
         return tmp;
     }
@@ -1971,7 +1971,7 @@ namespace mystl
     basic_string<CharType, CharTraits>
     operator+(CharType ch, basic_string<CharType, CharTraits>&& rhs)
     {
-        basic_string<CharType, CharTraits> tmp(mystl::move(rhs));
+        basic_string<CharType, CharTraits> tmp(myownstl::move(rhs));
         tmp.insert(tmp.begin(), ch);
         return tmp;
     }
@@ -1980,7 +1980,7 @@ namespace mystl
     basic_string<CharType, CharTraits>
     operator+(basic_string<CharType, CharTraits>&& lhs, const CharType* rhs)
     {
-        basic_string<CharType, CharTraits> tmp(mystl::move(lhs));
+        basic_string<CharType, CharTraits> tmp(myownstl::move(lhs));
         tmp.append(rhs);
         return tmp;
     }
@@ -1989,7 +1989,7 @@ namespace mystl
     basic_string<CharType, CharTraits>
     operator+(basic_string<CharType, CharTraits>&& lhs, CharType ch)
     {
-        basic_string<CharType, CharTraits> tmp(mystl::move(lhs));
+        basic_string<CharType, CharTraits> tmp(myownstl::move(lhs));
         tmp.append(1, ch);
         return tmp;
     }
@@ -2037,7 +2037,7 @@ namespace mystl
         return lhs.compare(rhs) >= 0;
     }
 
-    // 重载 mystl 的 swap
+    // 重载 myownstl 的 swap
     template <class CharType, class CharTraits>
     void swap(basic_string<CharType, CharTraits>& lhs,
               basic_string<CharType, CharTraits>& rhs) noexcept
@@ -2045,7 +2045,7 @@ namespace mystl
         lhs.swap(rhs);
     }
 
-    // 特化 mystl::hash
+    // 特化 myownstl::hash
     template<class CharType, class CharTraits>
     struct hash<basic_string<CharType, CharTraits>>
     {
@@ -2056,6 +2056,6 @@ namespace mystl
         }
     };
 
-} // namespace mystl
+} // namespace myownstl
 
-#endif //MYTINYSTL_BASIC_STRING_H
+#endif //MYOWNSTL_BASIC_STRING_H

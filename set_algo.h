@@ -2,8 +2,8 @@
 // Created by gy gao on 1/30/23.
 //
 
-#ifndef MYTINYSTL_SET_ALGO_H
-#define MYTINYSTL_SET_ALGO_H
+#ifndef MYOWNSTL_SET_ALGO_H
+#define MYOWNSTL_SET_ALGO_H
 
 // 这个头文件包含 set 的四种算法: union, intersection, difference, symmetric_difference
 // 所有函数都要求序列有序
@@ -11,7 +11,7 @@
 #include "algobase.h"
 #include "iterator.h"
 
-namespace mystl
+namespace myownstl
 {
     /*****************************************************************************************/
     // set_union
@@ -43,7 +43,7 @@ namespace mystl
             ++result;
         }
         // 将剩余元素拷贝到 result
-        return mystl::copy(first2, last2, mystl::copy(first1, last1, result));
+        return myownstl::copy(first2, last2, myownstl::copy(first1, last1, result));
     }
 
     // 重载版本使用函数对象 comp 代替比较操作
@@ -73,7 +73,7 @@ namespace mystl
             ++result;
         }
         // 将剩余元素拷贝到 result
-        return mystl::copy(first2, last2, mystl::copy(first1, last1, result));
+        return myownstl::copy(first2, last2, myownstl::copy(first1, last1, result));
     }
 
     /*****************************************************************************************/
@@ -160,7 +160,7 @@ namespace mystl
                 ++first2;
             }
         }
-        return mystl::copy(first1, last1, result);
+        return myownstl::copy(first1, last1, result);
     }
 
     // 重载版本使用函数对象 comp 代替比较操作
@@ -187,7 +187,7 @@ namespace mystl
                 ++first2;
             }
         }
-        return mystl::copy(first1, last1, result);
+        return myownstl::copy(first1, last1, result);
     }
 
     /*****************************************************************************************/
@@ -219,7 +219,7 @@ namespace mystl
                 ++first2;
             }
         }
-        return mystl::copy(first2, last2, mystl::copy(first1, last1, result));
+        return myownstl::copy(first2, last2, myownstl::copy(first1, last1, result));
     }
 
     // 重载版本使用函数对象 comp 代替比较操作
@@ -248,7 +248,7 @@ namespace mystl
                 ++first2;
             }
         }
-        return mystl::copy(first2, last2, mystl::copy(first1, last1, result));
+        return myownstl::copy(first2, last2, myownstl::copy(first1, last1, result));
     }
 }
-#endif //MYTINYSTL_SET_ALGO_H
+#endif //MYOWNSTL_SET_ALGO_H

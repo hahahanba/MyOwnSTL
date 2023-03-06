@@ -2,8 +2,8 @@
 // Created by gy gao on 10/14/22.
 //
 
-#ifndef MYTINYSTL_VECTOR_H
-#define MYTINYSTL_VECTOR_H
+#ifndef MYOWNSTL_VECTOR_H
+#define MYOWNSTL_VECTOR_H
 
 // 这个头文件包含一个模板类vector
 // vector ：向量
@@ -11,7 +11,7 @@
 // notes:
 //
 // 异常保证：
-// mystl::vecotr<T> 满足基本异常保证，部分函数无异常保证，并对以下函数做强异常安全保证：
+// myownstl::vecotr<T> 满足基本异常保证，部分函数无异常保证，并对以下函数做强异常安全保证：
 //   * emplace
 //   * emplace_back
 //   * push_back
@@ -28,7 +28,7 @@
 #include "exceptdef.h"
 #include "algo.h"
 
-namespace mystl
+namespace myownstl
 {
 #ifdef max
 #pragma message("#undefing marco max")
@@ -45,11 +45,11 @@ namespace mystl
     class vector
     {
         // If bool-constexpr returns true, this declaration has no effect.
-        static_assert(!std::is_same<bool, T>::value, "vector<bool> is abandon in mystl");
+        static_assert(!std::is_same<bool, T>::value, "vector<bool> is abandon in myownstl");
     public:
         // vector 的嵌套型别定义
-        typedef mystl::allocator<T>                      allocator_type;
-        typedef mystl::allocator<T>                      data_allocator;
+        typedef myownstl::allocator<T>                      allocator_type;
+        typedef myownstl::allocator<T>                      data_allocator;
 
         typedef typename allocator_type::value_type      value_type;
         typedef typename allocator_type::pointer         pointer;
@@ -62,8 +62,8 @@ namespace mystl
         // 连续空间的迭代器直接使用指针就够了
         typedef value_type*                              iterator;
         typedef const value_type*                        const_iterator;
-        typedef mystl::reverse_iterator<iterator>        reverse_iterator;
-        typedef mystl::reverse_iterator<const_iterator>  const_reverse_iterator;
+        typedef myownstl::reverse_iterator<iterator>        reverse_iterator;
+        typedef myownstl::reverse_iterator<const_iterator>  const_reverse_iterator;
 
         allocator_type get_allocator() {return data_allocator();}
 
@@ -86,10 +86,10 @@ namespace mystl
         {fill_init(n, value);}
 
         template<class Iter, typename std::enable_if<
-                mystl::is_input_iterator<Iter>::value, int>::type = 0>
+                myownstl::is_input_iterator<Iter>::value, int>::type = 0>
         vector(Iter first, Iter last)
         {
-            MYSTL_DEBUG(!(last < first));
+            myownstl_DEBUG(!(last < first));
             range_init(first, last);
         }
 
@@ -174,12 +174,12 @@ namespace mystl
         // 所有带有连续空间特性的容器必须提供重载[]
         reference operator[](size_type n)
         {
-            MYSTL_DEBUG(n < size());
+            myownstl_DEBUG(n < size());
             return *(begin_ + n);
         }
         const_reference operator[](size_type n) const
         {
-            MYSTL_DEBUG(n < size());
+            myownstl_DEBUG(n < size());
             return *(begin_ + n);
         }
         reference at(size_type n)
@@ -194,22 +194,22 @@ namespace mystl
         }
         reference front()
         {
-            MYSTL_DEBUG(!empty());
+            myownstl_DEBUG(!empty());
             return *begin_;
         }
         const_reference front() const
         {
-            MYSTL_DEBUG(!empty());
+            myownstl_DEBUG(!empty());
             return *begin_;
         }
         reference back()
         {
-            MYSTL_DEBUG(!empty());
+            myownstl_DEBUG(!empty());
             return *(end_ - 1);
         }
         const_reference back() const
         {
-            MYSTL_DEBUG(!empty());
+            myownstl_DEBUG(!empty());
             return *(end_ - 1);
         }
 
@@ -222,16 +222,16 @@ namespace mystl
         {fill_assign(n, value);}
 
         template<class Iter, typename std::enable_if<
-                mystl::is_input_iterator<Iter>::value, int>::type = 0>
+                myownstl::is_input_iterator<Iter>::value, int>::type = 0>
         void assign(Iter first, Iter last)
         {
-            MYSTL_DEBUG(!(last < first));
+            myownstl_DEBUG(!(last < first));
             copy_assign(first, last, iterator_category(first));
         }
 
         void assign(std::initializer_list<value_type> il)
         {
-            copy_assign(il.begin(), il.end(), mystl::forward_iterator_tag{});
+            copy_assign(il.begin(), il.end(), myownstl::forward_iterator_tag{});
         }
 
         // 2.emplace/emplace_back
@@ -244,26 +244,26 @@ namespace mystl
         // 3.push_back/pop_back
         void push_back(const value_type& value);
         void push_back(value_type&& value)
-        { emplace_back(mystl::move(value));}
+        { emplace_back(myownstl::move(value));}
 
         void pop_back();
 
         // 4.insert
         iterator insert(const_iterator pos, const value_type& value);
         iterator insert(const_iterator pos, value_type&& value)
-        {return emplace(pos, mystl::move(value));}
+        {return emplace(pos, myownstl::move(value));}
 
         iterator insert(const_iterator pos, size_type n, const value_type& value)
         {
-            MYSTL_DEBUG(pos >= begin() && pos <= end());
+            myownstl_DEBUG(pos >= begin() && pos <= end());
             return fill_insert(const_cast<iterator>(pos), n, value);
         }
 
         template<class Iter, typename std::enable_if<
-                mystl::is_input_iterator<Iter>::value, int>::type = 0>
+                myownstl::is_input_iterator<Iter>::value, int>::type = 0>
         void insert(const_iterator pos, Iter first, Iter last)
         {
-            MYSTL_DEBUG(pos >= begin() && pos <= end() && !(last < first));
+            myownstl_DEBUG(pos >= begin() && pos <= end() && !(last < first));
             copy_insert(const_cast<iterator>(pos), first, last);
         }
 
@@ -276,7 +276,7 @@ namespace mystl
         void resize(size_type new_size) {return resize(new_size, value_type());}
         void resize(size_type new_size, const value_type& value);
 
-        void reverse() {mystl::reverse(begin(), end());}
+        void reverse() {myownstl::reverse(begin(), end());}
 
         // 7.swap
         void swap(vector& rhs) noexcept;
@@ -339,14 +339,14 @@ namespace mystl
             }
             else if (size() >= len)
             {
-                auto i = mystl::copy(rhs.begin(), rhs.end(), begin());
+                auto i = myownstl::copy(rhs.begin(), rhs.end(), begin());
                 data_allocator::destroy(i, end_);
                 end_ = begin_ + len;
             }
             else
             {
-                mystl::copy(rhs.begin(), rhs.end() + size(), begin_);
-                mystl::uninitialized_copy(rhs.begin() + size(), rhs.end(), end_);
+                myownstl::copy(rhs.begin(), rhs.end() + size(), begin_);
+                myownstl::uninitialized_copy(rhs.begin() + size(), rhs.end(), end_);
                 cap_ = end_ = begin_ + len;
             }
         }
@@ -376,7 +376,7 @@ namespace mystl
             THROW_LENGTH_ERROR_IF(n > max_size(), "n can not larger than max_size() in vector<T>::reserve(n)");
             const auto old_size = size();
             auto tmp = data_allocator::allocate(n);
-            mystl::uninitialized_move(begin_, end_, tmp);
+            myownstl::uninitialized_move(begin_, end_, tmp);
             data_allocator::deallocate(begin_, cap_ - begin_);
             begin_ = tmp;
             end_ = tmp + old_size;
@@ -399,26 +399,26 @@ namespace mystl
     template<class... Args>
     typename vector<T>::iterator vector<T>::emplace(const_iterator pos, Args&& ...args)
     {
-        MYSTL_DEBUG(pos >= begin() && pos <= end());
+        myownstl_DEBUG(pos >= begin() && pos <= end());
         iterator xpos = const_cast<iterator>(pos);
         const size_type n = xpos - begin_;
         if (end_ != cap_ && xpos == end_)
         {
-            data_allocator::construct(mystl::address_of(*end_), mystl::forward<Args>(args)...);
+            data_allocator::construct(myownstl::address_of(*end_), myownstl::forward<Args>(args)...);
             ++end_;
         }
         else if (end_ != cap_)
         {
             auto new_end = end_;
-            data_allocator::construct(mystl::address_of(*end_), *(end_ - 1));
+            data_allocator::construct(myownstl::address_of(*end_), *(end_ - 1));
             ++new_end;
-            mystl::copy_backward(xpos, end_ - 1, end_);
-            *xpos = value_type(mystl::forward<Args>(args)...);
+            myownstl::copy_backward(xpos, end_ - 1, end_);
+            *xpos = value_type(myownstl::forward<Args>(args)...);
             end_ = new_end;
         }
         else
         {
-            reallocate_emplace(xpos, mystl::forward<Args>(args)...);
+            reallocate_emplace(xpos, myownstl::forward<Args>(args)...);
         }
         return begin() + n;
     }
@@ -430,12 +430,12 @@ namespace mystl
     {
         if (end_ < cap_)
         {
-            data_allocator::construct(mystl::address_of(*end_), mystl::forward<Args>(args)...);
+            data_allocator::construct(myownstl::address_of(*end_), myownstl::forward<Args>(args)...);
             ++end_;
         }
         else
         {
-            reallocate_emplace(end_, mystl::forward<Args>(args)...);
+            reallocate_emplace(end_, myownstl::forward<Args>(args)...);
         }
     }
 
@@ -445,7 +445,7 @@ namespace mystl
     {
         if (end_ != cap_)
         {
-            data_allocator::construct(mystl::address_of(*end_), value);
+            data_allocator::construct(myownstl::address_of(*end_), value);
             ++end_;
         }
         else
@@ -458,7 +458,7 @@ namespace mystl
     template<class T>
     void vector<T>::pop_back()
     {
-        MYSTL_DEBUG(!empty());
+        myownstl_DEBUG(!empty());
         data_allocator::destroy(end_ - 1);
         --end_;
     }
@@ -468,22 +468,22 @@ namespace mystl
     typename vector<T>::iterator
     vector<T>::insert(const_iterator pos, const value_type& value)
     {
-        MYSTL_DEBUG(pos >= begin() && pos <= end());
+        myownstl_DEBUG(pos >= begin() && pos <= end());
         iterator xpos = const_cast<iterator>(pos);
         const size_type n = pos - begin_;
         if (end_ != cap_ && xpos == end_)
         {
-            data_allocator::construct(mystl::address_of(*end_), value);
+            data_allocator::construct(myownstl::address_of(*end_), value);
             ++end_;
         }
         else if (end_ != cap_)
         {
             auto new_end = end_;
-            data_allocator::construct(mystl::address_of(*end_), *(end_ - 1));
+            data_allocator::construct(myownstl::address_of(*end_), *(end_ - 1));
             ++new_end;
             auto value_copy = value;    // 避免元素因以下复制操作而改变
-            mystl::copy_backward(xpos, end_ - 1, end_);
-            *xpos = mystl::move(value_copy);
+            myownstl::copy_backward(xpos, end_ - 1, end_);
+            *xpos = myownstl::move(value_copy);
             end_ = new_end;
         }
         else
@@ -498,9 +498,9 @@ namespace mystl
     typename vector<T>::iterator
     vector<T>::erase(vector::const_iterator pos)
     {
-        MYSTL_DEBUG(pos >= begin() && pos < end());
+        myownstl_DEBUG(pos >= begin() && pos < end());
         iterator xpos = begin_ + (pos - begin());
-        mystl::move(xpos + 1, end_, xpos);
+        myownstl::move(xpos + 1, end_, xpos);
         data_allocator::destroy(end_ - 1);
         --end_;
         return xpos;
@@ -511,10 +511,10 @@ namespace mystl
     typename vector<T>::iterator
     vector<T>::erase(vector::const_iterator first, vector::const_iterator last)
     {
-        MYSTL_DEBUG(first >= begin() && last <= end() && !(last < first));
+        myownstl_DEBUG(first >= begin() && last <= end() && !(last < first));
         const auto n = first - begin();
         iterator r = begin_ + (first - begin());
-        data_allocator::destroy(mystl::move(r + (last - first), end_, r), end_);
+        data_allocator::destroy(myownstl::move(r + (last - first), end_, r), end_);
         end_ = end_ - (last - first);
         return begin_ + n;
     }
@@ -539,9 +539,9 @@ namespace mystl
     {
         if (this != &rhs)
         {
-            mystl::swap(begin_, rhs.begin_);
-            mystl::swap(end_, rhs.end_);
-            mystl::swap(cap_, rhs.cap_);
+            myownstl::swap(begin_, rhs.begin_);
+            myownstl::swap(end_, rhs.end_);
+            myownstl::swap(cap_, rhs.cap_);
         }
     }
 
@@ -589,19 +589,19 @@ namespace mystl
     template<class T>
     void vector<T>::fill_init(size_type n, const value_type &value)
     {
-        const size_type init_size = mystl::max(static_cast<size_type>(16), n);
+        const size_type init_size = myownstl::max(static_cast<size_type>(16), n);
         init_space(n, init_size);
-        mystl::uninitialized_fill_n(begin_, n, value);
+        myownstl::uninitialized_fill_n(begin_, n, value);
     }
 
     template<class T>
     template<class Iter>
     void vector<T>::range_init(Iter first, Iter last)
     {
-        const size_type init_size = mystl::max(static_cast<size_type>(last - first),
+        const size_type init_size = myownstl::max(static_cast<size_type>(last - first),
                                                static_cast<size_type>(6));
         init_space(static_cast<size_type>(last - first), init_size);
-        mystl::uninitialized_copy(first, last, begin_);
+        myownstl::uninitialized_copy(first, last, begin_);
     }
 
     // destroy_and_recover函数
@@ -625,8 +625,8 @@ namespace mystl
             return old_size + add_size > max_size() - 16 ? old_size + add_size : old_size + add_size + 16;
         }
         const size_type new_size = old_size == 0
-                ? mystl::max(old_size, static_cast<size_type>(16))
-                : mystl::max(old_size + old_size / 2, old_size + add_size);
+                ? myownstl::max(old_size, static_cast<size_type>(16))
+                : myownstl::max(old_size + old_size / 2, old_size + add_size);
         return new_size;
     }
 
@@ -641,12 +641,12 @@ namespace mystl
         }
         else if (n > size())
         {
-            mystl::fill(begin(), end(), value);
-            end_ = mystl::uninitialized_fill_n(end_, n - size(), value);
+            myownstl::fill(begin(), end(), value);
+            end_ = myownstl::uninitialized_fill_n(end_, n - size(), value);
         }
         else
         {
-            erase(mystl::fill_n(begin_, n, value), end_);
+            erase(myownstl::fill_n(begin_, n, value), end_);
         }
     }
 
@@ -675,7 +675,7 @@ namespace mystl
     template<class FIter>
     void vector<T>::copy_assign(FIter first, FIter last, forward_iterator_tag)
     {
-        const size_type len = mystl::distance(first, last);
+        const size_type len = myownstl::distance(first, last);
         if (len > capacity())
         {
             vector tmp(first, last);
@@ -683,16 +683,16 @@ namespace mystl
         }
         else if (size() >= len)
         {
-            auto new_end = mystl::copy(first, last, begin_);
+            auto new_end = myownstl::copy(first, last, begin_);
             data_allocator::destroy(new_end, end_);
             end_ = new_end;
         }
         else
         {
             auto mid = first;
-            mystl::advance(mid, size());
-            mystl::copy(first, mid, begin_);
-            auto new_end = mystl::uninitialized_copy(mid, last, end_);
+            myownstl::advance(mid, size());
+            myownstl::copy(first, mid, begin_);
+            auto new_end = myownstl::uninitialized_copy(mid, last, end_);
             end_ = new_end;
         }
     }
@@ -707,10 +707,10 @@ namespace mystl
         auto new_end = new_begin;
         try
         {
-            new_end = mystl::uninitialized_move(begin_, pos, new_begin);
-            data_allocator::construct(mystl::address_of(*new_end), mystl::forward<Args>(args)...);
+            new_end = myownstl::uninitialized_move(begin_, pos, new_begin);
+            data_allocator::construct(myownstl::address_of(*new_end), myownstl::forward<Args>(args)...);
             ++new_end;
-            new_end = mystl::uninitialized_move(pos, end_, new_end);
+            new_end = myownstl::uninitialized_move(pos, end_, new_end);
         }
         catch (...)
         {
@@ -733,10 +733,10 @@ namespace mystl
         const value_type& value_copy = value;
         try
         {
-            new_end = mystl::uninitialized_move(begin_, pos, new_begin);
-            data_allocator::construct(mystl::address_of(*new_end), value_copy);
+            new_end = myownstl::uninitialized_move(begin_, pos, new_begin);
+            data_allocator::construct(myownstl::address_of(*new_end), value_copy);
             ++new_end;
-            new_end = mystl::uninitialized_move(pos, end_, new_end);
+            new_end = myownstl::uninitialized_move(pos, end_, new_end);
         }
         catch (...)
         {
@@ -765,16 +765,16 @@ namespace mystl
             auto old_end = end_;
             if (after_elems > n)
             {
-                mystl::uninitialized_copy(end_ - n, end_, end_);
+                myownstl::uninitialized_copy(end_ - n, end_, end_);
                 end_ += n;
-                mystl::move_backward(pos, old_end - n, old_end);
-                mystl::uninitialized_fill_n(pos, n, value_copy);
+                myownstl::move_backward(pos, old_end - n, old_end);
+                myownstl::uninitialized_fill_n(pos, n, value_copy);
             }
             else
             {
-                end_ = mystl::uninitialized_fill_n(end_, n - after_elems, value_copy);
-                end_ = mystl::uninitialized_move(pos, old_end, end_);
-                mystl::uninitialized_fill_n(pos, after_elems, value_copy);
+                end_ = myownstl::uninitialized_fill_n(end_, n - after_elems, value_copy);
+                end_ = myownstl::uninitialized_move(pos, old_end, end_);
+                myownstl::uninitialized_fill_n(pos, after_elems, value_copy);
             }
         }
         else
@@ -785,9 +785,9 @@ namespace mystl
             auto new_end = new_begin;
             try
             {
-                new_end = mystl::uninitialized_move(begin_, pos, new_begin);
-                new_end = mystl::uninitialized_fill_n(new_end, n, value);
-                new_end = mystl::uninitialized_move(pos, end_, new_end);
+                new_end = myownstl::uninitialized_move(begin_, pos, new_begin);
+                new_end = myownstl::uninitialized_fill_n(new_end, n, value);
+                new_end = myownstl::uninitialized_move(pos, end_, new_end);
             }
             catch (...)
             {
@@ -809,7 +809,7 @@ namespace mystl
     {
         if (first == last)
             return;
-        const auto n = mystl::distance(first, last);
+        const auto n = myownstl::distance(first, last);
         if ((cap_ - end_) >= n)
         {
             // 如果备用空间大小足够
@@ -817,17 +817,17 @@ namespace mystl
             auto old_end = end_;
             if (after_elems > n)
             {
-                end_ = mystl::uninitialized_copy(end_ - n, end_, end_);
-                mystl::move_backward(pos, old_end -n, old_end);
-                mystl::uninitialized_copy(first, last, pos);
+                end_ = myownstl::uninitialized_copy(end_ - n, end_, end_);
+                myownstl::move_backward(pos, old_end -n, old_end);
+                myownstl::uninitialized_copy(first, last, pos);
             }
             else
             {
                 auto mid = first;
-                mystl::advance(mid, after_elems);
-                end_ = mystl::uninitialized_copy(mid, last, end_);
-                end_ = mystl::uninitialized_move(pos, old_end, end_);
-                mystl::uninitialized_copy(first, mid, pos);
+                myownstl::advance(mid, after_elems);
+                end_ = myownstl::uninitialized_copy(mid, last, end_);
+                end_ = myownstl::uninitialized_move(pos, old_end, end_);
+                myownstl::uninitialized_copy(first, mid, pos);
             }
         }
         else
@@ -838,9 +838,9 @@ namespace mystl
             auto new_end = new_begin;
             try
             {
-                new_end = mystl::uninitialized_move(begin_, pos, new_begin);
-                new_end = mystl::uninitialized_copy(first, last, new_end);
-                new_end = mystl::uninitialized_move(pos, end_, new_end);
+                new_end = myownstl::uninitialized_move(begin_, pos, new_begin);
+                new_end = myownstl::uninitialized_copy(first, last, new_end);
+                new_end = myownstl::uninitialized_move(pos, end_, new_end);
             }
             catch (...)
             {
@@ -861,7 +861,7 @@ namespace mystl
         auto new_begin = data_allocator::allocate(size);
         try
         {
-            mystl::uninitialized_move(begin_, end_, new_begin);
+            myownstl::uninitialized_move(begin_, end_, new_begin);
         }
         catch (...)
         {
@@ -881,13 +881,13 @@ namespace mystl
     bool operator==(const vector<T>& lhs, const vector<T>& rhs)
     {
         return lhs.size() == rhs.size() &&
-          mystl::equal(lhs.begin(), lhs.end(), rhs.begin());
+          myownstl::equal(lhs.begin(), lhs.end(), rhs.begin());
     }
 
     template<class T>
     bool operator<(const vector<T>& lhs, const vector<T>& rhs)
     {
-        return mystl::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+        return myownstl::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
     }
 
     template<class T>
@@ -914,7 +914,7 @@ namespace mystl
         return !(lhs < rhs);
     }
 
-    // 重载mystl的swap
+    // 重载myownstl的swap
     template<class T>
     void swap(vector<T>& lhs, vector<T>& rhs)
     {
@@ -923,4 +923,4 @@ namespace mystl
 
 }
 
-#endif //MYTINYSTL_VECTOR_H
+#endif //MYOWNSTL_VECTOR_H

@@ -2,15 +2,15 @@
 // Created by gy gao on 10/11/22.
 //
 
-#ifndef MYTINYSTL_EXCEPTDEF_H
-#define MYTINYSTL_EXCEPTDEF_H
+#ifndef MYOWNSTL_EXCEPTDEF_H
+#define MYOWNSTL_EXCEPTDEF_H
 
 #include <stdexcept>
 #include <cassert>
 
-namespace mystl
+namespace myownstl
 {
-#define MYSTL_DEBUG(expr) \
+#define myownstl_DEBUG(expr) \
   assert(expr)
 
 #define THROW_LENGTH_ERROR_IF(expr, what) \
@@ -25,4 +25,4 @@ namespace mystl
 }
 
 
-#endif //MYTINYSTL_EXCEPTDEF_H
+#endif //MYOWNSTL_EXCEPTDEF_H

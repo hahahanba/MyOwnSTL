@@ -2,14 +2,14 @@
 // Created by gy gao on 9/27/22.
 //
 
-#ifndef MYTINYSTL_ALGOBASE_H
-#define MYTINYSTL_ALGOBASE_H
+#ifndef MYOWNSTL_ALGOBASE_H
+#define MYOWNSTL_ALGOBASE_H
 
 #include <cstring>
 #include "iterator.h"
 #include "util.h"
 
-namespace mystl
+namespace myownstl
 {
 //    Pragma 指令指定计算机特定或操作系统特定的编译器功能。 以 #pragma 开头行指定 pragma 指令。
 #ifdef max
@@ -63,7 +63,7 @@ namespace mystl
     template<class FIter1, class FIter2>
     void iter_swap(FIter1 lhs, FIter2 rhs)
     {
-        mystl::swap(*lhs, *rhs);
+        myownstl::swap(*lhs, *rhs);
     }
 
     /*****************************************************************************************/
@@ -73,7 +73,7 @@ namespace mystl
     // input_iterator_tag 版本
     template<class InputIter, class OutputIter>
     OutputIter unchecked_copy_cat(InputIter first, InputIter last, OutputIter result,
-                                  mystl::input_iterator_tag)
+                                  myownstl::input_iterator_tag)
     {
         for (; first != last; ++first, ++result)
         {
@@ -85,7 +85,7 @@ namespace mystl
     // random_access_iterator_tag版本
     template<class RandomIter, class OutputIter>
     OutputIter unchecked_copy_cat(RandomIter first, RandomIter last, OutputIter result,
-                                  mystl::random_access_iterator_tag)
+                                  myownstl::random_access_iterator_tag)
     {
         for (auto n = last - first; n > 0; --n, ++first, ++result)
         {
@@ -127,7 +127,7 @@ namespace mystl
     template<class BidirectionalIter1, class BidirectionalIter2>
     BidirectionalIter2
     unchecked_copy_backward_cat(BidirectionalIter1 first, BidirectionalIter1 last,
-                                BidirectionalIter2 result, mystl::bidirectional_iterator_tag)
+                                BidirectionalIter2 result, myownstl::bidirectional_iterator_tag)
     {
         while (first != last)
             *--result = *--last;
@@ -138,7 +138,7 @@ namespace mystl
     template <class BidirectionalIter1, class BidirectionalIter2>
     BidirectionalIter2
     unchecked_copy_backward_cat(BidirectionalIter1 first, BidirectionalIter1 last,
-                                BidirectionalIter2 result, mystl::random_access_iterator_tag)
+                                BidirectionalIter2 result, myownstl::random_access_iterator_tag)
     {
         for (auto n = last - first; n > 0; --n)
             *--result = *--last;
@@ -202,28 +202,28 @@ namespace mystl
     /*****************************************************************************************/
     // input_iterator_tag 版本
     template<class InputIter, class Size, class OutputIter>
-    mystl::pair<InputIter, OutputIter>
-    unchecked_copy_n(InputIter first, Size n, OutputIter result, mystl::input_iterator_tag)
+    myownstl::pair<InputIter, OutputIter>
+    unchecked_copy_n(InputIter first, Size n, OutputIter result, myownstl::input_iterator_tag)
     {
         for (; n > 0; --n, ++first, ++result)
         {
             *result = *first;
         }
-        return mystl::pair<InputIter, OutputIter>(first, result);
+        return myownstl::pair<InputIter, OutputIter>(first, result);
     }
 
     // ramdom_access_iterator_tag 版本
     template<class RandomIter, class Size, class OutputIter>
-    mystl::pair<RandomIter, OutputIter>
+    myownstl::pair<RandomIter, OutputIter>
     unchecked_copy_n(RandomIter first, Size n, OutputIter result,
-                     mystl::random_access_iterator_tag)
+                     myownstl::random_access_iterator_tag)
     {
         auto last = first + n;
-        return mystl::pair<RandomIter, OutputIter>(last, mystl::copy(first, last, result));
+        return myownstl::pair<RandomIter, OutputIter>(last, myownstl::copy(first, last, result));
     }
 
     template<class InputIter, class Size, class OutputIter>
-    mystl::pair<InputIter, OutputIter>
+    myownstl::pair<InputIter, OutputIter>
     copy_n(InputIter first, Size n, OutputIter result)
     {
         return unchecked_copy_n(first, n, result, iterator_category(first));
@@ -237,11 +237,11 @@ namespace mystl
     template<class InputIter, class OutputIter>
     OutputIter
     unchecked_move_cat(InputIter first, InputIter last, OutputIter result,
-                       mystl::input_iterator_tag)
+                       myownstl::input_iterator_tag)
     {
         for (; first != last; ++first, ++result)
         {
-            *result = mystl::move(*first);
+            *result = myownstl::move(*first);
         }
         return result;
     }
@@ -250,11 +250,11 @@ namespace mystl
     template<class RandomIter, class OutputIter>
     OutputIter
     unchecked_move_cat(RandomIter first, RandomIter last, OutputIter result,
-                       mystl::random_access_iterator_tag)
+                       myownstl::random_access_iterator_tag)
     {
         for (auto n = last - first; n > 0; --n, ++first, ++result)
         {
-            *result = mystl::move(*first);
+            *result = myownstl::move(*first);
         }
         return result;
     }
@@ -294,10 +294,10 @@ namespace mystl
     template<class BidirectionalIter1, class BidirectionalIter2>
     BidirectionalIter2
     unchecked_move_backward_cat(BidirectionalIter1 first, BidirectionalIter1 last,
-                                BidirectionalIter2 result, mystl::bidirectional_iterator_tag)
+                                BidirectionalIter2 result, myownstl::bidirectional_iterator_tag)
     {
         while (first != last)
-            *--result = mystl::move(*--last);
+            *--result = myownstl::move(*--last);
         return result;
     }
 
@@ -305,10 +305,10 @@ namespace mystl
     template<class RandomIter1, class RandomIter2>
     RandomIter2
     unchecked_move_backward_cat(RandomIter1 first, RandomIter1 last,
-                                RandomIter2 result, mystl::random_access_iterator_tag)
+                                RandomIter2 result, myownstl::random_access_iterator_tag)
     {
         for (auto n = last - first; n > 0; --n)
-            *--result = mystl::move(*--last);
+            *--result = myownstl::move(*--last);
         return result;
     }
 
@@ -413,7 +413,7 @@ namespace mystl
     /*****************************************************************************************/
     template<class ForwardIter, class T>
     void fill_cat(ForwardIter first, ForwardIter last, const T& value,
-                  mystl::forward_iterator_tag)
+                  myownstl::forward_iterator_tag)
     {
         for (; first != last; ++first)
         {
@@ -423,7 +423,7 @@ namespace mystl
 
     template<class RandomIter, class T>
     void fill_cat(RandomIter first, RandomIter last, const T& value,
-                  mystl::random_access_iterator_tag)
+                  myownstl::random_access_iterator_tag)
     {
         fill_n(first, last - first, value);
     }
@@ -481,7 +481,7 @@ namespace mystl
         const auto len2 = last2 - first2;
 
         // 先比较相同长度的部分
-        const auto result = std::memcmp(first1, first2, mystl::min(len1, len2));
+        const auto result = std::memcmp(first1, first2, myownstl::min(len1, len2));
 
         // 若相等，长度较长的比较大
         return result != 0 ? result < 0 : len1 < len2;
@@ -492,7 +492,7 @@ namespace mystl
     // 平行比较两个序列，找到第一处失配的元素，返回一对迭代器，分别指向两个序列中失配的元素
     /*****************************************************************************************/
     template<class InputIter1, class InputIter2>
-    mystl::pair<InputIter1, InputIter2>
+    myownstl::pair<InputIter1, InputIter2>
     mismatch(InputIter1 first1, InputIter1 last1, InputIter2 first2)
     {
         while (first1 != last1 && *first1 == *first2)
@@ -500,12 +500,12 @@ namespace mystl
             ++first1;
             ++first2;
         }
-        return mystl::pair<InputIter1, InputIter2>(first1, first2);
+        return myownstl::pair<InputIter1, InputIter2>(first1, first2);
     }
 
     // 重载版本使用函数对象comp代替比较操作
     template<class InputIter1, class InputIter2, class Compared>
-    mystl::pair<InputIter1, InputIter2>
+    myownstl::pair<InputIter1, InputIter2>
     mismatch(InputIter1 first1, InputIter1 last1, InputIter2 first2, Compared comp)
     {
         while (first1 != last1 && comp(*first1, *first2))
@@ -513,8 +513,8 @@ namespace mystl
             ++first1;
             ++first2;
         }
-        return mystl::pair<InputIter1, InputIter2>(first1, first2);
+        return myownstl::pair<InputIter1, InputIter2>(first1, first2);
     }
 }
 
-#endif //MYTINYSTL_ALGOBASE_H
+#endif //MYOWNSTL_ALGOBASE_H

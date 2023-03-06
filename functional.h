@@ -2,13 +2,13 @@
 // Created by gy gao on 10/11/22.
 //
 
-#ifndef MYTINYSTL_FUNCTIONAL_H
-#define MYTINYSTL_FUNCTIONAL_H
+#ifndef MYOWNSTL_FUNCTIONAL_H
+#define MYOWNSTL_FUNCTIONAL_H
 
-// 这个头文件包含了mystl的函数对象与哈希函数
+// 这个头文件包含了myownstl的函数对象与哈希函数
 #include <cstddef>
 
-namespace mystl
+namespace myownstl
 {
     // 定义一元函数的参数型别和返回值型别
     template<class Arg, class Result>
@@ -205,44 +205,44 @@ namespace mystl
     };
 
 // 对于整数类型，只是返回原值
-#define MYSTL_TRIVIAL_HASH_FCN(Type)            \
+#define myownstl_TRIVIAL_HASH_FCN(Type)            \
 template <> struct hash<Type>                   \
 {                                               \
     size_t operator()(Type val) const noexcept  \
     {return static_cast<size_t>(val);}          \
 };
 
-MYSTL_TRIVIAL_HASH_FCN(bool)
+myownstl_TRIVIAL_HASH_FCN(bool)
 
-MYSTL_TRIVIAL_HASH_FCN(char)
+myownstl_TRIVIAL_HASH_FCN(char)
 
-MYSTL_TRIVIAL_HASH_FCN(signed char)
+myownstl_TRIVIAL_HASH_FCN(signed char)
 
-MYSTL_TRIVIAL_HASH_FCN(unsigned char)
+myownstl_TRIVIAL_HASH_FCN(unsigned char)
 
-MYSTL_TRIVIAL_HASH_FCN(wchar_t)
+myownstl_TRIVIAL_HASH_FCN(wchar_t)
 
-MYSTL_TRIVIAL_HASH_FCN(char16_t)
+myownstl_TRIVIAL_HASH_FCN(char16_t)
 
-MYSTL_TRIVIAL_HASH_FCN(char32_t)
+myownstl_TRIVIAL_HASH_FCN(char32_t)
 
-MYSTL_TRIVIAL_HASH_FCN(short)
+myownstl_TRIVIAL_HASH_FCN(short)
 
-MYSTL_TRIVIAL_HASH_FCN(unsigned short)
+myownstl_TRIVIAL_HASH_FCN(unsigned short)
 
-MYSTL_TRIVIAL_HASH_FCN(int)
+myownstl_TRIVIAL_HASH_FCN(int)
 
-MYSTL_TRIVIAL_HASH_FCN(unsigned int)
+myownstl_TRIVIAL_HASH_FCN(unsigned int)
 
-MYSTL_TRIVIAL_HASH_FCN(long)
+myownstl_TRIVIAL_HASH_FCN(long)
 
-MYSTL_TRIVIAL_HASH_FCN(unsigned long)
+myownstl_TRIVIAL_HASH_FCN(unsigned long)
 
-MYSTL_TRIVIAL_HASH_FCN(long long)
+myownstl_TRIVIAL_HASH_FCN(long long)
 
-MYSTL_TRIVIAL_HASH_FCN(unsigned long long)
+myownstl_TRIVIAL_HASH_FCN(unsigned long long)
 
-#undef MYSTL_TRIVIAL_HASH_FCN
+#undef myownstl_TRIVIAL_HASH_FCN
 
     // 对于浮点数，逐位哈希
     inline size_t bitwise_hash(const unsigned char* first, size_t count)
@@ -293,4 +293,4 @@ MYSTL_TRIVIAL_HASH_FCN(unsigned long long)
 
 }
 
-#endif //MYTINYSTL_FUNCTIONAL_H
+#endif //MYOWNSTL_FUNCTIONAL_H

@@ -2,8 +2,8 @@
 // Created by gy gao on 1/12/23.
 //
 
-#ifndef MYTINYSTL_UNORDERED_MAP_H
-#define MYTINYSTL_UNORDERED_MAP_H
+#ifndef MYOWNSTL_UNORDERED_MAP_H
+#define MYOWNSTL_UNORDERED_MAP_H
 
 // 这个头文件包含两个模板类 unordered_map 和 unordered_multimap
 // 功能与用法与 map 和 multimap 类似，不同的是使用 hashtable 作为底层实现机制，容器内的元素不会自动排序
@@ -11,25 +11,25 @@
 // notes:
 //
 // 异常保证：
-// mystl::unordered_map<Key, T> / mystl::unordered_multimap<Key, T> 满足基本异常保证，对以下等函数做强异常安全保证：
+// myownstl::unordered_map<Key, T> / myownstl::unordered_multimap<Key, T> 满足基本异常保证，对以下等函数做强异常安全保证：
 //   * emplace
 //   * emplace_hint
 //   * insert
 
 #include "hashtable.h"
 
-namespace mystl
+namespace myownstl
 {
 
     // 模板类 unordered_map，键值不允许重复
-    // 参数一代表键值类型，参数二代表实值类型，参数三代表哈希函数，缺省使用 mystl::hash
-    // 参数四代表键值比较方式，缺省使用 mystl::equal_to
-    template <class Key, class T, class Hash = mystl::hash<Key>, class KeyEqual = mystl::equal_to<Key>>
+    // 参数一代表键值类型，参数二代表实值类型，参数三代表哈希函数，缺省使用 myownstl::hash
+    // 参数四代表键值比较方式，缺省使用 myownstl::equal_to
+    template <class Key, class T, class Hash = myownstl::hash<Key>, class KeyEqual = myownstl::equal_to<Key>>
     class unordered_map
     {
     private:
         // 使用 hashtable 作为底层机制
-        typedef hashtable<mystl::pair<const Key, T>, Hash, KeyEqual> base_type;
+        typedef hashtable<myownstl::pair<const Key, T>, Hash, KeyEqual> base_type;
         base_type ht_;
 
     public:
@@ -76,7 +76,7 @@ namespace mystl
                       const size_type bucket_count = 100,
                       const Hash& hash = Hash(),
                       const KeyEqual& equal = KeyEqual())
-                : ht_(mystl::max(bucket_count, static_cast<size_type>(mystl::distance(first, last))), hash, equal)
+                : ht_(myownstl::max(bucket_count, static_cast<size_type>(myownstl::distance(first, last))), hash, equal)
         {
             for (; first != last; ++first)
                 ht_.insert_unique_noresize(*first);
@@ -86,7 +86,7 @@ namespace mystl
                       const size_type bucket_count = 100,
                       const Hash& hash = Hash(),
                       const KeyEqual& equal = KeyEqual())
-                :ht_(mystl::max(bucket_count, static_cast<size_type>(ilist.size())), hash, equal)
+                :ht_(myownstl::max(bucket_count, static_cast<size_type>(ilist.size())), hash, equal)
         {
             for (auto first = ilist.begin(), last = ilist.end(); first != last; ++first)
                 ht_.insert_unique_noresize(*first);
@@ -97,7 +97,7 @@ namespace mystl
         {
         }
         unordered_map(unordered_map&& rhs) noexcept
-                :ht_(mystl::move(rhs.ht_))
+                :ht_(myownstl::move(rhs.ht_))
         {
         }
 
@@ -108,7 +108,7 @@ namespace mystl
         }
         unordered_map& operator=(unordered_map&& rhs)
         {
-            ht_ = mystl::move(rhs.ht_);
+            ht_ = myownstl::move(rhs.ht_);
             return *this;
         }
 
@@ -151,23 +151,23 @@ namespace mystl
 
         template <class ...Args>
         pair<iterator, bool> emplace(Args&& ...args)
-        { return ht_.emplace_unique(mystl::forward<Args>(args)...); }
+        { return ht_.emplace_unique(myownstl::forward<Args>(args)...); }
 
         template <class ...Args>
         iterator emplace_hint(const_iterator hint, Args&& ...args)
-        { return ht_.emplace_unique_use_hint(hint, mystl::forward<Args>(args)...); }
+        { return ht_.emplace_unique_use_hint(hint, myownstl::forward<Args>(args)...); }
 
         // insert
 
         pair<iterator, bool> insert(const value_type& value)
         { return ht_.insert_unique(value); }
         pair<iterator, bool> insert(value_type&& value)
-        { return ht_.emplace_unique(mystl::move(value)); }
+        { return ht_.emplace_unique(myownstl::move(value)); }
 
         iterator insert(const_iterator hint, const value_type& value)
         { return ht_.insert_unique_use_hint(hint, value); }
         iterator insert(const_iterator hint, value_type&& value)
-        { return ht_.emplace_unique_use_hint(hint, mystl::move(value)); }
+        { return ht_.emplace_unique_use_hint(hint, myownstl::move(value)); }
 
         template <class InputIterator>
         void insert(InputIterator first, InputIterator last)
@@ -215,7 +215,7 @@ namespace mystl
         {
             iterator it = ht_.find(key);
             if (it.node == nullptr)
-                it = ht_.emplace_unique(mystl::move(key), T{}).first;
+                it = ht_.emplace_unique(myownstl::move(key), T{}).first;
             return it->second;
         }
 
@@ -297,7 +297,7 @@ namespace mystl
         return lhs != rhs;
     }
 
-    // 重载 mystl 的 swap
+    // 重载 myownstl 的 swap
     template <class Key, class T, class Hash, class KeyEqual>
     void swap(unordered_map<Key, T, Hash, KeyEqual>& lhs,
               unordered_map<Key, T, Hash, KeyEqual>& rhs)
@@ -308,9 +308,9 @@ namespace mystl
     /*****************************************************************************************/
 
     // 模板类 unordered_multimap，键值允许重复
-    // 参数一代表键值类型，参数二代表实值类型，参数三代表哈希函数，缺省使用 mystl::hash
-    // 参数四代表键值比较方式，缺省使用 mystl::equal_to
-    template <class Key, class T, class Hash = mystl::hash<Key>, class KeyEqual = mystl::equal_to<Key>>
+    // 参数一代表键值类型，参数二代表实值类型，参数三代表哈希函数，缺省使用 myownstl::hash
+    // 参数四代表键值比较方式，缺省使用 myownstl::equal_to
+    template <class Key, class T, class Hash = myownstl::hash<Key>, class KeyEqual = myownstl::equal_to<Key>>
     class unordered_multimap
     {
     private:
@@ -361,7 +361,7 @@ namespace mystl
                            const size_type bucket_count = 100,
                            const Hash& hash = Hash(),
                            const KeyEqual& equal = KeyEqual())
-                :ht_(mystl::max(bucket_count, static_cast<size_type>(mystl::distance(first, last))), hash, equal)
+                :ht_(myownstl::max(bucket_count, static_cast<size_type>(myownstl::distance(first, last))), hash, equal)
         {
             for (; first != last; ++first)
                 ht_.insert_multi_noresize(*first);
@@ -371,7 +371,7 @@ namespace mystl
                            const size_type bucket_count = 100,
                            const Hash& hash = Hash(),
                            const KeyEqual& equal = KeyEqual())
-                :ht_(mystl::max(bucket_count, static_cast<size_type>(ilist.size())), hash, equal)
+                :ht_(myownstl::max(bucket_count, static_cast<size_type>(ilist.size())), hash, equal)
         {
             for (auto first = ilist.begin(), last = ilist.end(); first != last; ++first)
                 ht_.insert_multi_noresize(*first);
@@ -382,7 +382,7 @@ namespace mystl
         {
         }
         unordered_multimap(unordered_multimap&& rhs) noexcept
-                :ht_(mystl::move(rhs.ht_))
+                :ht_(myownstl::move(rhs.ht_))
         {
         }
 
@@ -393,7 +393,7 @@ namespace mystl
         }
         unordered_multimap& operator=(unordered_multimap&& rhs)
         {
-            ht_ = mystl::move(rhs.ht_);
+            ht_ = myownstl::move(rhs.ht_);
             return *this;
         }
 
@@ -436,23 +436,23 @@ namespace mystl
 
         template <class ...Args>
         iterator emplace(Args&& ...args)
-        { return ht_.emplace_multi(mystl::forward<Args>(args)...); }
+        { return ht_.emplace_multi(myownstl::forward<Args>(args)...); }
 
         template <class ...Args>
         iterator emplace_hint(const_iterator hint, Args&& ...args)
-        { return ht_.emplace_multi_use_hint(hint, mystl::forward<Args>(args)...); }
+        { return ht_.emplace_multi_use_hint(hint, myownstl::forward<Args>(args)...); }
 
         // insert
 
         iterator insert(const value_type& value)
         { return ht_.insert_multi(value); }
         iterator insert(value_type&& value)
-        { return ht_.emplace_multi(mystl::move(value)); }
+        { return ht_.emplace_multi(myownstl::move(value)); }
 
         iterator insert(const_iterator hint, const value_type& value)
         { return ht_.insert_multi_use_hint(hint, value); }
         iterator insert(const_iterator hint, value_type&& value)
-        { return ht_.emplace_multi_use_hint(hint, mystl::move(value)); }
+        { return ht_.emplace_multi_use_hint(hint, myownstl::move(value)); }
 
         template <class InputIterator>
         void     insert(InputIterator first, InputIterator last)
@@ -554,7 +554,7 @@ namespace mystl
         return lhs != rhs;
     }
 
-    // 重载 mystl 的 swap
+    // 重载 myownstl 的 swap
     template <class Key, class T, class Hash, class KeyEqual>
     void swap(unordered_multimap<Key, T, Hash, KeyEqual>& lhs,
               unordered_multimap<Key, T, Hash, KeyEqual>& rhs)
@@ -562,6 +562,6 @@ namespace mystl
         lhs.swap(rhs);
     }
 
-} // namespace mystl
+} // namespace myownstl
 
-#endif //MYTINYSTL_UNORDERED_MAP_H
+#endif //MYOWNSTL_UNORDERED_MAP_H

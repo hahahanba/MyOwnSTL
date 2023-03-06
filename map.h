@@ -2,8 +2,8 @@
 // Created by gy gao on 1/30/23.
 //
 
-#ifndef MYTINYSTL_MAP_H
-#define MYTINYSTL_MAP_H
+#ifndef MYOWNSTL_MAP_H
+#define MYOWNSTL_MAP_H
 
 // 这个头文件包含了两个模板类 map 和 multimap
 // map      : 映射，元素具有键值和实值，会根据键值大小自动排序，键值不允许重复
@@ -12,26 +12,26 @@
 // notes:
 //
 // 异常保证：
-// mystl::map<Key, T> / mystl::multimap<Key, T> 满足基本异常保证，对以下等函数做强异常安全保证：
+// myownstl::map<Key, T> / myownstl::multimap<Key, T> 满足基本异常保证，对以下等函数做强异常安全保证：
 //   * emplace
 //   * emplace_hint
 //   * insert
 
 #include "rb_tree.h"
 
-namespace mystl
+namespace myownstl
 {
 
     // 模板类 map，键值不允许重复
-    // 参数一代表键值类型，参数二代表实值类型，参数三代表键值的比较方式，缺省使用 mystl::less
-    template <class Key, class T, class Compare = mystl::less<Key>>
+    // 参数一代表键值类型，参数二代表实值类型，参数三代表键值的比较方式，缺省使用 myownstl::less
+    template <class Key, class T, class Compare = myownstl::less<Key>>
     class map
     {
     public:
         // map 的嵌套型别定义
         typedef Key                        key_type;
         typedef T                          mapped_type;
-        typedef mystl::pair<const Key, T>  value_type;
+        typedef myownstl::pair<const Key, T>  value_type;
         typedef Compare                    key_compare;
 
         // 定义一个 functor，用来进行元素比较
@@ -49,8 +49,8 @@ namespace mystl
         };
 
     private:
-        // 以 mystl::rb_tree 作为底层机制
-        typedef mystl::rb_tree<value_type, key_compare>  base_type;
+        // 以 myownstl::rb_tree 作为底层机制
+        typedef myownstl::rb_tree<value_type, key_compare>  base_type;
         base_type tree_;
 
     public:
@@ -87,7 +87,7 @@ namespace mystl
         {
         }
         map(map&& rhs) noexcept
-                :tree_(mystl::move(rhs.tree_))
+                :tree_(myownstl::move(rhs.tree_))
         {
         }
 
@@ -98,7 +98,7 @@ namespace mystl
         }
         map& operator=(map&& rhs)
         {
-            tree_ = mystl::move(rhs.tree_);
+            tree_ = myownstl::move(rhs.tree_);
             return *this;
         }
 
@@ -182,7 +182,7 @@ namespace mystl
             iterator it = lower_bound(key);
             // it->first >= key
             if (it == end() || key_comp()(key, it->first))
-                it = emplace_hint(it, mystl::move(key), T{});
+                it = emplace_hint(it, myownstl::move(key), T{});
             return it->second;
         }
 
@@ -191,13 +191,13 @@ namespace mystl
         template <class ...Args>
         pair<iterator, bool> emplace(Args&& ...args)
         {
-            return tree_.emplace_unique(mystl::forward<Args>(args)...);
+            return tree_.emplace_unique(myownstl::forward<Args>(args)...);
         }
 
         template <class ...Args>
         iterator emplace_hint(iterator hint, Args&& ...args)
         {
-            return tree_.emplace_unique_use_hint(hint, mystl::forward<Args>(args)...);
+            return tree_.emplace_unique_use_hint(hint, myownstl::forward<Args>(args)...);
         }
 
         pair<iterator, bool> insert(const value_type& value)
@@ -206,7 +206,7 @@ namespace mystl
         }
         pair<iterator, bool> insert(value_type&& value)
         {
-            return tree_.insert_unique(mystl::move(value));
+            return tree_.insert_unique(myownstl::move(value));
         }
 
         iterator insert(iterator hint, const value_type& value)
@@ -215,7 +215,7 @@ namespace mystl
         }
         iterator insert(iterator hint, value_type&& value)
         {
-            return tree_.insert_unique(hint, mystl::move(value));
+            return tree_.insert_unique(hint, myownstl::move(value));
         }
 
         template <class InputIterator>
@@ -296,7 +296,7 @@ namespace mystl
         return !(lhs < rhs);
     }
 
-    // 重载 mystl 的 swap
+    // 重载 myownstl 的 swap
     template <class Key, class T, class Compare>
     void swap(map<Key, T, Compare>& lhs, map<Key, T, Compare>& rhs) noexcept
     {
@@ -306,15 +306,15 @@ namespace mystl
     /*****************************************************************************************/
 
     // 模板类 multimap，键值允许重复
-    // 参数一代表键值类型，参数二代表实值类型，参数三代表键值的比较方式，缺省使用 mystl::less
-    template <class Key, class T, class Compare = mystl::less<Key>>
+    // 参数一代表键值类型，参数二代表实值类型，参数三代表键值的比较方式，缺省使用 myownstl::less
+    template <class Key, class T, class Compare = myownstl::less<Key>>
     class multimap
     {
     public:
         // multimap 的型别定义
         typedef Key                        key_type;
         typedef T                          mapped_type;
-        typedef mystl::pair<const Key, T>  value_type;
+        typedef myownstl::pair<const Key, T>  value_type;
         typedef Compare                    key_compare;
 
         // 定义一个 functor，用来进行元素比较
@@ -332,8 +332,8 @@ namespace mystl
         };
 
     private:
-        // 用 mystl::rb_tree 作为底层机制
-        typedef mystl::rb_tree<value_type, key_compare>  base_type;
+        // 用 myownstl::rb_tree 作为底层机制
+        typedef myownstl::rb_tree<value_type, key_compare>  base_type;
         base_type tree_;
 
     public:
@@ -369,7 +369,7 @@ namespace mystl
         {
         }
         multimap(multimap&& rhs) noexcept
-                :tree_(mystl::move(rhs.tree_))
+                :tree_(myownstl::move(rhs.tree_))
         {
         }
 
@@ -380,7 +380,7 @@ namespace mystl
         }
         multimap& operator=(multimap&& rhs)
         {
-            tree_ = mystl::move(rhs.tree_);
+            tree_ = myownstl::move(rhs.tree_);
             return *this;
         }
 
@@ -436,13 +436,13 @@ namespace mystl
         template <class ...Args>
         iterator emplace(Args&& ...args)
         {
-            return tree_.emplace_multi(mystl::forward<Args>(args)...);
+            return tree_.emplace_multi(myownstl::forward<Args>(args)...);
         }
 
         template <class ...Args>
         iterator emplace_hint(iterator hint, Args&& ...args)
         {
-            return tree_.emplace_multi_use_hint(hint, mystl::forward<Args>(args)...);
+            return tree_.emplace_multi_use_hint(hint, myownstl::forward<Args>(args)...);
         }
 
         iterator insert(const value_type& value)
@@ -451,7 +451,7 @@ namespace mystl
         }
         iterator insert(value_type&& value)
         {
-            return tree_.insert_multi(mystl::move(value));
+            return tree_.insert_multi(myownstl::move(value));
         }
 
         iterator insert(iterator hint, const value_type& value)
@@ -460,7 +460,7 @@ namespace mystl
         }
         iterator insert(iterator hint, value_type&& value)
         {
-            return tree_.insert_multi(hint, mystl::move(value));
+            return tree_.insert_multi(hint, myownstl::move(value));
         }
 
         template <class InputIterator>
@@ -541,7 +541,7 @@ namespace mystl
         return !(lhs < rhs);
     }
 
-    // 重载 mystl 的 swap
+    // 重载 myownstl 的 swap
     template <class Key, class T, class Compare>
     void swap(multimap<Key, T, Compare>& lhs, multimap<Key, T, Compare>& rhs) noexcept
     {
@@ -550,4 +550,4 @@ namespace mystl
 
 }
 
-#endif //MYTINYSTL_MAP_H
+#endif //MYOWNSTL_MAP_H

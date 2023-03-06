@@ -2,8 +2,8 @@
 // Created by gy gao on 9/27/22.
 //
 
-#ifndef MYTINYSTL_MEMORY_H
-#define MYTINYSTL_MEMORY_H
+#ifndef MYOWNSTL_MEMORY_H
+#define MYOWNSTL_MEMORY_H
 
 // 负责更高级的动态内存管理
 // 包含一些基本函数、空间配置器、未初始化的储存空间管理，以及一个模板类auto_ptr
@@ -17,7 +17,7 @@
 #include "construct.h"
 #include "uninitialized.h"
 
-namespace mystl
+namespace myownstl
 {
     // 获取对象地址
     template<class Tp>
@@ -77,7 +77,7 @@ namespace mystl
         temporary_buffer(ForwardIterator first, ForwardIterator last);
         ~temporary_buffer()
         {
-            mystl::destroy(buffer, buffer + len);
+            myownstl::destroy(buffer, buffer + len);
             free(buffer);
         }
 
@@ -91,7 +91,7 @@ namespace mystl
         void allocate_buffer();
         void initialize_buffer(const T&, std::true_type) {}
         void initialize_buffer(const T& value, std::false_type)
-        {mystl::uninitialized_fill_n(buffer, len, value);}
+        {myownstl::uninitialized_fill_n(buffer, len, value);}
 
     private:
         temporary_buffer(const temporary_buffer&);
@@ -103,7 +103,7 @@ namespace mystl
     {
         try
         {
-            len = mystl::distance(first, last);
+            len = myownstl::distance(first, last);
             allocate_buffer();
             if (len > 0)
             {
@@ -195,4 +195,4 @@ namespace mystl
 
 
 
-#endif //MYTINYSTL_MEMORY_H
+#endif //MYOWNSTL_MEMORY_H

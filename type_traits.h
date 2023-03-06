@@ -2,15 +2,15 @@
 // Created by gy gao on 8/11/22.
 //
 
-#ifndef MYTINYSTL_TYPE_TRAITS_H
-#define MYTINYSTL_TYPE_TRAITS_H
+#ifndef MYOWNSTL_TYPE_TRAITS_H
+#define MYOWNSTL_TYPE_TRAITS_H
 
 // 用于提取类型信息, 使用std的type_traits
 
 // use std header for type_traits
 #include <type_traits>
 
-namespace mystl
+namespace myownstl
 {
     // type_traits Helper classes
     // 1. integral_constant
@@ -41,11 +41,11 @@ namespace mystl
     // ---forward declaration end
 
     template<class T>
-    struct is_pair : mystl::m_false_type {};
+    struct is_pair : myownstl::m_false_type {};
 
     template <class T1, class T2>
-    struct is_pair<mystl::pair<T1, T2>> : mystl::m_true_type {};
+    struct is_pair<myownstl::pair<T1, T2>> : myownstl::m_true_type {};
 
 }
 
-#endif //MYTINYSTL_TYPE_TRAITS_H
+#endif //MYOWNSTL_TYPE_TRAITS_H

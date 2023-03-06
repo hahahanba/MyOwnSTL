@@ -2,14 +2,14 @@
 // Created by gy gao on 10/14/22.
 //
 
-#ifndef MYTINYSTL_HEAP_ALGO_H
-#define MYTINYSTL_HEAP_ALGO_H
+#ifndef MYOWNSTL_HEAP_ALGO_H
+#define MYOWNSTL_HEAP_ALGO_H
 
 // 这个头文件包含 heap 的四个算法：push_heap, pop_heap, sort_heap, make_heap
 
 #include "iterator.h"
 
-namespace mystl
+namespace myownstl
 {
     /*****************************************************************************************/
     // push_heap
@@ -32,13 +32,13 @@ namespace mystl
     template<class RandomIter, class Distance>
     void push_heap_d(RandomIter first, RandomIter last, Distance*)
     {
-        mystl::push_heap_aux(first, (last - first) - 1, static_cast<Distance>(0), *(last - 1));
+        myownstl::push_heap_aux(first, (last - first) - 1, static_cast<Distance>(0), *(last - 1));
     }
 
     template<class RandomIter>
     void push_heap(RandomIter first, RandomIter last)
     {   // 新元素应该已置于底部容器的最尾端
-        mystl::push_heap_d(first, last, distance_type(first));
+        myownstl::push_heap_d(first, last, distance_type(first));
     }
 
     // 重载版本使用函数对象comp代替比较操作
@@ -59,14 +59,14 @@ namespace mystl
     template<class RandomIter, class Compared, class Distance>
     void push_heap_d(RandomIter first, RandomIter last, Distance*, Compared comp)
     {
-        mystl::push_heap_aux(first, (last - first) - 1, static_cast<Distance>(0),
+        myownstl::push_heap_aux(first, (last - first) - 1, static_cast<Distance>(0),
                              *(last - 1), comp);
     }
 
     template<class RandomIter, class Compared>
     void push_heap(RandomIter first, RandomIter last, Compared comp)
     {
-        mystl::push_heap_d(first, last, distance_type(first), comp);
+        myownstl::push_heap_d(first, last, distance_type(first), comp);
     }
 
     /*****************************************************************************************/
@@ -93,7 +93,7 @@ namespace mystl
             holeIndex = rchild - 1;
         }
         // 再执行一次上溯(percolate up)过程
-        mystl::push_heap_aux(first, holeIndex, topIndex, value);
+        myownstl::push_heap_aux(first, holeIndex, topIndex, value);
     }
 
     template<class RandomIter, class T, class Distance>
@@ -102,13 +102,13 @@ namespace mystl
     {
         // 先将首值调至尾节点，然后调整[first, last - 1)使之重新成为一个max-heap
         *result = *first;
-        mystl::adjust_heap(first, static_cast<Distance>(0), last - first, value);
+        myownstl::adjust_heap(first, static_cast<Distance>(0), last - first, value);
     }
 
     template<class RandomIter>
     void pop_heap(RandomIter first, RandomIter last)
     {
-        mystl::pop_heap_aux(first, last - 1, last - 1, *(last - 1), distance_type(first));
+        myownstl::pop_heap_aux(first, last - 1, last - 1, *(last - 1), distance_type(first));
     }
 
     // 重载版本使用函数对象comp代替比较操作
@@ -133,7 +133,7 @@ namespace mystl
             holeIndex = rchild - 1;
         }
         // 再执行一次上溯(percolate up)过程
-        mystl::push_heap_aux(first, holeIndex, topIndex, value, comp);
+        myownstl::push_heap_aux(first, holeIndex, topIndex, value, comp);
     }
 
     template<class RandomIter, class T, class Distance, class Compared>
@@ -141,13 +141,13 @@ namespace mystl
                       T value, Distance*, Compared comp)
     {
         *result = *first;     // 先将尾指针设置成首值，即尾指针为欲求结果
-        mystl::adjust_heap(first, static_cast<Distance>(0), last - first, value, comp);
+        myownstl::adjust_heap(first, static_cast<Distance>(0), last - first, value, comp);
     }
 
     template<class RandomIter, class Compared>
     void pop_heap(RandomIter first, RandomIter last, Compared comp)
     {
-        mystl::pop_heap_aux(first, last - 1, last - 1, *(last - 1),
+        myownstl::pop_heap_aux(first, last - 1, last - 1, *(last - 1),
                             distance_type(first), comp);
     }
 
@@ -161,7 +161,7 @@ namespace mystl
         // 每执行一次pop_heap, 最大的元素都被放到尾部，直到容器最多只有一个元素，完成排序
         while (last - first > 1)
         {
-            mystl::pop_heap(first, last--);
+            myownstl::pop_heap(first, last--);
         }
     }
 
@@ -171,7 +171,7 @@ namespace mystl
     {
         while (last - first > 1)
         {
-            mystl::pop_heap(first, last--, comp);
+            myownstl::pop_heap(first, last--, comp);
         }
     }
 
@@ -189,7 +189,7 @@ namespace mystl
         while (true)
         {
             // 重排以holeIndex为首的子树
-            mystl::adjust_heap(first, holeIndex, len, *(first + holeIndex));
+            myownstl::adjust_heap(first, holeIndex, len, *(first + holeIndex));
             if (holeIndex == 0)
                 return;
             holeIndex--;
@@ -199,7 +199,7 @@ namespace mystl
     template<class RandomIter>
     void make_heap(RandomIter first, RandomIter last)
     {
-        mystl::make_heap_aux(first, last, distance_type(first));
+        myownstl::make_heap_aux(first, last, distance_type(first));
     }
 
     // 重载版本使用函数对象comp代替比较操作
@@ -213,7 +213,7 @@ namespace mystl
         while (true)
         {
             // 重排以holeIndex为首的子树
-            mystl::adjust_heap(first, holeIndex, len, *(first + holeIndex), comp);
+            myownstl::adjust_heap(first, holeIndex, len, *(first + holeIndex), comp);
             if (holeIndex == 0)
                 return;
             holeIndex--;
@@ -223,8 +223,8 @@ namespace mystl
     template<class RandomIter, class Compared>
     void make_heap(RandomIter first, RandomIter last, Compared comp)
     {
-        mystl::make_heap_aux(first, last, distance_type(first), comp);
+        myownstl::make_heap_aux(first, last, distance_type(first), comp);
     }
 
 }
-#endif //MYTINYSTL_HEAP_ALGO_H
+#endif //MYOWNSTL_HEAP_ALGO_H
