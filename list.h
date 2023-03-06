@@ -114,7 +114,7 @@ namespace myownstl
 
         self& operator++()
         {
-            myownstl_DEBUG(node_ != nullptr);
+            MYOWNSTL_DEBUG(node_ != nullptr);
             node_ = node_->next;
             return *this;
         }
@@ -126,7 +126,7 @@ namespace myownstl
         }
         self& operator--()
         {
-            myownstl_DEBUG(node_ != nullptr);
+            MYOWNSTL_DEBUG(node_ != nullptr);
             node_ = node_->prev;
             return *this;
         }
@@ -165,7 +165,7 @@ namespace myownstl
 
         self& operator++()
         {
-            myownstl_DEBUG(node_ != nullptr);
+            MYOWNSTL_DEBUG(node_ != nullptr);
             node_ = node_->next;
             return *this;
         }
@@ -177,7 +177,7 @@ namespace myownstl
         }
         self& operator--()
         {
-            myownstl_DEBUG(node_ != nullptr);
+            MYOWNSTL_DEBUG(node_ != nullptr);
             node_ = node_->prev;
             return *this;
         }
@@ -319,25 +319,25 @@ namespace myownstl
         // 2. 访问元素相关操作
         reference       front()
         {
-            myownstl_DEBUG(!empty());
+            MYOWNSTL_DEBUG(!empty());
             return *begin();
         }
 
         const_reference front() const
         {
-            myownstl_DEBUG(!empty());
+            MYOWNSTL_DEBUG(!empty());
             return *begin();
         }
 
         reference       back()
         {
-            myownstl_DEBUG(!empty());
+            MYOWNSTL_DEBUG(!empty());
             return *(--end());
         }
 
         const_reference back()  const
         {
-            myownstl_DEBUG(!empty());
+            MYOWNSTL_DEBUG(!empty());
             return *(--end());
         }
 
@@ -445,7 +445,7 @@ namespace myownstl
         // e) pop_front / pop_back
         void pop_front()
         {
-            myownstl_DEBUG(!empty());
+            MYOWNSTL_DEBUG(!empty());
             auto n = node_->next;
             unlink_nodes(n, n);
             destroy_node(n->as_node());
@@ -454,7 +454,7 @@ namespace myownstl
 
         void pop_back()
         {
-            myownstl_DEBUG(!empty());
+            MYOWNSTL_DEBUG(!empty());
             auto n = node_->prev;
             unlink_nodes(n, n);
             destroy_node(n->as_node());
@@ -557,7 +557,7 @@ namespace myownstl
     typename list<T>::iterator
     list<T>::erase(list::const_iterator pos)
     {
-        myownstl_DEBUG(pos != cend());
+        MYOWNSTL_DEBUG(pos != cend());
         auto n = pos.node_;
         auto next = n->next;
         unlink_nodes(n, n);
@@ -626,7 +626,7 @@ namespace myownstl
     template<class T>
     void list<T>::splice(list::const_iterator pos, list &x)
     {
-        myownstl_DEBUG(this != &x);
+        MYOWNSTL_DEBUG(this != &x);
         if (!x.empty())
         {
             THROW_LENGTH_ERROR_IF(size_ > max_size() - x.size_, "list<T>'s size too big");

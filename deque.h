@@ -347,13 +347,13 @@ namespace myownstl
         // 2. 访问元素相关操作
         reference       operator[](size_type n)
         {
-            myownstl_DEBUG(n < size());
+            MYOWNSTL_DEBUG(n < size());
             return begin_[n];
         }
 
         const_reference operator[](size_type n) const
         {
-            myownstl_DEBUG(n < size());
+            MYOWNSTL_DEBUG(n < size());
             return begin_[n];
         }
 
@@ -371,25 +371,25 @@ namespace myownstl
 
         reference       front()
         {
-            myownstl_DEBUG(!empty());
+            MYOWNSTL_DEBUG(!empty());
             return *begin();
         }
 
         const_reference front() const
         {
-            myownstl_DEBUG(!empty());
+            MYOWNSTL_DEBUG(!empty());
             return *begin();
         }
 
         reference       back()
         {
-            myownstl_DEBUG(!empty());
+            MYOWNSTL_DEBUG(!empty());
             return *(end() - 1);
         }
 
         const_reference back() const
         {
-            myownstl_DEBUG(!empty());
+            MYOWNSTL_DEBUG(!empty());
             return *(end() - 1);
         }
 
@@ -670,7 +670,7 @@ namespace myownstl
     template<class T>
     void deque<T>::pop_front()
     {
-        myownstl_DEBUG(!empty());
+        MYOWNSTL_DEBUG(!empty());
         if (begin_.cur != begin_.last - 1)
         {
             data_allocator::destroy(begin_.cur);
@@ -688,7 +688,7 @@ namespace myownstl
     template<class T>
     void deque<T>::pop_back()
     {
-        myownstl_DEBUG(!empty());
+        MYOWNSTL_DEBUG(!empty());
         if (end_.cur != end_.first)
         {
             --end_.cur;

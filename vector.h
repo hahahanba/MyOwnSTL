@@ -89,7 +89,7 @@ namespace myownstl
                 myownstl::is_input_iterator<Iter>::value, int>::type = 0>
         vector(Iter first, Iter last)
         {
-            myownstl_DEBUG(!(last < first));
+            MYOWNSTL_DEBUG(!(last < first));
             range_init(first, last);
         }
 
@@ -174,12 +174,12 @@ namespace myownstl
         // 所有带有连续空间特性的容器必须提供重载[]
         reference operator[](size_type n)
         {
-            myownstl_DEBUG(n < size());
+            MYOWNSTL_DEBUG(n < size());
             return *(begin_ + n);
         }
         const_reference operator[](size_type n) const
         {
-            myownstl_DEBUG(n < size());
+            MYOWNSTL_DEBUG(n < size());
             return *(begin_ + n);
         }
         reference at(size_type n)
@@ -194,22 +194,22 @@ namespace myownstl
         }
         reference front()
         {
-            myownstl_DEBUG(!empty());
+            MYOWNSTL_DEBUG(!empty());
             return *begin_;
         }
         const_reference front() const
         {
-            myownstl_DEBUG(!empty());
+            MYOWNSTL_DEBUG(!empty());
             return *begin_;
         }
         reference back()
         {
-            myownstl_DEBUG(!empty());
+            MYOWNSTL_DEBUG(!empty());
             return *(end_ - 1);
         }
         const_reference back() const
         {
-            myownstl_DEBUG(!empty());
+            MYOWNSTL_DEBUG(!empty());
             return *(end_ - 1);
         }
 
@@ -225,7 +225,7 @@ namespace myownstl
                 myownstl::is_input_iterator<Iter>::value, int>::type = 0>
         void assign(Iter first, Iter last)
         {
-            myownstl_DEBUG(!(last < first));
+            MYOWNSTL_DEBUG(!(last < first));
             copy_assign(first, last, iterator_category(first));
         }
 
@@ -255,7 +255,7 @@ namespace myownstl
 
         iterator insert(const_iterator pos, size_type n, const value_type& value)
         {
-            myownstl_DEBUG(pos >= begin() && pos <= end());
+            MYOWNSTL_DEBUG(pos >= begin() && pos <= end());
             return fill_insert(const_cast<iterator>(pos), n, value);
         }
 
@@ -263,7 +263,7 @@ namespace myownstl
                 myownstl::is_input_iterator<Iter>::value, int>::type = 0>
         void insert(const_iterator pos, Iter first, Iter last)
         {
-            myownstl_DEBUG(pos >= begin() && pos <= end() && !(last < first));
+            MYOWNSTL_DEBUG(pos >= begin() && pos <= end() && !(last < first));
             copy_insert(const_cast<iterator>(pos), first, last);
         }
 
@@ -399,7 +399,7 @@ namespace myownstl
     template<class... Args>
     typename vector<T>::iterator vector<T>::emplace(const_iterator pos, Args&& ...args)
     {
-        myownstl_DEBUG(pos >= begin() && pos <= end());
+        MYOWNSTL_DEBUG(pos >= begin() && pos <= end());
         iterator xpos = const_cast<iterator>(pos);
         const size_type n = xpos - begin_;
         if (end_ != cap_ && xpos == end_)
@@ -458,7 +458,7 @@ namespace myownstl
     template<class T>
     void vector<T>::pop_back()
     {
-        myownstl_DEBUG(!empty());
+        MYOWNSTL_DEBUG(!empty());
         data_allocator::destroy(end_ - 1);
         --end_;
     }
@@ -468,7 +468,7 @@ namespace myownstl
     typename vector<T>::iterator
     vector<T>::insert(const_iterator pos, const value_type& value)
     {
-        myownstl_DEBUG(pos >= begin() && pos <= end());
+        MYOWNSTL_DEBUG(pos >= begin() && pos <= end());
         iterator xpos = const_cast<iterator>(pos);
         const size_type n = pos - begin_;
         if (end_ != cap_ && xpos == end_)
@@ -498,7 +498,7 @@ namespace myownstl
     typename vector<T>::iterator
     vector<T>::erase(vector::const_iterator pos)
     {
-        myownstl_DEBUG(pos >= begin() && pos < end());
+        MYOWNSTL_DEBUG(pos >= begin() && pos < end());
         iterator xpos = begin_ + (pos - begin());
         myownstl::move(xpos + 1, end_, xpos);
         data_allocator::destroy(end_ - 1);
@@ -511,7 +511,7 @@ namespace myownstl
     typename vector<T>::iterator
     vector<T>::erase(vector::const_iterator first, vector::const_iterator last)
     {
-        myownstl_DEBUG(first >= begin() && last <= end() && !(last < first));
+        MYOWNSTL_DEBUG(first >= begin() && last <= end() && !(last < first));
         const auto n = first - begin();
         iterator r = begin_ + (first - begin());
         data_allocator::destroy(myownstl::move(r + (last - first), end_, r), end_);

@@ -46,7 +46,7 @@ namespace myownstl
 
         static char_type* copy(char_type* dst, const char_type* src, size_t n)
         {
-            myownstl_DEBUG(src + n <= dst || dst + n <= src);
+            MYOWNSTL_DEBUG(src + n <= dst || dst + n <= src);
             char_type* r = dst;
             for (; n != 0; --n, ++dst, ++src)
                 *dst = *src;
@@ -94,7 +94,7 @@ namespace myownstl
 
         static char_type* copy(char_type* dst, const char_type* src, size_t n) noexcept
         {
-            myownstl_DEBUG(src + n <= dst || dst + n <= src);
+            MYOWNSTL_DEBUG(src + n <= dst || dst + n <= src);
             return static_cast<char_type*>(std::memcpy(dst, src, n));
         }
 
@@ -127,7 +127,7 @@ namespace myownstl
 
         static char_type* copy(char_type* dst, const char_type* src, size_t n) noexcept
         {
-            myownstl_DEBUG(src + n <= dst || dst + n <= src);
+            MYOWNSTL_DEBUG(src + n <= dst || dst + n <= src);
             return static_cast<char_type*>(std::wmemcpy(dst, src, n));
         }
 
@@ -170,7 +170,7 @@ namespace myownstl
 
         static char_type* copy(char_type* dst, const char_type* src, size_t n) noexcept
         {
-            myownstl_DEBUG(src + n <= dst || dst + n <= src);
+            MYOWNSTL_DEBUG(src + n <= dst || dst + n <= src);
             char_type* r = dst;
             for (; n != 0; --n, ++dst, ++src)
                 *dst = *src;
@@ -232,7 +232,7 @@ namespace myownstl
 
         static char_type* copy(char_type* dst, const char_type* src, size_t n) noexcept
         {
-            myownstl_DEBUG(src + n <= dst || dst + n <= src);
+            MYOWNSTL_DEBUG(src + n <= dst || dst + n <= src);
             char_type* r = dst;
             for (; n != 0; --n, ++dst, ++src)
                 *dst = *src;
@@ -430,14 +430,14 @@ namespace myownstl
         // 访问元素相关操作
         reference       operator[](size_type n)
         {
-            myownstl_DEBUG(n <= size_);
+            MYOWNSTL_DEBUG(n <= size_);
             if (n == size_)
                 *(buffer_ + n) = value_type();
             return *(buffer_ + n);
         }
         const_reference operator[](size_type n) const
         {
-            myownstl_DEBUG(n <= size_);
+            MYOWNSTL_DEBUG(n <= size_);
             if (n == size_)
                 *(buffer_ + n) = value_type();
             return *(buffer_ + n);
@@ -458,23 +458,23 @@ namespace myownstl
 
         reference       front()
         {
-            myownstl_DEBUG(!empty());
+            MYOWNSTL_DEBUG(!empty());
             return *begin();
         }
         const_reference front() const
         {
-            myownstl_DEBUG(!empty());
+            MYOWNSTL_DEBUG(!empty());
             return *begin();
         }
 
         reference       back()
         {
-            myownstl_DEBUG(!empty());
+            MYOWNSTL_DEBUG(!empty());
             return *(end() - 1);
         }
         const_reference back()  const
         {
-            myownstl_DEBUG(!empty());
+            MYOWNSTL_DEBUG(!empty());
             return *(end() - 1);
         }
 
@@ -498,7 +498,7 @@ namespace myownstl
         { append(1, ch); }
         void     pop_back()
         {
-            myownstl_DEBUG(!empty());
+            MYOWNSTL_DEBUG(!empty());
             --size_;
         }
 
@@ -558,7 +558,7 @@ namespace myownstl
         }
         basic_string& replace(const_iterator first, const_iterator last, const basic_string& str)
         {
-            myownstl_DEBUG(begin() <= first && last <= end() && first <= last);
+            MYOWNSTL_DEBUG(begin() <= first && last <= end() && first <= last);
             return replace_cstr(first, static_cast<size_type>(last - first), str.buffer_, str.size_);
         }
 
@@ -569,7 +569,7 @@ namespace myownstl
         }
         basic_string& replace(const_iterator first, const_iterator last, const_pointer str)
         {
-            myownstl_DEBUG(begin() <= first && last <= end() && first <= last);
+            MYOWNSTL_DEBUG(begin() <= first && last <= end() && first <= last);
             return replace_cstr(first, static_cast<size_type>(last - first), str, char_traits::length(str));
         }
 
@@ -580,7 +580,7 @@ namespace myownstl
         }
         basic_string& replace(const_iterator first, const_iterator last, const_pointer str, size_type count)
         {
-            myownstl_DEBUG(begin() <= first && last <= end() && first <= last);
+            MYOWNSTL_DEBUG(begin() <= first && last <= end() && first <= last);
             return replace_cstr(first, static_cast<size_type>(last - first), str, count);
 
         }
@@ -592,7 +592,7 @@ namespace myownstl
         }
         basic_string& replace(const_iterator first, const_iterator last, size_type count, value_type ch)
         {
-            myownstl_DEBUG(begin() <= first && last <= end() && first <= last);
+            MYOWNSTL_DEBUG(begin() <= first && last <= end() && first <= last);
             return replace_fill(first, static_cast<size_type>(last - first), count, ch);
         }
 
@@ -608,7 +608,7 @@ namespace myownstl
                 myownstl::is_input_iterator<Iter>::value, int>::type = 0>
         basic_string& replace(const_iterator first, const_iterator last, Iter first2, Iter last2)
         {
-            myownstl_DEBUG(begin() <= first && last <= end() && first <= last);
+            MYOWNSTL_DEBUG(begin() <= first && last <= end() && first <= last);
             return replace_copy(first, last, first2, last2);
         }
 
@@ -925,7 +925,7 @@ namespace myownstl
     typename basic_string<CharType, CharTraits>::iterator
     basic_string<CharType, CharTraits>::erase(basic_string::const_iterator pos)
     {
-        myownstl_DEBUG(pos != end());
+        MYOWNSTL_DEBUG(pos != end());
         iterator r = const_cast<iterator>(pos);
         char_traits::move(r, pos + 1, end() - pos - 1);
         --size_;

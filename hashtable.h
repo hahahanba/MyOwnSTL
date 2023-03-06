@@ -208,7 +208,7 @@ namespace myownstl
 
         iterator& operator++()
         {
-            myownstl_DEBUG(node != nullptr);
+            MYOWNSTL_DEBUG(node != nullptr);
             const node_ptr old = node;
             node = node->next;
             if (node == nullptr)
@@ -286,7 +286,7 @@ namespace myownstl
 
         const_iterator& operator++()
         {
-            myownstl_DEBUG(node != nullptr);
+            MYOWNSTL_DEBUG(node != nullptr);
             const node_ptr old = node;
             node = node->next;
             if (node == nullptr)
@@ -341,7 +341,7 @@ namespace myownstl
 
         self& operator++()
         {
-            myownstl_DEBUG(node != nullptr);
+            MYOWNSTL_DEBUG(node != nullptr);
             node = node->next;
             return *this;
         }
@@ -391,7 +391,7 @@ namespace myownstl
 
         self& operator++()
         {
-            myownstl_DEBUG(node != nullptr);
+            MYOWNSTL_DEBUG(node != nullptr);
             node = node->next;
             return *this;
         }
@@ -713,33 +713,33 @@ static constexpr size_t ht_prime_list[] = {
 
         local_iterator       begin(size_type n)        noexcept
         {
-            myownstl_DEBUG(n < size_);
+            MYOWNSTL_DEBUG(n < size_);
             return buckets_[n];
         }
         const_local_iterator begin(size_type n)  const noexcept
         {
-            myownstl_DEBUG(n < size_);
+            MYOWNSTL_DEBUG(n < size_);
             return buckets_[n];
         }
         const_local_iterator cbegin(size_type n) const noexcept
         {
-            myownstl_DEBUG(n < size_);
+            MYOWNSTL_DEBUG(n < size_);
             return buckets_[n];
         }
 
         local_iterator       end(size_type n)          noexcept
         {
-            myownstl_DEBUG(n < size_);
+            MYOWNSTL_DEBUG(n < size_);
             return nullptr;
         }
         const_local_iterator end(size_type n)    const noexcept
         {
-            myownstl_DEBUG(n < size_);
+            MYOWNSTL_DEBUG(n < size_);
             return nullptr;
         }
         const_local_iterator cend(size_type n)   const noexcept
         {
-            myownstl_DEBUG(n < size_);
+            MYOWNSTL_DEBUG(n < size_);
             return nullptr;
         }
 

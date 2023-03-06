@@ -10,7 +10,7 @@
 
 namespace myownstl
 {
-#define myownstl_DEBUG(expr) \
+#define MYOWNSTL_DEBUG(expr) \
   assert(expr)
 
 #define THROW_LENGTH_ERROR_IF(expr, what) \
