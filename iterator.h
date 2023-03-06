@@ -271,7 +271,7 @@ namespace myownstl
 
     public:
         // 构造函数
-        reverse_iterator() {}
+        reverse_iterator() : current() {}
         explicit reverse_iterator(iterator_type i)
             : current(i)
         {}
