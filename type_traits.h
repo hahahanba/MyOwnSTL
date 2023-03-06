@@ -5,7 +5,7 @@
 #ifndef MYTINYSTL_TYPE_TRAITS_H
 #define MYTINYSTL_TYPE_TRAITS_H
 
-// 用于提取类型信息
+// 用于提取类型信息, 使用std的type_traits
 
 // use std header for type_traits
 #include <type_traits>
