@@ -208,7 +208,7 @@ namespace mystl
         return last - first;
     }
 
-    // 整合以上两个版本
+    // 函数对象整合以上两个版本
     template<class InputIterator>
     typename iterator_traits<InputIterator>::difference_type
     distance(InputIterator first, InputIterator last)
@@ -251,7 +251,7 @@ namespace mystl
 
     /*************************************************************************************/
     // 模版类 ：reverse_iterator
-    // 反向迭代器
+    // 反向迭代器（内涵iterator，可通过base()回到正常行为）
     template<class Iterator>
     class reverse_iterator
     {
@@ -354,7 +354,7 @@ namespace mystl
         return rhs.base() - lhs.base();
     }
 
-    // 重载比较运算符
+    // 增补的比较运算符
     template<class Iterator>
     bool operator==(const reverse_iterator<Iterator>& lhs,
                     const reverse_iterator<Iterator>& rhs)
