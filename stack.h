@@ -2,19 +2,19 @@
 // Created by gy gao on 1/11/23.
 //
 
-#ifndef MYTINYSTL_STACK_H
-#define MYTINYSTL_STACK_H
+#ifndef MYOWNSTL_STACK_H
+#define MYOWNSTL_STACK_H
 
 // 这个头文件包含了一个模板类 stack
 // stack : 栈
 
 #include "deque.h"
 
-namespace mystl
+namespace myownstl
 {
     // 模板类stack
-    // 参数一代表数据类型，参数二代表底层容器，缺省使用mystl::deque作为底层容器
-    template<class T, class Container = mystl::deque<T>>
+    // 参数一代表数据类型，参数二代表底层容器，缺省使用myownstl::deque作为底层容器
+    template<class T, class Container = myownstl::deque<T>>
     class stack
     {
     public:
@@ -42,12 +42,12 @@ namespace mystl
         stack(std::initializer_list<T> ilist) : c_(ilist.begin(), ilist.end()) {}
         stack(const Container& c) : c_(c) {}
         stack(Container&& c) noexcept(std::is_nothrow_move_constructible<Container>::value)
-          : c_(mystl::move(c))
+          : c_(myownstl::move(c))
         {}
 
         stack(const stack& rhs) : c_(rhs.c_) {}
         stack(stack&& rhs) noexcept(std::is_nothrow_move_constructible<Container>::value)
-          : c_(mystl::move(rhs.c_))
+          : c_(myownstl::move(rhs.c_))
         {}
 
         stack& operator=(const stack& rhs)
@@ -58,7 +58,7 @@ namespace mystl
 
         stack& operator=(stack&& rhs) noexcept(std::is_nothrow_move_assignable<Container>::value)
         {
-            c_ = mystl::move(rhs.c_);
+            c_ = myownstl::move(rhs.c_);
             return *this;
         }
 
@@ -81,12 +81,12 @@ namespace mystl
         // 修改容器相关操作
         template<class... Args>
         void emplace(Args&& ...args)
-        { c_.emplace_back(mystl::forward<Args>(args)...); }
+        { c_.emplace_back(myownstl::forward<Args>(args)...); }
 
         void push(const value_type& value)
         { c_.push_back(value); }
         void push(value_type&& value)
-        { c_.push_back(mystl::move(value)); }
+        { c_.push_back(myownstl::move(value)); }
 
         void pop()
         { c_.pop_back(); }
@@ -97,8 +97,8 @@ namespace mystl
                 pop();
         }
 
-        void swap(stack& rhs) noexcept(noexcept(mystl::swap(c_, rhs.c_)))
-        { mystl::swap(c_, rhs.c_); }
+        void swap(stack& rhs) noexcept(noexcept(myownstl::swap(c_, rhs.c_)))
+        { myownstl::swap(c_, rhs.c_); }
 
     public:
         friend bool operator==(const stack& lhs, const stack& rhs) { return lhs.c_ == rhs.c_; }
@@ -142,11 +142,11 @@ namespace mystl
         return !(lhs < rhs);
     }
 
-    // 重载 mystl 的 swap
+    // 重载 myownstl 的 swap
     template <class T, class Container>
     void swap(stack<T, Container>& lhs, stack<T, Container>& rhs) noexcept(noexcept(lhs.swap(rhs)))
     {
         lhs.swap(rhs);
     }
 }
-#endif //MYTINYSTL_STACK_H
+#endif //MYOWNSTL_STACK_H

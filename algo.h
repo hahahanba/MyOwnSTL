@@ -2,15 +2,15 @@
 // Created by gy gao on 10/14/22.
 //
 
-#ifndef MYTINYSTL_ALGO_H
-#define MYTINYSTL_ALGO_H
+#ifndef MYOWNSTL_ALGO_H
+#define MYOWNSTL_ALGO_H
 
 #ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable : 4244)
 #endif
 
-// 这个头文件包含了 mystl 的一系列算法
+// 这个头文件包含了 myownstl 的一系列算法
 
 #include <cstddef>
 #include <ctime>
@@ -20,7 +20,7 @@
 #include "heap_algo.h"
 #include "functional.h"
 
-namespace mystl
+namespace myownstl
 {
 
     /*****************************************************************************************/
@@ -148,8 +148,8 @@ namespace mystl
     search(ForwardIter1 first1, ForwardIter1 last1,
            ForwardIter2 first2, ForwardIter2 last2)
     {
-        auto d1 = mystl::distance(first1, last1);
-        auto d2 = mystl::distance(first2, last2);
+        auto d1 = myownstl::distance(first1, last1);
+        auto d2 = myownstl::distance(first2, last2);
         if (d1 < d2)
             return last1;
         auto current1 = first1;
@@ -184,8 +184,8 @@ namespace mystl
     search(ForwardIter1 first1, ForwardIter1 last1,
            ForwardIter2 first2, ForwardIter2 last2, Compared comp)
     {
-        auto d1 = mystl::distance(first1, last1);
-        auto d2 = mystl::distance(first2, last2);
+        auto d1 = myownstl::distance(first1, last1);
+        auto d2 = myownstl::distance(first2, last2);
         if (d1 < d2)
             return last1;
         auto current1 = first1;
@@ -228,7 +228,7 @@ namespace mystl
         }
         else
         {
-            first = mystl::find(first, last, value);
+            first = myownstl::find(first, last, value);
             while (first != last)
             {
                 auto m = n - 1;
@@ -245,7 +245,7 @@ namespace mystl
                 }
                 else
                 {
-                    first = mystl::find(i, last, value);
+                    first = myownstl::find(i, last, value);
                 }
             }
             return last;
@@ -320,7 +320,7 @@ namespace mystl
             while (true)
             {
                 // 利用 search 查找某个子序列的首次出现点，找不到则返回 last1
-                auto new_result = mystl::search(first1, last1, first2, last2);
+                auto new_result = myownstl::search(first1, last1, first2, last2);
                 if (new_result == last1)
                 {
                     return result;
@@ -346,7 +346,7 @@ namespace mystl
         typedef reverse_iterator<BidirectionalIter2> reviter2;
         reviter1 rlast1(first1);
         reviter2 rlast2(first2);
-        reviter1 rresult = mystl::search(reviter1(last1), rlast1, reviter2(last2), rlast2);
+        reviter1 rresult = myownstl::search(reviter1(last1), rlast1, reviter2(last2), rlast2);
         if (rresult == rlast1)
         {
             return last1;
@@ -354,7 +354,7 @@ namespace mystl
         else
         {
             auto result = rresult.base();
-            mystl::advance(result, -mystl::distance(first2, last2));
+            myownstl::advance(result, -myownstl::distance(first2, last2));
             return result;
         }
     }
@@ -366,7 +366,7 @@ namespace mystl
     {
         typedef typename iterator_traits<ForwardIter1>::iterator_category Category1;
         typedef typename iterator_traits<ForwardIter2>::iterator_category Category2;
-        return mystl::find_end_dispatch(first1, last1, first2, last2, Category1(), Category2());
+        return myownstl::find_end_dispatch(first1, last1, first2, last2, Category1(), Category2());
     }
 
     // 重载版本使用函数对象 comp 代替比较操作
@@ -387,7 +387,7 @@ namespace mystl
             while (true)
             {
                 // 利用 search 查找某个子序列的首次出现点，找不到则返回 last1
-                auto new_result = mystl::search(first1, last1, first2, last2, comp);
+                auto new_result = myownstl::search(first1, last1, first2, last2, comp);
                 if (new_result == last1)
                 {
                     return result;
@@ -413,7 +413,7 @@ namespace mystl
         typedef reverse_iterator<BidirectionalIter2> reviter2;
         reviter1 rlast1(first1);
         reviter2 rlast2(first2);
-        reviter1 rresult = mystl::search(reviter1(last1), rlast1, reviter2(last2), rlast2, comp);
+        reviter1 rresult = myownstl::search(reviter1(last1), rlast1, reviter2(last2), rlast2, comp);
         if (rresult == rlast1)
         {
             return last1;
@@ -421,7 +421,7 @@ namespace mystl
         else
         {
             auto result = rresult.base();
-            mystl::advance(result, -mystl::distance(first2, last2));
+            myownstl::advance(result, -myownstl::distance(first2, last2));
             return result;
         }
     }
@@ -433,7 +433,7 @@ namespace mystl
     {
         typedef typename iterator_traits<ForwardIter1>::iterator_category Category1;
         typedef typename iterator_traits<ForwardIter2>::iterator_category Category2;
-        return mystl::find_end_dispatch(first1, last1, first2, last2, Category1(), Category2(), comp);
+        return myownstl::find_end_dispatch(first1, last1, first2, last2, Category1(), Category2(), comp);
     }
 
     /*****************************************************************************************/
@@ -529,14 +529,14 @@ namespace mystl
     lbound_dispatch(ForwardIter first, ForwardIter last,
                     const T& value, forward_iterator_tag)
     {
-        auto len = mystl::distance(first, last);
+        auto len = myownstl::distance(first, last);
         auto half = len;
         ForwardIter middle;
         while (len > 0)
         {
             half = len >> 1;
             middle = first;
-            mystl::advance(middle, half);
+            myownstl::advance(middle, half);
             if (*middle < value)
             {
                 first = middle;
@@ -581,7 +581,7 @@ namespace mystl
     ForwardIter
     lower_bound(ForwardIter first, ForwardIter last, const T& value)
     {
-        return mystl::lbound_dispatch(first, last, value, iterator_category(first));
+        return myownstl::lbound_dispatch(first, last, value, iterator_category(first));
     }
 
     // 重载版本使用函数对象 comp 代替比较操作
@@ -591,14 +591,14 @@ namespace mystl
     lbound_dispatch(ForwardIter first, ForwardIter last,
                     const T& value, forward_iterator_tag, Compared comp)
     {
-        auto len = mystl::distance(first, last);
+        auto len = myownstl::distance(first, last);
         auto half = len;
         ForwardIter middle;
         while (len > 0)
         {
             half = len >> 1;
             middle = first;
-            mystl::advance(middle, half);
+            myownstl::advance(middle, half);
             if (comp(*middle, value))
             {
                 first = middle;
@@ -643,7 +643,7 @@ namespace mystl
     ForwardIter
     lower_bound(ForwardIter first, ForwardIter last, const T& value, Compared comp)
     {
-        return mystl::lbound_dispatch(first, last, value, iterator_category(first), comp);
+        return myownstl::lbound_dispatch(first, last, value, iterator_category(first), comp);
     }
 
     /*****************************************************************************************/
@@ -656,14 +656,14 @@ namespace mystl
     ubound_dispatch(ForwardIter first, ForwardIter last,
                     const T& value, forward_iterator_tag)
     {
-        auto len = mystl::distance(first, last);
+        auto len = myownstl::distance(first, last);
         auto half = len;
         ForwardIter middle;
         while (len > 0)
         {
             half = len >> 1;
             middle = first;
-            mystl::advance(middle, half);
+            myownstl::advance(middle, half);
             if (value < *middle)
             {
                 len = half;
@@ -708,7 +708,7 @@ namespace mystl
     ForwardIter
     upper_bound(ForwardIter first, ForwardIter last, const T& value)
     {
-        return mystl::ubound_dispatch(first, last, value, iterator_category(first));
+        return myownstl::ubound_dispatch(first, last, value, iterator_category(first));
     }
 
     // 重载版本使用函数对象 comp 代替比较操作
@@ -718,14 +718,14 @@ namespace mystl
     ubound_dispatch(ForwardIter first, ForwardIter last,
                     const T& value, forward_iterator_tag, Compared comp)
     {
-        auto len = mystl::distance(first, last);
+        auto len = myownstl::distance(first, last);
         auto half = len;
         ForwardIter middle;
         while (len > 0)
         {
             half = len >> 1;
             middle = first;
-            mystl::advance(middle, half);
+            myownstl::advance(middle, half);
             if (comp(value, *middle))
             {
                 len = half;
@@ -770,7 +770,7 @@ namespace mystl
     ForwardIter
     upper_bound(ForwardIter first, ForwardIter last, const T& value, Compared comp)
     {
-        return mystl::ubound_dispatch(first, last, value, iterator_category(first), comp);
+        return myownstl::ubound_dispatch(first, last, value, iterator_category(first), comp);
     }
 
     /*****************************************************************************************/
@@ -780,7 +780,7 @@ namespace mystl
     template <class ForwardIter, class T>
     bool binary_search(ForwardIter first, ForwardIter last, const T& value)
     {
-        auto i = mystl::lower_bound(first, last, value);
+        auto i = myownstl::lower_bound(first, last, value);
         return i != last && !(value < *i);
     }
 
@@ -788,7 +788,7 @@ namespace mystl
     template <class ForwardIter, class T, class Compared>
     bool binary_search(ForwardIter first, ForwardIter last, const T& value, Compared comp)
     {
-        auto i = mystl::lower_bound(first, last, value);
+        auto i = myownstl::lower_bound(first, last, value);
         return i != last && !comp(value, *i);
     }
 
@@ -799,18 +799,18 @@ namespace mystl
     /*****************************************************************************************/
     // erange_dispatch 的 forward_iterator_tag 版本
     template <class ForwardIter, class T>
-    mystl::pair<ForwardIter, ForwardIter>
+    myownstl::pair<ForwardIter, ForwardIter>
     erange_dispatch(ForwardIter first, ForwardIter last,
                     const T& value, forward_iterator_tag)
     {
-        auto len = mystl::distance(first, last);
+        auto len = myownstl::distance(first, last);
         auto half = len;
         ForwardIter middle, left, right;
         while (len > 0)
         {
             half = len >> 1;
             middle = first;
-            mystl::advance(middle, half);
+            myownstl::advance(middle, half);
             if (*middle < value)
             {
                 first = middle;
@@ -823,18 +823,18 @@ namespace mystl
             }
             else
             {
-                left = mystl::lower_bound(first, last, value);
-                mystl::advance(first, len);
-                right = mystl::upper_bound(++middle, first, value);
-                return mystl::pair<ForwardIter, ForwardIter>(left, right);
+                left = myownstl::lower_bound(first, last, value);
+                myownstl::advance(first, len);
+                right = myownstl::upper_bound(++middle, first, value);
+                return myownstl::pair<ForwardIter, ForwardIter>(left, right);
             }
         }
-        return mystl::pair<ForwardIter, ForwardIter>(last, last);
+        return myownstl::pair<ForwardIter, ForwardIter>(last, last);
     }
 
     // erange_dispatch 的 random_access_iterator_tag 版本
     template <class RandomIter, class T>
-    mystl::pair<RandomIter, RandomIter>
+    myownstl::pair<RandomIter, RandomIter>
     erange_dispatch(RandomIter first, RandomIter last,
                     const T& value, random_access_iterator_tag)
     {
@@ -856,36 +856,36 @@ namespace mystl
             }
             else
             {
-                left = mystl::lower_bound(first, middle, value);
-                right = mystl::upper_bound(++middle, first + len, value);
-                return mystl::pair<RandomIter, RandomIter>(left, right);
+                left = myownstl::lower_bound(first, middle, value);
+                right = myownstl::upper_bound(++middle, first + len, value);
+                return myownstl::pair<RandomIter, RandomIter>(left, right);
             }
         }
-        return mystl::pair<RandomIter, RandomIter>(last, last);
+        return myownstl::pair<RandomIter, RandomIter>(last, last);
     }
 
     template <class ForwardIter, class T>
-    mystl::pair<ForwardIter, ForwardIter>
+    myownstl::pair<ForwardIter, ForwardIter>
     equal_range(ForwardIter first, ForwardIter last, const T& value)
     {
-        return mystl::erange_dispatch(first, last, value, iterator_category(first));
+        return myownstl::erange_dispatch(first, last, value, iterator_category(first));
     }
 
     // 重载版本使用函数对象 comp 代替比较操作
     // erange_dispatch 的 forward iterator 版本
     template <class ForwardIter, class T, class Compared>
-    mystl::pair<ForwardIter, ForwardIter>
+    myownstl::pair<ForwardIter, ForwardIter>
     erange_dispatch(ForwardIter first, ForwardIter last,
                     const T& value, forward_iterator_tag, Compared comp)
     {
-        auto len = mystl::distance(first, last);
+        auto len = myownstl::distance(first, last);
         auto half = len;
         ForwardIter middle, left, right;
         while (len > 0)
         {
             half = len >> 1;
             middle = first;
-            mystl::advance(middle, half);
+            myownstl::advance(middle, half);
             if (comp(*middle, value))
             {
                 first = middle;
@@ -898,18 +898,18 @@ namespace mystl
             }
             else
             {
-                left = mystl::lower_bound(first, last, value, comp);
-                mystl::advance(first, len);
-                right = mystl::upper_bound(++middle, first, value, comp);
-                return mystl::pair<ForwardIter, ForwardIter>(left, right);
+                left = myownstl::lower_bound(first, last, value, comp);
+                myownstl::advance(first, len);
+                right = myownstl::upper_bound(++middle, first, value, comp);
+                return myownstl::pair<ForwardIter, ForwardIter>(left, right);
             }
         }
-        return mystl::pair<ForwardIter, ForwardIter>(last, last);
+        return myownstl::pair<ForwardIter, ForwardIter>(last, last);
     }
 
     // erange_dispatch 的 random access iterator 版本
     template <class RandomIter, class T, class Compared>
-    mystl::pair<RandomIter, RandomIter>
+    myownstl::pair<RandomIter, RandomIter>
     erange_dispatch(RandomIter first, RandomIter last,
                     const T& value, random_access_iterator_tag, Compared comp)
     {
@@ -931,19 +931,19 @@ namespace mystl
             }
             else
             {
-                left = mystl::lower_bound(first, middle, value, comp);
-                right = mystl::upper_bound(++middle, first + len, value, comp);
-                return mystl::pair<RandomIter, RandomIter>(left, right);
+                left = myownstl::lower_bound(first, middle, value, comp);
+                right = myownstl::upper_bound(++middle, first + len, value, comp);
+                return myownstl::pair<RandomIter, RandomIter>(left, right);
             }
         }
-        return mystl::pair<RandomIter, RandomIter>(last, last);
+        return myownstl::pair<RandomIter, RandomIter>(last, last);
     }
 
     template <class ForwardIter, class T, class Compared>
-    mystl::pair<ForwardIter, ForwardIter>
+    myownstl::pair<ForwardIter, ForwardIter>
     equal_range(ForwardIter first, ForwardIter last, const T& value, Compared comp)
     {
-        return mystl::erange_dispatch(first, last, value, iterator_category(first), comp);
+        return myownstl::erange_dispatch(first, last, value, iterator_category(first), comp);
     }
 
     /*****************************************************************************************/
@@ -1028,7 +1028,7 @@ namespace mystl
     template <class RandomIter>
     bool is_heap(RandomIter first, RandomIter last)
     {
-        auto n = mystl::distance(first, last);
+        auto n = myownstl::distance(first, last);
         auto parent = 0;
         for (auto child = 1; child < n; ++child)
         {
@@ -1044,7 +1044,7 @@ namespace mystl
     template <class RandomIter, class Compared>
     bool is_heap(RandomIter first, RandomIter last, Compared comp)
     {
-        auto n = mystl::distance(first, last);
+        auto n = myownstl::distance(first, last);
         auto parent = 0;
         for (auto child = 1; child < n; ++child)
         {
@@ -1210,7 +1210,7 @@ namespace mystl
     {
         for (; first1 != last1; ++first1, ++first2)
         {
-            mystl::iter_swap(first1, first2);
+            myownstl::iter_swap(first1, first2);
         }
         return first2;
     }
@@ -1270,9 +1270,9 @@ namespace mystl
     template <class ForwardIter, class T>
     ForwardIter remove(ForwardIter first, ForwardIter last, const T& value)
     {
-        first = mystl::find(first, last, value);  // 利用 find 找出第一个匹配的地方
+        first = myownstl::find(first, last, value);  // 利用 find 找出第一个匹配的地方
         auto next = first;
-        return first == last ? first : mystl::remove_copy(++next, last, first, value);
+        return first == last ? first : myownstl::remove_copy(++next, last, first, value);
     }
 
     /*****************************************************************************************/
@@ -1303,9 +1303,9 @@ namespace mystl
     ForwardIter
     remove_if(ForwardIter first, ForwardIter last, UnaryPredicate unary_pred)
     {
-        first = mystl::find_if(first, last, unary_pred);  // 利用 find_if 找出第一个匹配的地方
+        first = myownstl::find_if(first, last, unary_pred);  // 利用 find_if 找出第一个匹配的地方
         auto next = first;
-        return first == last ? first : mystl::remove_copy_if(++next, last, first, unary_pred);
+        return first == last ? first : myownstl::remove_copy_if(++next, last, first, unary_pred);
     }
 
     /*****************************************************************************************/
@@ -1383,7 +1383,7 @@ namespace mystl
         {
             if (first == last || first == --last)
                 return;
-            mystl::iter_swap(first++, last);
+            myownstl::iter_swap(first++, last);
         }
     }
 
@@ -1393,13 +1393,13 @@ namespace mystl
                           random_access_iterator_tag)
     {
         while (first < last)
-            mystl::iter_swap(first++, --last);
+            myownstl::iter_swap(first++, --last);
     }
 
     template <class BidirectionalIter>
     void reverse(BidirectionalIter first, BidirectionalIter last)
     {
-        mystl::reverse_dispatch(first, last, iterator_category(first));
+        myownstl::reverse_dispatch(first, last, iterator_category(first));
     }
 
     /*****************************************************************************************/
@@ -1433,7 +1433,7 @@ namespace mystl
         srand((unsigned)time(0));
         for (auto i = first + 1; i != last; ++i)
         {
-            mystl::iter_swap(i, first + (rand() % (i - first + 1)));
+            myownstl::iter_swap(i, first + (rand() % (i - first + 1)));
         }
     }
 
@@ -1444,10 +1444,10 @@ namespace mystl
     {
         if (first == last)
             return;
-        auto len = mystl::distance(first, last);
+        auto len = myownstl::distance(first, last);
         for (auto i = first + 1; i != last; ++i)
         {
-            mystl::iter_swap(i, first + (rand(i - first + 1) % len));
+            myownstl::iter_swap(i, first + (rand(i - first + 1) % len));
         }
     }
 
@@ -1465,7 +1465,7 @@ namespace mystl
         auto first2 = middle;
         do
         {
-            mystl::swap(*first++, *first2++);
+            myownstl::swap(*first++, *first2++);
             if (first == middle)
                 middle = first2;
         } while (first2 != last);  // 后半段移到前面
@@ -1474,7 +1474,7 @@ namespace mystl
         first2 = middle;
         while (first2 != last)
         {   // 调整剩余元素
-            mystl::swap(*first++, *first2++);
+            myownstl::swap(*first++, *first2++);
             if (first == middle)
             {
                 middle = first2;
@@ -1493,18 +1493,18 @@ namespace mystl
     rotate_dispatch(BidirectionalIter first, BidirectionalIter middle,
                     BidirectionalIter last, bidirectional_iterator_tag)
     {
-        mystl::reverse_dispatch(first, middle, bidirectional_iterator_tag());
-        mystl::reverse_dispatch(middle, last, bidirectional_iterator_tag());
+        myownstl::reverse_dispatch(first, middle, bidirectional_iterator_tag());
+        myownstl::reverse_dispatch(middle, last, bidirectional_iterator_tag());
         while (first != middle && middle != last)
-            mystl::swap(*first++, *--last);
+            myownstl::swap(*first++, *--last);
         if (first == middle)
         {
-            mystl::reverse_dispatch(middle, last, bidirectional_iterator_tag());
+            myownstl::reverse_dispatch(middle, last, bidirectional_iterator_tag());
             return last;
         }
         else
         {
-            mystl::reverse_dispatch(first, middle, bidirectional_iterator_tag());
+            myownstl::reverse_dispatch(first, middle, bidirectional_iterator_tag());
             return first;
         }
     }
@@ -1535,7 +1535,7 @@ namespace mystl
         auto result = first + (last - middle);
         if (l == r)
         {
-            mystl::swap_ranges(first, middle, middle);
+            myownstl::swap_ranges(first, middle, middle);
             return result;
         }
         auto cycle_times = rgcd(n, l);
@@ -1583,7 +1583,7 @@ namespace mystl
             return last;
         if (middle == last)
             return first;
-        return mystl::rotate_dispatch(first, middle, last, iterator_category(first));
+        return myownstl::rotate_dispatch(first, middle, last, iterator_category(first));
     }
 
     /*****************************************************************************************/
@@ -1595,7 +1595,7 @@ namespace mystl
     rotate_copy(ForwardIter first, ForwardIter middle,
                 ForwardIter last, OutputIter result)
     {
-        return mystl::copy(first, middle, mystl::copy(middle, last, result));
+        return myownstl::copy(first, middle, myownstl::copy(middle, last, result));
     }
 
     /*****************************************************************************************/
@@ -1607,8 +1607,8 @@ namespace mystl
                             ForwardIter2 first2, ForwardIter2 last2,
                             BinaryPred pred)
     {
-        constexpr bool is_ra_it = mystl::is_random_access_iterator<ForwardIter1>::value
-                                  && mystl::is_random_access_iterator<ForwardIter2>::value;
+        constexpr bool is_ra_it = myownstl::is_random_access_iterator<ForwardIter1>::value
+                                  && myownstl::is_random_access_iterator<ForwardIter2>::value;
         if (is_ra_it)
         {
             auto len1 = last1 - first1;
@@ -1630,8 +1630,8 @@ namespace mystl
         }
         else
         {
-            auto len1 = mystl::distance(first1, last1);
-            auto len2 = mystl::distance(first2, last2);
+            auto len1 = myownstl::distance(first1, last1);
+            auto len2 = myownstl::distance(first2, last2);
             if (len1 == 0 && len2 == 0)
                 return true;
             if (len1 != len2)
@@ -1693,9 +1693,9 @@ namespace mystl
         typedef typename iterator_traits<ForwardIter1>::value_type v1;
         typedef typename iterator_traits<ForwardIter2>::value_type v2;
         static_assert(std::is_same<v1, v2>::value,
-                      "the type should be same in mystl::is_permutation");
+                      "the type should be same in myownstl::is_permutation");
         return is_permutation_aux(first1, last1, first2, last2,
-                                  mystl::equal_to<v1>());
+                                  myownstl::equal_to<v1>());
     }
 
     /*****************************************************************************************/
@@ -1715,13 +1715,13 @@ namespace mystl
             {                 // 找到第一对小于关系的元素
                 auto j = last;
                 while (!(*i < *--j)) {}
-                mystl::iter_swap(i, j);       // 交换 i，j 所指元素
-                mystl::reverse(ii, last);     // 将 ii 之后的所有元素反转
+                myownstl::iter_swap(i, j);       // 交换 i，j 所指元素
+                myownstl::reverse(ii, last);     // 将 ii 之后的所有元素反转
                 return true;
             }
             if (i == first)
             {
-                mystl::reverse(first, last);
+                myownstl::reverse(first, last);
                 return false;
             }
         }
@@ -1741,13 +1741,13 @@ namespace mystl
             {
                 auto j = last;
                 while (!comp(*i, *--j)) {}
-                mystl::iter_swap(i, j);       // 交换 i，j 所指元素
-                mystl::reverse(ii, last);     // 将 ii 之后的所有元素反转
+                myownstl::iter_swap(i, j);       // 交换 i，j 所指元素
+                myownstl::reverse(ii, last);     // 将 ii 之后的所有元素反转
                 return true;
             }
             if (i == first)
             {
-                mystl::reverse(first, last);
+                myownstl::reverse(first, last);
                 return false;
             }
         }
@@ -1770,13 +1770,13 @@ namespace mystl
             {                 // 找到第一对大于关系的元素
                 auto j = last;
                 while (!(*--j < *i)) {}
-                mystl::iter_swap(i, j);       // 交换i，j
-                mystl::reverse(ii, last);     // 将 ii 之后的所有元素反转
+                myownstl::iter_swap(i, j);       // 交换i，j
+                myownstl::reverse(ii, last);     // 将 ii 之后的所有元素反转
                 return true;
             }
             if (i == first)
             {
-                mystl::reverse(first, last);
+                myownstl::reverse(first, last);
                 return false;
             }
         }
@@ -1796,13 +1796,13 @@ namespace mystl
             {
                 auto j = last;
                 while (!comp(*--j, *i)) {}
-                mystl::iter_swap(i, j);       // 交换i，j
-                mystl::reverse(ii, last);     // 将 ii 之后的所有元素反转
+                myownstl::iter_swap(i, j);       // 交换i，j
+                myownstl::reverse(ii, last);     // 将 ii 之后的所有元素反转
                 return true;
             }
             if (i == first)
             {
-                mystl::reverse(first, last);
+                myownstl::reverse(first, last);
                 return false;
             }
         }
@@ -1832,7 +1832,7 @@ namespace mystl
             }
             ++result;
         }
-        return mystl::copy(first2, last2, mystl::copy(first1, last1, result));
+        return myownstl::copy(first2, last2, myownstl::copy(first1, last1, result));
     }
 
     // 重载版本使用函数对象 comp 代替比较操作
@@ -1856,7 +1856,7 @@ namespace mystl
             }
             ++result;
         }
-        return mystl::copy(first2, last2, mystl::copy(first1, last1, result));
+        return myownstl::copy(first2, last2, myownstl::copy(first1, last1, result));
     }
 
     /*****************************************************************************************/
@@ -1873,7 +1873,7 @@ namespace mystl
         if (len1 + len2 == 2)
         {
             if (*middle < *first)
-                mystl::iter_swap(first, middle);
+                myownstl::iter_swap(first, middle);
             return;
         }
         auto first_cut = first;
@@ -1883,20 +1883,20 @@ namespace mystl
         if (len1 > len2)
         {  // 序列一较长，找到序列一的中点
             len11 = len1 >> 1;
-            mystl::advance(first_cut, len11);
-            second_cut = mystl::lower_bound(middle, last, *first_cut);
-            len22 = mystl::distance(middle, second_cut);
+            myownstl::advance(first_cut, len11);
+            second_cut = myownstl::lower_bound(middle, last, *first_cut);
+            len22 = myownstl::distance(middle, second_cut);
         }
         else
         {              // 序列二较长，找到序列二的中点
             len22 = len2 >> 1;
-            mystl::advance(second_cut, len22);
-            first_cut = mystl::upper_bound(first, middle, *second_cut);
-            len11 = mystl::distance(first, first_cut);
+            myownstl::advance(second_cut, len22);
+            first_cut = myownstl::upper_bound(first, middle, *second_cut);
+            len11 = myownstl::distance(first, first_cut);
         }
-        auto new_middle = mystl::rotate(first_cut, middle, second_cut);
-        mystl::merge_without_buffer(first, first_cut, new_middle, len11, len22);
-        mystl::merge_without_buffer(new_middle, second_cut, last, len1 - len11, len2 - len22);
+        auto new_middle = myownstl::rotate(first_cut, middle, second_cut);
+        myownstl::merge_without_buffer(first, first_cut, new_middle, len11, len22);
+        myownstl::merge_without_buffer(new_middle, second_cut, last, len1 - len11, len2 - len22);
     }
 
     template <class BidirectionalIter1, class BidirectionalIter2>
@@ -1906,9 +1906,9 @@ namespace mystl
                    BidirectionalIter1 result)
     {
         if (first1 == last1)
-            return mystl::copy_backward(first2, last2, result);
+            return myownstl::copy_backward(first2, last2, result);
         if (first2 == last2)
-            return mystl::copy_backward(first1, last1, result);
+            return myownstl::copy_backward(first1, last1, result);
         --last1;
         --last2;
         while (true)
@@ -1917,14 +1917,14 @@ namespace mystl
             {
                 *--result = *last1;
                 if (first1 == last1)
-                    return mystl::copy_backward(first2, ++last2, result);
+                    return myownstl::copy_backward(first2, ++last2, result);
                 --last1;
             }
             else
             {
                 *--result = *last2;
                 if (first2 == last2)
-                    return mystl::copy_backward(first1, ++last1, result);
+                    return myownstl::copy_backward(first1, ++last1, result);
                 --last2;
             }
         }
@@ -1939,19 +1939,19 @@ namespace mystl
         BidirectionalIter2 buffer_end;
         if (len1 > len2 && len2 <= buffer_size)
         {
-            buffer_end = mystl::copy(middle, last, buffer);
-            mystl::copy_backward(first, middle, last);
-            return mystl::copy(buffer, buffer_end, first);
+            buffer_end = myownstl::copy(middle, last, buffer);
+            myownstl::copy_backward(first, middle, last);
+            return myownstl::copy(buffer, buffer_end, first);
         }
         else if (len1 <= buffer_size)
         {
-            buffer_end = mystl::copy(first, middle, buffer);
-            mystl::copy(middle, last, first);
-            return mystl::copy_backward(buffer, buffer_end, last);
+            buffer_end = myownstl::copy(first, middle, buffer);
+            myownstl::copy(middle, last, first);
+            return myownstl::copy_backward(buffer, buffer_end, last);
         }
         else
         {
-            return mystl::rotate(first, middle, last);
+            return myownstl::rotate(first, middle, last);
         }
     }
 
@@ -1964,13 +1964,13 @@ namespace mystl
         // 区间长度足够放进缓冲区
         if (len1 <= len2 && len1 <= buffer_size)
         {
-            Pointer buffer_end = mystl::copy(first, middle, buffer);
-            mystl::merge(buffer, buffer_end, middle, last, first);
+            Pointer buffer_end = myownstl::copy(first, middle, buffer);
+            myownstl::merge(buffer, buffer_end, middle, last, first);
         }
         else if (len2 <= buffer_size)
         {
-            Pointer buffer_end = mystl::copy(middle, last, buffer);
-            mystl::merge_backward(first, middle, buffer, buffer_end, last);
+            Pointer buffer_end = myownstl::copy(middle, last, buffer);
+            myownstl::merge_backward(first, middle, buffer, buffer_end, last);
         }
         else
         {  // 区间长度太长，分割递归处理
@@ -1981,21 +1981,21 @@ namespace mystl
             if (len1 > len2)
             {
                 len11 = len1 >> 1;
-                mystl::advance(first_cut, len11);
-                second_cut = mystl::lower_bound(middle, last, *first_cut);
-                len22 = mystl::distance(middle, second_cut);
+                myownstl::advance(first_cut, len11);
+                second_cut = myownstl::lower_bound(middle, last, *first_cut);
+                len22 = myownstl::distance(middle, second_cut);
             }
             else
             {
                 len22 = len2 >> 1;
-                mystl::advance(second_cut, len22);
-                first_cut = mystl::upper_bound(first, middle, *second_cut);
-                len11 = mystl::distance(first, first_cut);
+                myownstl::advance(second_cut, len22);
+                first_cut = myownstl::upper_bound(first, middle, *second_cut);
+                len11 = myownstl::distance(first, first_cut);
             }
-            auto new_middle = mystl::rotate_adaptive(first_cut, middle, second_cut,
+            auto new_middle = myownstl::rotate_adaptive(first_cut, middle, second_cut,
                                                      len1 - len11, len22, buffer, buffer_size);
-            mystl::merge_adaptive(first, first_cut, new_middle, len11, len22, buffer, buffer_size);
-            mystl::merge_adaptive(new_middle, second_cut, last, len1 - len11,
+            myownstl::merge_adaptive(first, first_cut, new_middle, len11, len22, buffer, buffer_size);
+            myownstl::merge_adaptive(new_middle, second_cut, last, len1 - len11,
                                   len2 - len22, buffer, buffer_size);
         }
     }
@@ -2005,16 +2005,16 @@ namespace mystl
     inplace_merge_aux(BidirectionalIter first, BidirectionalIter middle,
                       BidirectionalIter last, T*)
     {
-        auto len1 = mystl::distance(first, middle);
-        auto len2 = mystl::distance(middle, last);
+        auto len1 = myownstl::distance(first, middle);
+        auto len2 = myownstl::distance(middle, last);
         temporary_buffer<BidirectionalIter, T> buf(first, last);
         if (!buf.begin())
         {
-            mystl::merge_without_buffer(first, middle, last, len1, len2);
+            myownstl::merge_without_buffer(first, middle, last, len1, len2);
         }
         else
         {
-            mystl::merge_adaptive(first, middle, last, len1, len2, buf.begin(), buf.size());
+            myownstl::merge_adaptive(first, middle, last, len1, len2, buf.begin(), buf.size());
         }
     }
 
@@ -2025,7 +2025,7 @@ namespace mystl
     {
         if (first == middle || middle == last)
             return;
-        mystl::inplace_merge_aux(first, middle, last, value_type(first));
+        myownstl::inplace_merge_aux(first, middle, last, value_type(first));
     }
 
     // 重载版本使用函数对象 comp 代替比较操作
@@ -2040,7 +2040,7 @@ namespace mystl
         if (len1 + len2 == 2)
         {
             if (comp(*middle, *first))
-                mystl::iter_swap(first, middle);
+                myownstl::iter_swap(first, middle);
             return;
         }
         auto first_cut = first;
@@ -2050,20 +2050,20 @@ namespace mystl
         if (len1 > len2)
         {
             len11 = len1 >> 1;
-            mystl::advance(first_cut, len11);
-            second_cut = mystl::lower_bound(middle, last, *first_cut, comp);
-            len22 = mystl::distance(middle, second_cut);
+            myownstl::advance(first_cut, len11);
+            second_cut = myownstl::lower_bound(middle, last, *first_cut, comp);
+            len22 = myownstl::distance(middle, second_cut);
         }
         else
         {
             len22 = len2 >> 1;
-            mystl::advance(second_cut, len22);
-            first_cut = mystl::upper_bound(first, middle, *second_cut, comp);
-            len11 = mystl::distance(first, first_cut);
+            myownstl::advance(second_cut, len22);
+            first_cut = myownstl::upper_bound(first, middle, *second_cut, comp);
+            len11 = myownstl::distance(first, first_cut);
         }
-        auto new_middle = mystl::rotate(first_cut, middle, second_cut);
-        mystl::merge_without_buffer(first, first_cut, new_middle, len11, len22, comp);
-        mystl::merge_without_buffer(new_middle, second_cut, last, len1 - len11, len2 - len22, comp);
+        auto new_middle = myownstl::rotate(first_cut, middle, second_cut);
+        myownstl::merge_without_buffer(first, first_cut, new_middle, len11, len22, comp);
+        myownstl::merge_without_buffer(new_middle, second_cut, last, len1 - len11, len2 - len22, comp);
     }
 
     template <class BidirectionalIter1, class BidirectionalIter2, class Compared>
@@ -2073,9 +2073,9 @@ namespace mystl
                    BidirectionalIter1 result, Compared comp)
     {
         if (first1 == last1)
-            return mystl::copy_backward(first2, last2, result);
+            return myownstl::copy_backward(first2, last2, result);
         if (first2 == last2)
-            return mystl::copy_backward(first1, last1, result);
+            return myownstl::copy_backward(first1, last1, result);
         --last1;
         --last2;
         while (true)
@@ -2084,14 +2084,14 @@ namespace mystl
             {
                 *--result = *last1;
                 if (first1 == last1)
-                    return mystl::copy_backward(first2, ++last2, result);
+                    return myownstl::copy_backward(first2, ++last2, result);
                 --last1;
             }
             else
             {
                 *--result = *last2;
                 if (first2 == last2)
-                    return mystl::copy_backward(first1, ++last1, result);
+                    return myownstl::copy_backward(first1, ++last1, result);
                 --last2;
             }
         }
@@ -2106,13 +2106,13 @@ namespace mystl
         // 区间长度足够放进缓冲区
         if (len1 <= len2 && len1 <= buffer_size)
         {
-            Pointer buffer_end = mystl::copy(first, middle, buffer);
-            mystl::merge(buffer, buffer_end, middle, last, first, comp);
+            Pointer buffer_end = myownstl::copy(first, middle, buffer);
+            myownstl::merge(buffer, buffer_end, middle, last, first, comp);
         }
         else if (len2 <= buffer_size)
         {
-            Pointer buffer_end = mystl::copy(middle, last, buffer);
-            mystl::merge_backward(first, middle, buffer, buffer_end, last, comp);
+            Pointer buffer_end = myownstl::copy(middle, last, buffer);
+            myownstl::merge_backward(first, middle, buffer, buffer_end, last, comp);
         }
         else
         {  // 区间长度太长，分割递归处理
@@ -2123,22 +2123,22 @@ namespace mystl
             if (len1 > len2)
             {
                 len11 = len1 >> 1;
-                mystl::advance(first_cut, len11);
-                second_cut = mystl::lower_bound(middle, last, *first_cut, comp);
-                len22 = mystl::distance(middle, second_cut);
+                myownstl::advance(first_cut, len11);
+                second_cut = myownstl::lower_bound(middle, last, *first_cut, comp);
+                len22 = myownstl::distance(middle, second_cut);
             }
             else
             {
                 len22 = len2 >> 1;
-                mystl::advance(second_cut, len22);
-                first_cut = mystl::upper_bound(first, middle, *second_cut, comp);
-                len11 = mystl::distance(first, first_cut);
+                myownstl::advance(second_cut, len22);
+                first_cut = myownstl::upper_bound(first, middle, *second_cut, comp);
+                len11 = myownstl::distance(first, first_cut);
             }
-            auto new_middle = mystl::rotate_adaptive(first_cut, middle, second_cut, len1 - len11,
+            auto new_middle = myownstl::rotate_adaptive(first_cut, middle, second_cut, len1 - len11,
                                                      len22, buffer, buffer_size);
-            mystl::merge_adaptive(first, first_cut, new_middle, len11,
+            myownstl::merge_adaptive(first, first_cut, new_middle, len11,
                                   len22, buffer, buffer_size, comp);
-            mystl::merge_adaptive(new_middle, second_cut, last, len1 - len11,
+            myownstl::merge_adaptive(new_middle, second_cut, last, len1 - len11,
                                   len2 - len22, buffer, buffer_size, comp);
         }
     }
@@ -2148,16 +2148,16 @@ namespace mystl
     inplace_merge_aux(BidirectionalIter first, BidirectionalIter middle,
                       BidirectionalIter last, T*, Compared comp)
     {
-        auto len1 = mystl::distance(first, middle);
-        auto len2 = mystl::distance(middle, last);
+        auto len1 = myownstl::distance(first, middle);
+        auto len2 = myownstl::distance(middle, last);
         temporary_buffer<BidirectionalIter, T> buf(first, last);
         if (!buf.begin())
         {
-            mystl::merge_without_buffer(first, middle, last, len1, len2, comp);
+            myownstl::merge_without_buffer(first, middle, last, len1, len2, comp);
         }
         else
         {
-            mystl::merge_adaptive(first, middle, last, len1, len2, buf.begin(), buf.size(), comp);
+            myownstl::merge_adaptive(first, middle, last, len1, len2, buf.begin(), buf.size(), comp);
         }
     }
 
@@ -2168,7 +2168,7 @@ namespace mystl
     {
         if (first == middle || middle == last)
             return;
-        mystl::inplace_merge_aux(first, middle, last, value_type(first), comp);
+        myownstl::inplace_merge_aux(first, middle, last, value_type(first), comp);
     }
 
     /*****************************************************************************************/
@@ -2179,15 +2179,15 @@ namespace mystl
     void partial_sort(RandomIter first, RandomIter middle,
                       RandomIter last)
     {
-        mystl::make_heap(first, middle);
+        myownstl::make_heap(first, middle);
         for (auto i = middle; i < last; ++i)
         {
             if (*i < *first)
             {
-                mystl::pop_heap_aux(first, middle, i, *i, distance_type(first));
+                myownstl::pop_heap_aux(first, middle, i, *i, distance_type(first));
             }
         }
-        mystl::sort_heap(first, middle);
+        myownstl::sort_heap(first, middle);
     }
 
     // 重载版本使用函数对象 comp 代替比较操作
@@ -2195,15 +2195,15 @@ namespace mystl
     void partial_sort(RandomIter first, RandomIter middle,
                       RandomIter last, Compared comp)
     {
-        mystl::make_heap(first, middle, comp);
+        myownstl::make_heap(first, middle, comp);
         for (auto i = middle; i < last; ++i)
         {
             if (comp(*i, *first))
             {
-                mystl::pop_heap_aux(first, middle, i, *i, distance_type(first), comp);
+                myownstl::pop_heap_aux(first, middle, i, *i, distance_type(first), comp);
             }
         }
-        mystl::sort_heap(first, middle, comp);
+        myownstl::sort_heap(first, middle, comp);
     }
 
     /*****************************************************************************************/
@@ -2225,17 +2225,17 @@ namespace mystl
             ++result_iter;
             ++first;
         }
-        mystl::make_heap(result_first, result_iter);
+        myownstl::make_heap(result_first, result_iter);
         while (first != last)
         {
             if (*first < *result_first)
             {
-                mystl::adjust_heap(result_first, static_cast<Distance>(0),
+                myownstl::adjust_heap(result_first, static_cast<Distance>(0),
                                    result_iter - result_first, *first);
             }
             ++first;
         }
-        mystl::sort_heap(result_first, result_iter);
+        myownstl::sort_heap(result_first, result_iter);
         return result_iter;
     }
 
@@ -2244,7 +2244,7 @@ namespace mystl
     partial_sort_copy(InputIter first, InputIter last,
                       RandomIter result_first, RandomIter result_last)
     {
-        return mystl::psort_copy_aux(first, last, result_first, result_last,
+        return myownstl::psort_copy_aux(first, last, result_first, result_last,
                                      distance_type(result_first));
     }
 
@@ -2264,17 +2264,17 @@ namespace mystl
             ++result_iter;
             ++first;
         }
-        mystl::make_heap(result_first, result_iter, comp);
+        myownstl::make_heap(result_first, result_iter, comp);
         while (first != last)
         {
             if (comp(*first, *result_first))
             {
-                mystl::adjust_heap(result_first, static_cast<Distance>(0),
+                myownstl::adjust_heap(result_first, static_cast<Distance>(0),
                                    result_iter - result_first, *first, comp);
             }
             ++first;
         }
-        mystl::sort_heap(result_first, result_iter, comp);
+        myownstl::sort_heap(result_first, result_iter, comp);
         return result_iter;
     }
 
@@ -2284,7 +2284,7 @@ namespace mystl
                       RandomIter result_first, RandomIter result_last,
                       Compared comp)
     {
-        return mystl::psort_copy_aux(first, last, result_first, result_last,
+        return myownstl::psort_copy_aux(first, last, result_first, result_last,
                                      distance_type(result_first), comp);
     }
     /*****************************************************************************************/
@@ -2312,7 +2312,7 @@ namespace mystl
             }
             if (first == last)
                 break;
-            mystl::iter_swap(first, last);
+            myownstl::iter_swap(first, last);
             ++first;
         }
         return first;
@@ -2321,10 +2321,10 @@ namespace mystl
     /*****************************************************************************************/
     // partition_copy
     // 行为与 partition 类似，不同的是，将被一元操作符判定为 true 的放到 result_true 的输出区间
-    // 其余放到 result_false 的输出区间，并返回一个 mystl::pair 指向这两个区间的尾部
+    // 其余放到 result_false 的输出区间，并返回一个 myownstl::pair 指向这两个区间的尾部
     /*****************************************************************************************/
     template <class InputIter, class OutputIter1, class OutputIter2, class UnaryPredicate>
-    mystl::pair<OutputIter1, OutputIter2>
+    myownstl::pair<OutputIter1, OutputIter2>
     partition_copy(InputIter first, InputIter last,
                    OutputIter1 result_true, OutputIter2 result_false,
                    UnaryPredicate unary_pred)
@@ -2340,7 +2340,7 @@ namespace mystl
                 *result_false++ = *first;
             }
         }
-        return mystl::pair<OutputIter1, OutputIter2>(result_true, result_false);
+        return myownstl::pair<OutputIter1, OutputIter2>(result_true, result_false);
     }
 
     /*****************************************************************************************/
@@ -2373,7 +2373,7 @@ namespace mystl
                 --last;
             if (!(first < last))
                 return first;
-            mystl::iter_swap(first, last);
+            myownstl::iter_swap(first, last);
             ++first;
         }
     }
@@ -2386,13 +2386,13 @@ namespace mystl
         {
             if (depth_limit == 0)
             {                      // 到达最大分割深度限制
-                mystl::partial_sort(first, last, last);  // 改用 heap_sort
+                myownstl::partial_sort(first, last, last);  // 改用 heap_sort
                 return;
             }
             --depth_limit;
-            auto mid = mystl::median(*(first), *(first + (last - first) / 2), *(last - 1));
-            auto cut = mystl::unchecked_partition(first, last, mid);
-            mystl::intro_sort(cut, last, depth_limit);
+            auto mid = myownstl::median(*(first), *(first + (last - first) / 2), *(last - 1));
+            auto cut = myownstl::unchecked_partition(first, last, mid);
+            myownstl::intro_sort(cut, last, depth_limit);
             last = cut;
         }
     }
@@ -2418,7 +2418,7 @@ namespace mystl
     {
         for (auto i = first; i != last; ++i)
         {
-            mystl::unchecked_linear_insert(i, *i);
+            myownstl::unchecked_linear_insert(i, *i);
         }
     }
 
@@ -2433,12 +2433,12 @@ namespace mystl
             auto value = *i;
             if (value < *first)
             {
-                mystl::copy_backward(first, i, i + 1);
+                myownstl::copy_backward(first, i, i + 1);
                 *first = value;
             }
             else
             {
-                mystl::unchecked_linear_insert(i, value);
+                myownstl::unchecked_linear_insert(i, value);
             }
         }
     }
@@ -2449,12 +2449,12 @@ namespace mystl
     {
         if (static_cast<size_t>(last - first) > kSmallSectionSize)
         {
-            mystl::insertion_sort(first, first + kSmallSectionSize);
-            mystl::unchecked_insertion_sort(first + kSmallSectionSize, last);
+            myownstl::insertion_sort(first, first + kSmallSectionSize);
+            myownstl::unchecked_insertion_sort(first + kSmallSectionSize, last);
         }
         else
         {
-            mystl::insertion_sort(first, last);
+            myownstl::insertion_sort(first, last);
         }
     }
 
@@ -2464,8 +2464,8 @@ namespace mystl
         if (first != last)
         {
             // 内省式排序，将区间分为一个个小区间，然后对整体进行插入排序
-            mystl::intro_sort(first, last, slg2(last - first) * 2);
-            mystl::final_insertion_sort(first, last);
+            myownstl::intro_sort(first, last, slg2(last - first) * 2);
+            myownstl::final_insertion_sort(first, last);
         }
     }
 
@@ -2485,7 +2485,7 @@ namespace mystl
                 --last;
             if (!(first < last))
                 return first;
-            mystl::iter_swap(first, last);
+            myownstl::iter_swap(first, last);
             ++first;
         }
     }
@@ -2499,13 +2499,13 @@ namespace mystl
         {
             if (depth_limit == 0)
             {                            // 到达最大分割深度限制
-                mystl::partial_sort(first, last, last, comp);  // 改用 heap_sort
+                myownstl::partial_sort(first, last, last, comp);  // 改用 heap_sort
                 return;
             }
             --depth_limit;
-            auto mid = mystl::median(*(first), *(first + (last - first) / 2), *(last - 1));
-            auto cut = mystl::unchecked_partition(first, last, mid, comp);
-            mystl::intro_sort(cut, last, depth_limit, comp);
+            auto mid = myownstl::median(*(first), *(first + (last - first) / 2), *(last - 1));
+            auto cut = myownstl::unchecked_partition(first, last, mid, comp);
+            myownstl::intro_sort(cut, last, depth_limit, comp);
             last = cut;
         }
     }
@@ -2532,7 +2532,7 @@ namespace mystl
     {
         for (auto i = first; i != last; ++i)
         {
-            mystl::unchecked_linear_insert(i, *i, comp);
+            myownstl::unchecked_linear_insert(i, *i, comp);
         }
     }
 
@@ -2547,12 +2547,12 @@ namespace mystl
             auto value = *i;
             if (comp(value, *first))
             {
-                mystl::copy_backward(first, i, i + 1);
+                myownstl::copy_backward(first, i, i + 1);
                 *first = value;
             }
             else
             {
-                mystl::unchecked_linear_insert(i, value, comp);
+                myownstl::unchecked_linear_insert(i, value, comp);
             }
         }
     }
@@ -2563,12 +2563,12 @@ namespace mystl
     {
         if (static_cast<size_t>(last - first) > kSmallSectionSize)
         {
-            mystl::insertion_sort(first, first + kSmallSectionSize, comp);
-            mystl::unchecked_insertion_sort(first + kSmallSectionSize, last, comp);
+            myownstl::insertion_sort(first, first + kSmallSectionSize, comp);
+            myownstl::unchecked_insertion_sort(first + kSmallSectionSize, last, comp);
         }
         else
         {
-            mystl::insertion_sort(first, last, comp);
+            myownstl::insertion_sort(first, last, comp);
         }
     }
 
@@ -2578,8 +2578,8 @@ namespace mystl
         if (first != last)
         {
             // 内省式排序，将区间分为一个个小区间，然后对整体进行插入排序
-            mystl::intro_sort(first, last, slg2(last - first) * 2, comp);
-            mystl::final_insertion_sort(first, last, comp);
+            myownstl::intro_sort(first, last, slg2(last - first) * 2, comp);
+            myownstl::final_insertion_sort(first, last, comp);
         }
     }
 
@@ -2595,7 +2595,7 @@ namespace mystl
             return;
         while (last - first > 3)
         {
-            auto cut = mystl::unchecked_partition(first, last, mystl::median(*first,
+            auto cut = myownstl::unchecked_partition(first, last, myownstl::median(*first,
                                                                              *(first + (last - first) / 2),
                                                                              *(last - 1)));
             if (cut <= nth)  // 如果 nth 位于右段
@@ -2603,7 +2603,7 @@ namespace mystl
             else
                 last = cut;    // 对左段进行分割
         }
-        mystl::insertion_sort(first, last);
+        myownstl::insertion_sort(first, last);
     }
 
     // 重载版本使用函数对象 comp 代替比较操作
@@ -2615,7 +2615,7 @@ namespace mystl
             return;
         while (last - first > 3)
         {
-            auto cut = mystl::unchecked_partition(first, last, mystl::median(*first,
+            auto cut = myownstl::unchecked_partition(first, last, myownstl::median(*first,
                                                                              *(first + (last - first) / 2),
                                                                              *(last - 1)), comp);
             if (cut <= nth)  // 如果 nth 位于右段
@@ -2623,7 +2623,7 @@ namespace mystl
             else
                 last = cut;    // 对左段进行分割
         }
-        mystl::insertion_sort(first, last, comp);
+        myownstl::insertion_sort(first, last, comp);
     }
 
     /*****************************************************************************************/
@@ -2671,7 +2671,7 @@ namespace mystl
     {
         if (first == last)
             return result;
-        return mystl::unique_copy_dispatch(first, last, result, iterator_category(result));
+        return myownstl::unique_copy_dispatch(first, last, result, iterator_category(result));
     }
 
     // 重载版本使用函数对象 comp 代替比较操作
@@ -2716,7 +2716,7 @@ namespace mystl
     {
         if (first == last)
             return result;
-        return mystl::unique_copy_dispatch(first, last, result, iterator_category(result), comp);
+        return myownstl::unique_copy_dispatch(first, last, result, iterator_category(result), comp);
     }
 
     /*****************************************************************************************/
@@ -2726,22 +2726,22 @@ namespace mystl
     template <class ForwardIter>
     ForwardIter unique(ForwardIter first, ForwardIter last)
     {
-        first = mystl::adjacent_find(first, last);
-        return mystl::unique_copy(first, last, first);
+        first = myownstl::adjacent_find(first, last);
+        return myownstl::unique_copy(first, last, first);
     }
 
     // 重载版本使用函数对象 comp 代替比较操作
     template <class ForwardIter, class Compared>
     ForwardIter unique(ForwardIter first, ForwardIter last, Compared comp)
     {
-        first = mystl::adjacent_find(first, last, comp);
-        return mystl::unique_copy(first, last, first, comp);
+        first = myownstl::adjacent_find(first, last, comp);
+        return myownstl::unique_copy(first, last, first, comp);
     }
 
-} // namespace mystl
+} // namespace myownstl
 
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 
-#endif //MYTINYSTL_ALGO_H
+#endif //MYOWNSTL_ALGO_H

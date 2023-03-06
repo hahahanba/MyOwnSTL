@@ -2,13 +2,13 @@
 // Created by gy gao on 9/8/22.
 //
 
-#ifndef MYTINYSTL_ALLOCATOR_H
-#define MYTINYSTL_ALLOCATOR_H
+#ifndef MYOWNSTL_ALLOCATOR_H
+#define MYOWNSTL_ALLOCATOR_H
 
 #include "construct.h"
 #include "util.h"
 
-namespace mystl
+namespace myownstl
 {
     // 模板类：allocator
     // 模板函数代表数据类型
@@ -75,41 +75,41 @@ namespace mystl
     template<class T>
     void allocator<T>::construct(T *ptr)
     {
-        mystl::construct(ptr);
+        myownstl::construct(ptr);
     }
 
     template<class T>
     void allocator<T>::construct(T* ptr, const T& value)
     {
-        mystl::construct(ptr, value);
+        myownstl::construct(ptr, value);
     }
 
     template<class T>
     void allocator<T>::construct(T* ptr, T&& value)
     {
-        mystl::construct(ptr, mystl::move(value));
+        myownstl::construct(ptr, myownstl::move(value));
     }
 
     template<class T>
     template<class... Args>
     void allocator<T>::construct(T *ptr, Args &&... args)
     {
-        mystl::construct(ptr, mystl::forward<Args>(args)...);
+        myownstl::construct(ptr, myownstl::forward<Args>(args)...);
     }
 
     template<class T>
     void allocator<T>::destroy(T *ptr)
     {
-        mystl::destroy(ptr);
+        myownstl::destroy(ptr);
     }
 
     template<class T>
     void allocator<T>::destroy(T *first, T *last)
     {
-        mystl::destroy(first, last);
+        myownstl::destroy(first, last);
     }
 }
 
 
 
-#endif //MYTINYSTL_ALLOCATOR_H
+#endif //MYOWNSTL_ALLOCATOR_H

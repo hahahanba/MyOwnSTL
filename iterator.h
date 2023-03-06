@@ -2,15 +2,15 @@
 // Created by gy gao on 8/14/22.
 //
 
-#ifndef MYTINYSTL_ITERATOR_H
-#define MYTINYSTL_ITERATOR_H
+#ifndef MYOWNSTL_ITERATOR_H
+#define MYOWNSTL_ITERATOR_H
 
 // 用于迭代器的设计，包含一些模板结构体与全局函数
 #include <cstddef>
 
 #include "type_traits.h"
 
-namespace mystl
+namespace myownstl
 {
     /*****************************************************************************/
     // 5种迭代器类型
@@ -124,7 +124,7 @@ namespace mystl
     // 是否能将T的迭代器类型转换成U的迭代器类型
     template<class T, class U, bool = has_iterator_cat<iterator_traits<T>>::value>
     struct has_iterator_cat_of
-            : public mystl::m_bool_constant<std::is_convertible<
+            : public myownstl::m_bool_constant<std::is_convertible<
                     typename iterator_traits<T>::iterator_category, U>::value>
     {};
 
@@ -399,4 +399,4 @@ namespace mystl
 }
 
 
-#endif //MYTINYSTL_ITERATOR_H
+#endif //MYOWNSTL_ITERATOR_H

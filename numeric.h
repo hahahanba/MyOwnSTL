@@ -2,13 +2,13 @@
 // Created by gy gao on 1/10/23.
 //
 
-#ifndef MYTINYSTL_NUMERIC_H
-#define MYTINYSTL_NUMERIC_H
+#ifndef MYOWNSTL_NUMERIC_H
+#define MYOWNSTL_NUMERIC_H
 
-// 这个头文件包含了 mystl 的数值算法
+// 这个头文件包含了 myownstl 的数值算法
 #include "iterator.h"
 
-namespace mystl
+namespace myownstl
 {
     /*****************************************************************************************/
     // accumulate
@@ -151,4 +151,4 @@ namespace mystl
         return ++result;
     }
 }
-#endif //MYTINYSTL_NUMERIC_H
+#endif //MYOWNSTL_NUMERIC_H
